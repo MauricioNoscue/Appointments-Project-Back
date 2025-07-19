@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Entity_Back.Models;
 using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Security;
+using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -27,6 +28,12 @@ namespace Entity_Back.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<Person>()
+           .HasOne(p => p.User)
+           .WithOne(u => u.Person)
+           .HasForeignKey<User>(u => u.PersonId)
+           .OnDelete(DeleteBehavior.Cascade); // o Restrict según tu lógica
 
         }
 

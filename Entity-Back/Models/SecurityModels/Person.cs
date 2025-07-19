@@ -23,6 +23,7 @@ namespace Entity_Back.Models.SecurityModels
         public bool IsDeleted { get; set; }
         public HealthRegime HealthRegime { get; set; }
 
+        public User User { get; set; }
         public int EpsId { get; set; }
         public Eps Eps { get; set; }
 
