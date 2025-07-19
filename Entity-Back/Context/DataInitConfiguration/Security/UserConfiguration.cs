@@ -11,6 +11,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
 {
     internal class UserConfiguration : IEntityTypeConfiguration<User>
     {
+        // rama mauro 
         public void Configure(EntityTypeBuilder<User> builder)
         {
 
