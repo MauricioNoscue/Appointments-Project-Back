@@ -257,16 +257,16 @@ namespace Entity_Back.Migrations
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 21,
                             IsDeleted = false,
-                            Name = "Asmet Salud",
+                            Name = "Emssanar E.S.S.",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Id = 21,
+                            Id = 20,
                             IsDeleted = false,
-                            Name = "Emssanar E.S.S.",
+                            Name = "Asmet Salud",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -344,25 +344,7 @@ namespace Entity_Back.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rol", "ModelSecurity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Rol de administrador",
-                            IsDeleted = false,
-                            Name = "Admin",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Rol estándar",
-                            IsDeleted = false,
-                            Name = "Usuario",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("Rol");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>
@@ -397,13 +379,11 @@ namespace Entity_Back.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
-                    b.Property<string>("HealthRegime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HealthRegime")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -421,46 +401,7 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("EpsId");
 
-                    b.ToTable("Person", "ModelSecurity", t =>
-                        {
-                            t.HasCheckConstraint("CK_Person_Gender", "[Gender] IN ('Masculino', 'Femenino')");
-
-                            t.HasCheckConstraint("CK_Person_HealthRegime", "[HealthRegime] IN ('Contributivo', 'Subsidiado', 'Excepcion')");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = false,
-                            DateBorn = new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Document = "1084922863",
-                            DocumentTypeId = 1,
-                            EpsId = 1,
-                            FullLastName = "Noscue",
-                            FullName = "Mauricio",
-                            Gender = "Masculino",
-                            HealthRegime = "Contributivo",
-                            IsDeleted = false,
-                            PhoneNumber = "3133156032",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = false,
-                            DateBorn = new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Document = "1084922863",
-                            DocumentTypeId = 1,
-                            EpsId = 1,
-                            FullLastName = "Noscue",
-                            FullName = "María isabel",
-                            Gender = "Femenino",
-                            HealthRegime = "Contributivo",
-                            IsDeleted = false,
-                            PhoneNumber = "3133156032",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("Person");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.RolUser", b =>
@@ -489,25 +430,7 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RolUser", "ModelSecurity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsDeleted = false,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RolId = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsDeleted = false,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RolId = 2,
-                            UserId = 2
-                        });
+                    b.ToTable("RolUser");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.User", b =>
@@ -538,31 +461,11 @@ namespace Entity_Back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonId")
+                        .IsUnique()
+                        .HasFilter("[PersonId] IS NOT NULL");
 
-                    b.ToTable("User", "ModelSecurity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = false,
-                            Email = "mauronoscue@gmail.com",
-                            IsDeleted = false,
-                            Password = "M1d!Citas2025",
-                            PersonId = 1,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = false,
-                            Email = "isaTovarp.18@gmail.com",
-                            IsDeleted = false,
-                            Password = "M2d!Citas2025",
-                            PersonId = 2,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>
@@ -606,8 +509,9 @@ namespace Entity_Back.Migrations
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.User", b =>
                 {
                     b.HasOne("Entity_Back.Models.SecurityModels.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId");
+                        .WithOne("User")
+                        .HasForeignKey("Entity_Back.Models.SecurityModels.User", "PersonId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Person");
                 });
@@ -625,6 +529,12 @@ namespace Entity_Back.Migrations
             modelBuilder.Entity("Entity_Back.Models.Security.Rol", b =>
                 {
                     b.Navigation("RolUser");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.User", b =>

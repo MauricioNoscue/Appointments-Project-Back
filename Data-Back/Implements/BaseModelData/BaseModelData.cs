@@ -20,8 +20,8 @@ namespace Data_Back.Implements.BaseModelData
     public class BaseModelData<T> : ABaseModelData<T> where T : BaseModel
     {
 
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<BaseModelData<T>> _logger;
+        protected readonly ApplicationDbContext _context;
+        protected readonly ILogger<BaseModelData<T>> _logger;
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="BaseModelData{T}"/> con el contexto de base de datos y el logger.

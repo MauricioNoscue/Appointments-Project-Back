@@ -17,7 +17,8 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
     {
         private readonly IRolData _data;
 
-        public RolBusiness(IConfiguration configuration,IRolData data,ILogger<RolBusiness> logger): base(configuration,data,logger)
+        public RolBusiness(IConfiguration configuration,IRolData data,ILogger<RolBusiness> logger):
+            base(configuration,data,logger)
         {
             
         }
