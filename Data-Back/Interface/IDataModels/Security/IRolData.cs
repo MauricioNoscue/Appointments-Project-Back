@@ -10,5 +10,6 @@ namespace Data_Back.Interface.IDataModels.Security
 {
     public interface IRolData: IBaseModelData<Rol>
     {
+
     }
 }

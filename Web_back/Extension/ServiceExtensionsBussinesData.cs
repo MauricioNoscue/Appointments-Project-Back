@@ -20,10 +20,10 @@ namespace Web_back.Extension
 
 
             services.AddScoped<IRolData, RolData>();
-services.AddScoped<
-    IBaseModelBusiness<RolCreatedDto, RolEditDto, RolListDto>,
-    RolBusiness
->();
+            services.AddScoped<
+                IBaseModelBusiness<RolCreatedDto, RolEditDto, RolListDto>,
+                RolBusiness
+            >();
 
 
             return services;

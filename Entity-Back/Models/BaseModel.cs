@@ -10,6 +10,6 @@ namespace Entity_Back.Models
     {
         public int Id { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public DateTime? RegistrationDate { get; set; } = DateTime.Now;
+        public DateTime? RegistrationDate { get; set; } 
     }
 }
