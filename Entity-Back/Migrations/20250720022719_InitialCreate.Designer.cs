@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250719223527_InitialCreate")]
+    [Migration("20250720022719_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -347,7 +347,25 @@ namespace Entity_Back.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Rol", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Rol de administrador",
+                            IsDeleted = false,
+                            Name = "Admin",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Rol estándar",
+                            IsDeleted = false,
+                            Name = "Usuario",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>

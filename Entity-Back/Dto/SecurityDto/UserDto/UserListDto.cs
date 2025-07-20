@@ -10,7 +10,7 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
 {
     public class UserListDto : BaseModel
     {
-      public PersonCreatedDto Person {  get; set; }
+      public PersonListDto Person {  get; set; }
 
         public string? Email { get; set; }
         public bool? Active { get; set; } = false;

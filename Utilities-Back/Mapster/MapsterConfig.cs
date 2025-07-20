@@ -36,15 +36,27 @@ namespace Utilities_Back.Mapster
 
 
 
-            TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig();
 
 
-            // Configuración para Person con conversión de enums
-            TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig()
-                .Map(dest => dest.Gender, src => Enum.Parse<Gender>(src.Gender, true))
-                .Map(dest => dest.HealthRegime, src => Enum.Parse<HealthRegime>(src.HealthRegime, true))
-                .Map(dest => dest.Active, src => true)
-                .Map(dest => dest.IsDeleted, src => false);
+
+            TypeAdapterConfig<PersonCreatedDto, Person>
+            .NewConfig()
+            .Map(dest => dest.Gender, src => Enum.Parse<Gender>(src.Gender, true))
+            .Map(dest => dest.HealthRegime, src => Enum.Parse<HealthRegime>(src.HealthRegime, true));
+
+                    TypeAdapterConfig<Person, PersonListDto>
+                        .NewConfig()
+                        .Map(dest => dest.Gender, src => src.Gender.ToString())
+                        .Map(dest => dest.HealthRegime, src => src.HealthRegime.ToString());
+
+            
+
+            //// Configuración para Person con conversión de enums
+            //TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig()
+            //    .Map(dest => dest.Gender, src => Enum.Parse<Gender>(src.Gender, true))
+            //    .Map(dest => dest.HealthRegime, src => Enum.Parse<HealthRegime>(src.HealthRegime, true))
+            //    .Map(dest => dest.Active, src => true)
+            //    .Map(dest => dest.IsDeleted, src => false);
 
 
 

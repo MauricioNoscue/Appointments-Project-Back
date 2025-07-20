@@ -19,6 +19,18 @@ namespace Data_Back.Implements.ModelDataImplement.Security
 
         }
 
+
+
+        public async Task<Person> SavePerson(Person person)
+        {
+            await _context.Set<Person>().AddAsync(person);
+            await _context.SaveChangesAsync();
+            return person;
+        }
+
+
+       
+
         public override async Task<IEnumerable<User>> GetAll()
         {
             try
@@ -38,37 +50,22 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         }
 
 
-        public async Task<User> Save(User entity)
+        public override async Task<User?> GetById(int id)
         {
             try
             {
-                // Si tiene Person, asegurarse de que se guarde correctamente
-                if (entity.Person != null)
-                {
-                    entity.Person.Active = true;
-                    entity.Person.IsDeleted = false;
-                }
-
-                await _context.Set<User>().AddAsync(entity);
-                await _context.SaveChangesAsync();
-
-            
-                var savedEntity = await _context.Set<User>()
+                return await _context.Set<User>()
                     .Include(u => u.Person)
-                        .ThenInclude(p => p.DocumentType)
-                    .Include(u => u.Person)
-                        .ThenInclude(p => p.Eps)
-                    .FirstOrDefaultAsync(u => u.Id == entity.Id);
-
-                return savedEntity ?? entity;
+                    .FirstOrDefaultAsync(u => u.Id == id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error al crear el registro para la entidad: {typeof(User).Name}");
+                _logger.LogError(ex, $"Error al obtener el registro {typeof(User).Name} con ID: {id}");
                 throw;
             }
         }
 
+        
 
     }
 }

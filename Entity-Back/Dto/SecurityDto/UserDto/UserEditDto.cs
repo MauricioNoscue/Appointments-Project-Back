@@ -11,7 +11,7 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
     {
         public int Id { get; set; }
         public PersonCreatedDto Person { get; set; }
-        public string Name { get; set; }
+        public string Email { get; set; }
 
     }
 }

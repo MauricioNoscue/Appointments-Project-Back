@@ -24,7 +24,7 @@
 //                   Password = "M1d!Citas2025",
 //                   Active = false,
 //                   PersonId = 1,
-//                   RegistrationDate = new DateTime(2024, 7, 16) 
+//                   RegistrationDate = new DateTime(2024, 7, 16)
 //               }, new User
 //               {
 
@@ -33,7 +33,7 @@
 //                   Password = "M2d!Citas2025",
 //                   Active = false,
 //                   PersonId = 2,
-//                   RegistrationDate = new DateTime(2024, 7, 16) 
+//                   RegistrationDate = new DateTime(2024, 7, 16)
 //               }
 //               );
 

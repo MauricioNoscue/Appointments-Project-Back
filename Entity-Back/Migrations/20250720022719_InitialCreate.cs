@@ -16,6 +16,9 @@ namespace Entity_Back.Migrations
             migrationBuilder.EnsureSchema(
                 name: "Hospital");
 
+            migrationBuilder.EnsureSchema(
+                name: "ModelSecurity");
+
             migrationBuilder.CreateTable(
                 name: "DocumentType",
                 schema: "Hospital",
@@ -51,6 +54,7 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Rol",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -144,6 +148,7 @@ namespace Entity_Back.Migrations
                     table.ForeignKey(
                         name: "FK_RolUser_Rol_RolId",
                         column: x => x.RolId,
+                        principalSchema: "ModelSecurity",
                         principalTable: "Rol",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -205,6 +210,16 @@ namespace Entity_Back.Migrations
                     { 28, false, "Pijaos Salud EPSI", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
+                table: "Rol",
+                columns: new[] { "Id", "Description", "IsDeleted", "Name", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, "Rol de administrador", false, "Admin", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Rol estándar", false, "Usuario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Person_DocumentTypeId",
                 table: "Person",
@@ -240,7 +255,8 @@ namespace Entity_Back.Migrations
                 name: "RolUser");
 
             migrationBuilder.DropTable(
-                name: "Rol");
+                name: "Rol",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
                 name: "User");

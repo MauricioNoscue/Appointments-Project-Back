@@ -27,80 +27,67 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             _data = data;
         }
 
+
+
+
         public override async Task<UserListDto> Save(UserCreatedDto dto)
         {
             if (dto == null)
                 throw new ValidationException(nameof(dto), "Los datos enviados son nulos o inválidos.");
-            if (dto.Person == null)
-                throw new ValidationException("La persona es obligatoria para crear un usuario.");
 
             try
             {
-                
+                // Mapea manualmente person desde dto
+                var person = dto.Person.Adapt<Person>();
 
-                // Crear el User manualmente para evitar problemas de mapeo
-                var entidad = new User
-                {
-                    Email = dto.Email,
-                    Password = dto.Password,
-                    Active = dto.Active,
-                    Person = new Person
-                    {
-                        FullName = dto.Person.FullName,
-                        FullLastName = dto.Person.FullLastName,
-                        DocumentTypeId = dto.Person.DocumentTypeId,
-                        Document = dto.Person.Document,
-                        DateBorn = dto.Person.DateBorn,
-                        PhoneNumber = dto.Person.PhoneNumber,
-                        EpsId = dto.Person.EpsId,
-                        Gender = ParseGender(dto.Person.Gender),
-                        HealthRegime = ParseHealthRegime(dto.Person.HealthRegime),
-                        Active = true,
-                        IsDeleted = false
-                    }
-                };
+                // Inserta primero la persona
+                var personaCreada = await _data.SavePerson(person); // necesitas agregar esto en IUserData
 
-               
-            
+                // Mapea user
+                var user = dto.Adapt<User>();
+                user.PersonId = personaCreada.Id;
 
-                var entityGuardado = await _data.Save(entidad);
+                var userCreado = await _data.Save(user);
 
+                // Cargar persona (por si no la trae el user directamente)
+                userCreado.Person = personaCreada;
 
-                var resultado = entityGuardado.Adapt<UserListDto>();
-                return resultado;
+                return userCreado.Adapt<UserListDto>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear usuario - Detalles: {Message}", ex.Message);
+                _logger.LogError(ex, "Error al crear usuario con persona.");
                 throw new BusinessException("Error al intentar crear el usuario.", ex);
             }
         }
 
 
-
-        private Gender ParseGender(string gender)
+        public override async Task<bool> Update(UserEditDto dto)
         {
-            _logger.LogInformation($"Parseando Gender: {gender}");
-            return gender?.ToLower() switch
-            {
-                "masculino" or "male" or "m" => Gender.Masculino,
-                "femenino" or "female" or "f" => Gender.Femenino,
-                _ => Gender.Masculino // Valor por defecto
-            };
-        }
+            if (dto == null)
+                throw new ValidationException(nameof(dto), "Los datos enviados para actualización son inválidos.");
 
-        private HealthRegime ParseHealthRegime(string regime)
-        {
-            _logger.LogInformation($"Parseando HealthRegime: {regime}");
-            return regime?.ToLower() switch
+            try
             {
-                "contributivo" => HealthRegime.Contributivo,
-                "subsidiado" => HealthRegime.Subsidiado,
-                "especial" => HealthRegime.Excepcion,
-                _ => HealthRegime.Contributivo // Valor por defecto
-            };
-        }
+                var user = await _data.GetById(dto.Id);
+                if (user == null) throw new BusinessException("Usuario no encontrado.");
 
+                // Mapeamos datos del usuario
+                dto.Adapt(user);
+
+                // Mapeamos datos de la persona asociada
+                dto.Person.Adapt(user.Person);
+
+                await _data.Update(user); // solo necesitas uno si el contexto está trackeando
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar usuario con persona.");
+                throw new BusinessException("Error al intentar actualizar el registro.", ex);
+            }
+        }
 
 
     }

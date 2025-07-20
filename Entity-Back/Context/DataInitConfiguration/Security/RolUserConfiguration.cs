@@ -15,10 +15,20 @@
 //        {
 //            builder.HasData(
 
-//                 new RolUser { Id = 1, RolId = 1, UserId = 1,
-//                     RegistrationDate = new DateTime(2024, 7, 16)  },
-//                 new RolUser { Id = 2, RolId = 2, UserId = 2,
-//                     RegistrationDate = new DateTime(2024, 7, 16) }
+//                 new RolUser
+//                 {
+//                     Id = 1,
+//                     RolId = 1,
+//                     UserId = 1,
+//                     RegistrationDate = new DateTime(2024, 7, 16)
+//                 },
+//                 new RolUser
+//                 {
+//                     Id = 2,
+//                     RolId = 2,
+//                     UserId = 2,
+//                     RegistrationDate = new DateTime(2024, 7, 16)
+//                 }
 
 //               );
 //            builder.ToTable("RolUser", schema: "ModelSecurity");

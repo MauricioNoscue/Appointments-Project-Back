@@ -11,5 +11,6 @@ namespace Data_Back.Interface.IDataModels.Security
     public interface IUserData:IBaseModelData<User>
 
     {
+        public Task<Person> SavePerson(Person person);
     }
 }
