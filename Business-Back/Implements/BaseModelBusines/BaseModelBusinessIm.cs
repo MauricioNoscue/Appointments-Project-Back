@@ -129,7 +129,14 @@ namespace Business_Back.Implements.BaseModelBusiness
             }
         }
 
-     
+        public override void ValidateCreated(Dc dto)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override void ValidateUpdate(Dc dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

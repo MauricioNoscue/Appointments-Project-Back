@@ -25,7 +25,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             : base(configuration, data, logger)
         {
             _data = data;
-        }
+        }   
 
 
 

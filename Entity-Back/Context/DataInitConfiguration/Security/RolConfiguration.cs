@@ -13,6 +13,10 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
     {
         public void Configure(EntityTypeBuilder<Rol> builder)
         {
+
+            builder.HasIndex(f => f.Name).IsUnique();
+       
+
             builder.HasData(
           new Rol
           {
