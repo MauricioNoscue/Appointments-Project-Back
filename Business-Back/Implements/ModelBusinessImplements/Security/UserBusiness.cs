@@ -11,6 +11,7 @@ using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utilities_Back.Exceptions;
@@ -26,9 +27,6 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
         {
             _data = data;
         }   
-
-
-
 
         public override async Task<UserListDto> Save(UserCreatedDto dto)
         {
@@ -54,6 +52,13 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 
                 return userCreado.Adapt<UserListDto>();
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Capturamos errores de la base de datos y tratamos errores de restricción única
+                var mensaje = ParseUniqueConstraintError(dbEx);
+                throw new ValidationException(mensaje);
+            }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear usuario con persona.");
@@ -61,7 +66,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             }
         }
 
-
+        
         public override async Task<bool> Update(UserEditDto dto)
         {
             if (dto == null)

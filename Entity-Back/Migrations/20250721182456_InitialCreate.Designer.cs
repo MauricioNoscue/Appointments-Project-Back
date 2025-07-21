@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250720022719_InitialCreate")]
+    [Migration("20250721182456_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -340,12 +340,15 @@ namespace Entity_Back.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Rol", "ModelSecurity");
 
@@ -400,11 +403,13 @@ namespace Entity_Back.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthRegime")
-                        .HasColumnType("int");
+                    b.Property<string>("HealthRegime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -422,7 +427,46 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("EpsId");
 
-                    b.ToTable("Person");
+                    b.ToTable("Person", "ModelSecurity", t =>
+                        {
+                            t.HasCheckConstraint("CK_Person_Gender", "[Gender] IN ('Masculino', 'Femenino')");
+
+                            t.HasCheckConstraint("CK_Person_HealthRegime", "[HealthRegime] IN ('Contributivo', 'Subsidiado', 'Excepcion')");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = false,
+                            DateBorn = new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Document = "1084922863",
+                            DocumentTypeId = 1,
+                            EpsId = 1,
+                            FullLastName = "Noscue",
+                            FullName = "Mauricio",
+                            Gender = "Masculino",
+                            HealthRegime = "Contributivo",
+                            IsDeleted = false,
+                            PhoneNumber = "3133156032",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = false,
+                            DateBorn = new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Document = "1084922863",
+                            DocumentTypeId = 1,
+                            EpsId = 1,
+                            FullLastName = "Noscue",
+                            FullName = "María isabel",
+                            Gender = "Femenino",
+                            HealthRegime = "Contributivo",
+                            IsDeleted = false,
+                            PhoneNumber = "3133156032",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.RolUser", b =>
@@ -486,7 +530,29 @@ namespace Entity_Back.Migrations
                         .IsUnique()
                         .HasFilter("[PersonId] IS NOT NULL");
 
-                    b.ToTable("User");
+                    b.ToTable("User", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = false,
+                            Email = "mauronoscue@gmail.com",
+                            IsDeleted = false,
+                            Password = "M1d!Citas2025",
+                            PersonId = 1,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = false,
+                            Email = "isaTovarp.18@gmail.com",
+                            IsDeleted = false,
+                            Password = "M2d!Citas2025",
+                            PersonId = 2,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>

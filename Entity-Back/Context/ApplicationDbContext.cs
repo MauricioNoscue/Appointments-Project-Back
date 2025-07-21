@@ -11,6 +11,7 @@ using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Module = Entity_Back.Models.SecurityModels.Module;
 
 namespace Entity_Back.Context
 {
@@ -33,7 +34,7 @@ namespace Entity_Back.Context
            .HasOne(p => p.User)
            .WithOne(u => u.Person)
            .HasForeignKey<User>(u => u.PersonId)
-           .OnDelete(DeleteBehavior.Cascade); // o Restrict según tu lógica
+           .OnDelete(DeleteBehavior.Cascade);
 
         }
 
@@ -68,10 +69,26 @@ namespace Entity_Back.Context
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
+      
+        //security
         public DbSet<Rol> Rol { get; set; }
-        public DbSet<DocumentType> DocumentType { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<RolUser> RolUser { get; set; }
+        public DbSet<Form> Form { get; set; }
+        public DbSet<Module> Module { get; set; }
+        public DbSet<FormModule> Formmodule { get; set; }
+        public DbSet<Permission> Permission { get; set; }
+        public DbSet<RolFormPermission> RolFormPermission { get; set; }
 
+
+
+
+        //hospital
+        public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Eps> Eps { get; set; }
+
+
 
 
 

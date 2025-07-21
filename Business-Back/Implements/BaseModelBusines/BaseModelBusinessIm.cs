@@ -7,6 +7,7 @@ using Business_Back.Interface.BaseModelBusiness;
 using Data_Back.Interface.IBaseModelData;
 using Entity_Back.Models;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utilities_Back.Exceptions;
@@ -70,6 +71,12 @@ namespace Business_Back.Implements.BaseModelBusiness
                 return entiry.Adapt<Dl>();
 
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Capturamos errores de la base de datos y tratamos errores de restricción única
+                var mensaje = ParseUniqueConstraintError(dbEx);
+                throw new ValidationException(mensaje);
+            }
             catch (BusinessException ex)
             {
                 _logger.LogError(ex, "Error al crear entidad {Entity}", typeof(T).Name);
@@ -87,6 +94,12 @@ namespace Business_Back.Implements.BaseModelBusiness
                 var entity = dto.Adapt<T>();
                 await _data.Update(entity);
                 return true;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Capturamos errores de la base de datos y tratamos errores de restricción única
+                var mensaje = ParseUniqueConstraintError(dbEx);
+                throw new ValidationException(mensaje);
             }
             catch (BusinessException ex)
             {
@@ -138,5 +151,28 @@ namespace Business_Back.Implements.BaseModelBusiness
         {
             throw new NotImplementedException();
         }
+
+
+        public virtual string ParseUniqueConstraintError(Exception ex)
+        {
+            var message = ex.InnerException?.Message ?? ex.Message;
+
+            // Validaciones específicas por índice
+            if (message.Contains("IX_User_Email"))
+                return "Este correo electrónico ya está registrado.";
+
+            if (message.Contains("IX_ModuleForm_ModuleId_FormId"))
+                return "Este formulario ya ha sido asignado al módulo.";
+
+            if (message.Contains("IX_UserRol_UserId_RoleId"))
+                return "Este rol ya ha sido asignado al usuario.";
+
+            if (message.Contains("IX_RolFormPermission_RolId_FormId_PermissionId"))
+                return "Ya se ha asignado este permiso para el rol y formulario seleccionados.";
+
+            // Mensaje genérico por defecto
+            return "Ya existe un registro con esta combinación de datos. Verifica la información.";
+        }
+
     }
 }

@@ -59,7 +59,7 @@ namespace Entity_Back.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -71,6 +71,7 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Person",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -81,16 +82,18 @@ namespace Entity_Back.Migrations
                     Document = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateBorn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    HealthRegime = table.Column<int>(type: "int", nullable: false),
+                    HealthRegime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EpsId = table.Column<int>(type: "int", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Person", x => x.Id);
+                    table.CheckConstraint("CK_Person_Gender", "[Gender] IN ('Masculino', 'Femenino')");
+                    table.CheckConstraint("CK_Person_HealthRegime", "[HealthRegime] IN ('Contributivo', 'Subsidiado', 'Excepcion')");
                     table.ForeignKey(
                         name: "FK_Person_DocumentType_DocumentTypeId",
                         column: x => x.DocumentTypeId,
@@ -109,6 +112,7 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateTable(
                 name: "User",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -126,6 +130,7 @@ namespace Entity_Back.Migrations
                     table.ForeignKey(
                         name: "FK_User_Person_PersonId",
                         column: x => x.PersonId,
+                        principalSchema: "ModelSecurity",
                         principalTable: "Person",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -155,6 +160,7 @@ namespace Entity_Back.Migrations
                     table.ForeignKey(
                         name: "FK_RolUser_User_UserId",
                         column: x => x.UserId,
+                        principalSchema: "ModelSecurity",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -220,15 +226,44 @@ namespace Entity_Back.Migrations
                     { 2, "Rol estándar", false, "Usuario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
+                table: "Person",
+                columns: new[] { "Id", "Active", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
+                table: "User",
+                columns: new[] { "Id", "Active", "Email", "IsDeleted", "Password", "PersonId", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, false, "mauronoscue@gmail.com", false, "M1d!Citas2025", 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, false, "isaTovarp.18@gmail.com", false, "M2d!Citas2025", 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Person_DocumentTypeId",
+                schema: "ModelSecurity",
                 table: "Person",
                 column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Person_EpsId",
+                schema: "ModelSecurity",
                 table: "Person",
                 column: "EpsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rol_Name",
+                schema: "ModelSecurity",
+                table: "Rol",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolUser_RolId",
@@ -242,6 +277,7 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_PersonId",
+                schema: "ModelSecurity",
                 table: "User",
                 column: "PersonId",
                 unique: true,
@@ -259,10 +295,12 @@ namespace Entity_Back.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "User",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "Person",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
                 name: "DocumentType",
