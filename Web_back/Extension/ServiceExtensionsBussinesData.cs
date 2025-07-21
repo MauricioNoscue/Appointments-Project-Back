@@ -1,5 +1,6 @@
 ﻿using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
+using Business_Back.Services;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface.IBaseModelData;
 using Data_Back.Interface.IDataModels.Security;
@@ -61,6 +62,13 @@ namespace Web_back.Extension
             services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
             services.AddScoped<IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>, RolFormPermissionBusiness>();
 
+
+
+
+
+            services.AddScoped<JWTService>();
+
+            services.AddScoped<AuthService>();
 
 
 
