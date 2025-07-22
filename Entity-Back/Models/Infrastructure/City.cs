@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity_Back.Models.SecurityModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Entity_Back.Models.Infrastructure
     {
         public int DepartamentId { get; set; }
         public string Name { get; set; }
-
+        public Departament Departament { get; set; }
+        public List<Institution> Institutions { get; set; } = new List<Institution>();
     }
 }
