@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity_Back.Dto.InfrastructureDto.InstitutionDto
+namespace Entity_Back.Dto.InfrastructureDto.BranchDto
 {
-    public class InstitutionListDto : BaseModel
+    public class BranchListDto : BaseModel
     {
-        public int CityId { get; set; }
         public string Name { get; set; }
-        public string Nit { get; set; }
         public string Email { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public int InstitutionId { get; set; }
     }
 }
