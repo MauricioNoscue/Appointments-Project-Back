@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Models.Infrastructure
 {
-    class Branch
+    public class Branch : BaseModel
     {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public int PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public int InstitutionId { get; set; }
+
     }
 }

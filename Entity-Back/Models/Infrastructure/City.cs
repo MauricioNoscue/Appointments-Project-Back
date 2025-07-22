@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Models.Infrastructure
 {
-    class City
+    public class City:BaseModel
     {
+        public int DepartamentId { get; set; }
+        public string Name { get; set; }
+
     }
 }

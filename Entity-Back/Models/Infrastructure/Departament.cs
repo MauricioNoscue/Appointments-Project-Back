@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Models.Infrastructure
 {
-    class Departament
+    public class Departament:BaseModel
     {
+        public string Name { get; set; }
+    
     }
 }

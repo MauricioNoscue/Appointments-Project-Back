@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Dto.InfrastructureDto.DepartamentDto
 {
-    class DepartamentEditDto
+    public class DepartamentEditDto
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
