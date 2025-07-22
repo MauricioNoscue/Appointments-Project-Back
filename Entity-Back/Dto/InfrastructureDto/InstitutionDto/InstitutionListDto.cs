@@ -13,5 +13,6 @@ namespace Entity_Back.Dto.InfrastructureDto.InstitutionDto
         public string Name { get; set; }
         public string Nit { get; set; }
         public string Email { get; set; }
+        public string CityName { get; set; }
     }
 }
