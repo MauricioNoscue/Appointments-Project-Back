@@ -22,7 +22,7 @@ namespace Entity_Back.Context
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
-           
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -65,11 +65,11 @@ namespace Entity_Back.Context
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             EnsureAudit();
-           
+
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
-      
+
         //security
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Person> Person { get; set; }
@@ -87,6 +87,7 @@ namespace Entity_Back.Context
         //hospital
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Eps> Eps { get; set; }
+        public DbSet<Citation> Citation { get; set; }
 
 
 

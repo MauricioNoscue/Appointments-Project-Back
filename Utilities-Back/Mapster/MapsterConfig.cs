@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entity_Back;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
 using Entity_Back.Dto.SecurityDto.PersonDto;
@@ -38,10 +39,10 @@ namespace Utilities_Back.Mapster
             .NewConfig()
             .Map(dest => dest.Gender, src => Enum.Parse<Gender>(src.Gender, true))
             .Map(dest => dest.HealthRegime, src => Enum.Parse<HealthRegime>(src.HealthRegime, true));
-             TypeAdapterConfig<Person, PersonListDto>
-             .NewConfig()
-             .Map(dest => dest.Gender, src => src.Gender.ToString())
-              .Map(dest => dest.HealthRegime, src => src.HealthRegime.ToString());
+            TypeAdapterConfig<Person, PersonListDto>
+            .NewConfig()
+            .Map(dest => dest.Gender, src => src.Gender.ToString())
+             .Map(dest => dest.HealthRegime, src => src.HealthRegime.ToString());
 
             //RolUser
             TypeAdapterConfig<RolUserCreatedDto, RolUser>.NewConfig();
@@ -81,6 +82,21 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.PermissionName, src => src.Permission.Name);
             TypeAdapterConfig<RolFormPermissionEditDto, RolFormPermission>.NewConfig();
 
+        
+            // Citation
+            TypeAdapterConfig<CitationCreateDto, Citation>.NewConfig()
+                .Map(dest => dest.Note, src => src.Note)
+                .Map(dest => dest.UserId, src => src.UserId)
+                .Map(dest => dest.ScheduleHourId, src => src.ScheduleHourId);
+
+            TypeAdapterConfig<CitationEditDto, Citation>.NewConfig()
+                .Map(dest => dest.State, src => src.State)
+                .Map(dest => dest.Note, src => src.Note);
+
+            TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
+                .Map(dest => dest.State, src => src.State)
+                .Map(dest => dest.Note, src => src.Note)
+                .Map(dest => dest.CreationDate, src => src.CreationDate);
 
 
 

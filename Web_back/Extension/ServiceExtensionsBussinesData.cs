@@ -1,9 +1,12 @@
-﻿using Business_Back.Implements.ModelBusinessImplements.Security;
+﻿using Business_Back;
+using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Services;
+using Data_Back;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface.IBaseModelData;
 using Data_Back.Interface.IDataModels.Security;
+using Entity_Back;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.FormModuleDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
@@ -17,16 +20,16 @@ using Entity_Back.Models.SecurityModels;
 
 namespace Web_back.Extension
 {
-    public static  class ServiceExtensionsBussinesData
+    public static class ServiceExtensionsBussinesData
     {
         public static IServiceCollection AddProjectServices(this IServiceCollection services)
         {
 
 
-           
+
             services.AddScoped<IBaseModelData<Rol>, RolData>();
             services.AddScoped<IRolData, RolData>();
-            services.AddScoped<IBaseModelBusiness<RolCreatedDto, RolEditDto, RolListDto>,RolBusiness>();
+            services.AddScoped<IBaseModelBusiness<RolCreatedDto, RolEditDto, RolListDto>, RolBusiness>();
 
             services.AddScoped<IBaseModelData<User>, UserData>();
             services.AddScoped<IUserData, UserData>();
@@ -62,7 +65,12 @@ namespace Web_back.Extension
             services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
             services.AddScoped<IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>, RolFormPermissionBusiness>();
 
+            // Citation
+            services.AddScoped<IBaseModelData<Citation>, CitationsData>();
+            services.AddScoped<ICitationsData, CitationsData>();
 
+            services.AddScoped<IBaseModelBusiness<CitationCreateDto, CitationEditDto, CitationListDto>, CitationBusiness>();
+            services.AddScoped<ICitationsBusiness, CitationBusiness>();
 
 
 
