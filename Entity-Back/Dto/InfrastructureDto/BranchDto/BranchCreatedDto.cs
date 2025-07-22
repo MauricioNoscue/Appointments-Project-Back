@@ -10,7 +10,7 @@ namespace Entity_Back.Dto.InfrastructureDto.BranchDto
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public int InstitutionId { get; set; }
     }

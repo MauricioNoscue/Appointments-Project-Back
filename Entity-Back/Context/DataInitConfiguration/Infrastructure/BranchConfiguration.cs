@@ -22,7 +22,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Infrastructure
                     Id = 1,
                     Name = "Sucursal Neiva",
                     Email = "neiva@ips.com",
-                    PhoneNumber = 3211112233,
+                    PhoneNumber = "3211112233",
                     Address = "Cra 7 #12-34",
                     InstitutionId = 10,
                     RegistrationDate = new DateTime(2024, 7, 22)
@@ -32,7 +32,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Infrastructure
                     Id = 2,
                     Name = "Sucursal Pitalito",
                     Email = "pitalito@ips.com",
-                    PhoneNumber = 3224445566,
+                    PhoneNumber = "3224445566",
                     Address = "Av Circunvalar #45",
                     InstitutionId = 10,
                     RegistrationDate = new DateTime(2024, 7, 22)
@@ -44,5 +44,3 @@ namespace Entity_Back.Context.DataInitConfiguration.Infrastructure
     }
 }
 
-    }
-}

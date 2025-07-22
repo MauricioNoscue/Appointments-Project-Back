@@ -16,7 +16,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Infrastructure
             builder.HasIndex(d => d.Name).IsUnique();
 
             builder.HasData(
-                new Departament { Id = 1, Name = "Huila", RegistrationDate = new DateTime(2024, 7, 22) },
+                new Departament { Id = 1, Name = "Huila", RegistrationDate = new DateTime(2024, 7, 22) }
             );
 
             builder.ToTable("Departament", schema: "ModelInfrastructure");
