@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utilities_Back.Exceptions;
+using Utilities_Back.Message.Email;
 
 namespace Business_Back.Implements.ModelBusinessImplements.Security
 {
@@ -49,6 +50,32 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 
                 // Cargar persona (por si no la trae el user directamente)
                 userCreado.Person = personaCreada;
+
+
+                var asunto = "¡Bienvenido a nuestro sistema!";
+                var cuerpo = $@"
+                            <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+                                <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+                                    <h2 style=""color: #4CAF50;"">¡Bienvenido, {userCreado.Email}!</h2>
+                                    <p style=""font-size: 16px; color: #333;"">
+                                        Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
+                                    </p>
+                                    <p style=""font-size: 14px; color: #666;"">
+                                        Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
+                                    </p>
+                                    <div style=""margin-top: 30px; text-align: center;"">
+                                        <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
+                                    </div>
+                                    <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+                                    <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                                        Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
+                                    </p>
+                                </div>
+                            </div>
+            ";
+
+
+                await CorreoMensaje.EnviarAsync(_configuration, userCreado.Email, asunto, cuerpo);
 
                 return userCreado.Adapt<UserListDto>();
             }

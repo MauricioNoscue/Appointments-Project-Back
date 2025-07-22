@@ -9,6 +9,7 @@ using Entity_Back.Context;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Utilities_Back.Helper;
 
 namespace Data_Back.Implements.ModelDataImplement.Security
 {
@@ -20,6 +21,16 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         }
 
 
+
+        public async Task<User?> validarCredenciales(string email, string password)
+        {
+            var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+           // if (user == null || !PasswordHelper.VerifyPassword(password, user.Password))
+               // return null;
+
+            return user;
+        }
 
         public async Task<Person> SavePerson(Person person)
         {

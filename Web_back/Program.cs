@@ -22,6 +22,10 @@ builder.Services.AddDatabaseConfiguration(configuration);
 // AutoMapper
 MapsterConfig.RegisterMappings();
 
+
+// JWT auht2.0
+builder.Services.AddJwtAndGoogleAuthentication(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,9 +36,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
