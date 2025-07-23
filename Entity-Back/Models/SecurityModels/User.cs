@@ -13,7 +13,11 @@ namespace Entity_Back.Models.SecurityModels
         public string? Password { get; set; }
         public bool? Active { get; set; } = false;
         public int? PersonId { get; set; }
+        public string? CodePassword { get; set; }
+        public int? RestrictionPoint { get; set; }
         public Person Person { get; set; }
+        public List<Citation> Citation { get; set; }
+
         public List<RolUser> RolUser { get; set; } = new List<RolUser>();
     }
 }

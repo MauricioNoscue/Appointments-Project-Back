@@ -14,17 +14,18 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 {
                     Id = 1,
                     Specialty = "Medicina General",
-                    IdUser = 1,
+                    PersonId = 1,
                     Active = true,
                     Image = "doctor1.jpg",
                     RegistrationDate = staticDate,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    EmailDoctor = "doctor@gmail.com"
                 },
                 new Doctor
                 {
                     Id = 2,
                     Specialty = "Pediatría",
-                    IdUser = 2,
+                    PersonId = 2,
                     Active = true,
                     Image = "doctor2.jpg",
                     RegistrationDate = staticDate,
@@ -34,11 +35,13 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 {
                     Id = 3,
                     Specialty = "Dermatología",
-                    IdUser = 3,
+                    PersonId = 1,
                     Active = false,
                     Image = "doctor3.jpg",
                     RegistrationDate = staticDate,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    EmailDoctor = "docto2r@gmail.com"
+
                 }
             );
 

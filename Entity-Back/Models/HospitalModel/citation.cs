@@ -1,4 +1,5 @@
 using Entity_Back.Models;
+using Entity_Back.Models.Notification;
 using Entity_Back.Models.SecurityModels;
 
 namespace Entity_Back
@@ -12,7 +13,7 @@ namespace Entity_Back
         public int ScheduleHourId { get; set; }
 
         public  User User { get; set; }
-        // public  List<Notification> Notifications { get; set; }
+         public  List<Notification> Notification { get; set; }
         public  ScheduleHour ScheduleHour { get; set; }
     }
 

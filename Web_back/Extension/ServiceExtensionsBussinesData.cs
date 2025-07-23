@@ -2,9 +2,6 @@
 using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Services;
-using Data_Back;
-using Data_Back.Implements;
-using Data_Back.Implements.ModelDataImplement.Infrastructure;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
@@ -69,46 +66,7 @@ namespace Web_back.Extension
             services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
             services.AddScoped<IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>, RolFormPermissionBusiness>();
 
-            // Citation
-            services.AddScoped<IBaseModelData<Citation>, CitationsData>();
-            services.AddScoped<ICitationsData, CitationsData>();
-            services.AddScoped<IBaseModelBusiness<CitationCreateDto, CitationEditDto, CitationListDto>, CitationBusiness>();
-            services.AddScoped<ICitationsBusiness, CitationBusiness>();
 
-            // ScheduleHour
-            services.AddScoped<IBaseModelData<ScheduleHour>, ScheduleHourData>();
-            services.AddScoped<IScheduleHourData, ScheduleHourData>();
-            services.AddScoped<IBaseModelBusiness<ScheduleHourCreateDto, ScheduleHourEditDto, ScheduleHourListDto>, ScheduleHourBusiness>();
-            services.AddScoped<IScheduleHourBusiness, ScheduleHourBusiness>();
-
-            // ConsultingRoom
-            services.AddScoped<IBaseModelData<ConsultingRoom>, ConsultingRoomData>();
-            services.AddScoped<IConsultingRoomData, ConsultingRoomData>();
-            services.AddScoped<IBaseModelBusiness<ConsultingRoomCreateDto, ConsultingRoomEditDto, ConsultingRoomListDto>, ConsultingRoomBusiness>();
-            services.AddScoped<IConsultingRoomBusiness, ConsultingRoomBusiness>();
-
-            // Doctor
-            services.AddScoped<IBaseModelData<Doctor>, DoctorData>();
-            services.AddScoped<IDoctorData, DoctorData>();
-            services.AddScoped<IBaseModelBusiness<DoctorCreateDto, DoctorEditDto, DoctorListDto>, DoctorBusiness>();
-            services.AddScoped<IDoctorBusiness, DoctorBusiness>();
-
-            // TypeCitation
-            services.AddScoped<IBaseModelData<TypeCitation>, TypeCitationData>();
-            services.AddScoped<ITypeCitationData, TypeCitationData>();
-            services.AddScoped<IBaseModelBusiness<TypeCitationCreateDto, TypeCitationEditDto, TypeCitationListDto>, TypeCitationBusiness>();
-            services.AddScoped<ITypeCitationBusiness, TypeCitationBusiness>();
-
-            // Shedule
-            services.AddScoped<IBaseModelData<Shedule>, SheduleData>();
-            services.AddScoped<ISheduleData, SheduleData>();
-            services.AddScoped<IBaseModelBusiness<SheduleCreateDto, SheduleEditDto, SheduleListDto>, SheduleBusiness>();
-            services.AddScoped<ISheduleBusiness, SheduleBusiness>();
-            //Infrastructure
-            services.AddScoped<IBaseModelData<Branch>, BranchData>();
-            services.AddScoped<IBaseModelData<Institution>, InstitutionData>();
-            services.AddScoped<IBaseModelData<City>, CityData>();
-            services.AddScoped<IBaseModelData<Departament>, DepartamentData>();
 
 
 

@@ -6,5 +6,7 @@ namespace Entity_Back
         public int IdUser { get; set; }
         public bool Active { get; set; }
         public string Image { get; set; } = string.Empty;
+        public string EmailDoctor { get; set; }
+
     }
 }

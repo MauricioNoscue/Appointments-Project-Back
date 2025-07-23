@@ -141,13 +141,11 @@ namespace Utilities_Back.Mapster
             // Doctor
             TypeAdapterConfig<DoctorCreateDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
-                .Map(dest => dest.IdUser, src => src.IdUser)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image);
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
-                .Map(dest => dest.IdUser, src => src.IdUser)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image);
 

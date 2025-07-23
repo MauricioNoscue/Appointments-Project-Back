@@ -24,7 +24,10 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                    Password = "M1d!Citas2025",
                    Active = false,
                    PersonId = 1,
-                   RegistrationDate = new DateTime(2024, 7, 16)
+                   RegistrationDate = new DateTime(2024, 7, 16),
+                   CodePassword = "no hay",
+                   RestrictionPoint= 3
+
                }, new User
                {
 
@@ -33,7 +36,9 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                    Password = "M2d!Citas2025",
                    Active = false,
                    PersonId = 2,
-                   RegistrationDate = new DateTime(2024, 7, 16)
+                   RegistrationDate = new DateTime(2024, 7, 16),
+                   CodePassword = "no hay",
+                   RestrictionPoint = 3
                }
                );
 

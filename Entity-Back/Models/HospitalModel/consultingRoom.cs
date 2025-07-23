@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entity_Back.Models;
+using Entity_Back.Models.Infrastructure;
 
 namespace Entity_Back
 {
@@ -10,7 +11,7 @@ namespace Entity_Back
         public int Floor { get; set; }
         public int BranchId { get; set; }
 
-        // public Branch Branch { get; set; }
+         public Branch Branch { get; set; }
         public  List<Shedule> Shedules { get; set; }
     }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Entity_Back.Models;
 using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
+using Entity_Back.Models.Notification;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,12 @@ namespace Entity_Back.Context
             .HasForeignKey<User>(u => u.PersonId)
             .OnDelete(DeleteBehavior.Cascade);
 
+
+            modelBuilder.Entity<Citation>()
+    .HasOne(c => c.User)
+    .WithMany() // ajusta según tu modelo
+    .HasForeignKey(c => c.UserId)
+    .OnDelete(DeleteBehavior.Restrict); // o .NoAction
         }
 
 
@@ -94,6 +101,9 @@ namespace Entity_Back.Context
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<TypeCitation> TypeCitations { get; set; }
         public DbSet<Shedule> Shedules { get; set; }
+        public DbSet<RelatedPerson> RelatedPerson { get; set; }
+
+
 
         //Infrastructure
 
@@ -101,6 +111,12 @@ namespace Entity_Back.Context
         public DbSet<City> City { get; set; }
         public DbSet<Departament> Departament { get; set; }
         public DbSet<Institution> Institution { get; set; }
+
+
+        //Notification
+
+        public DbSet<Notification> Notification { get; set; }
+
 
 
 

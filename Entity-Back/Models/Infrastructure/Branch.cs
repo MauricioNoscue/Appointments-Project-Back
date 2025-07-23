@@ -14,6 +14,8 @@ namespace Entity_Back.Models.Infrastructure
         public string Address { get; set; }
         public int InstitutionId { get; set; }
         public Institution Institution { get; set; }
+        public List<ConsultingRoom> ConsultingRoom { get; set; } = new List<ConsultingRoom>();
+
 
     }
 }

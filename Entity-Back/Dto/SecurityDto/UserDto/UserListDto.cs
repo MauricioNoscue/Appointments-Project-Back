@@ -14,6 +14,8 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
 
         public string? Email { get; set; }
         public bool? Active { get; set; } = false;
+        public string? CodePassword { get; set; }
+        public int? RestrictionPoint { get; set; }
 
     }
 }

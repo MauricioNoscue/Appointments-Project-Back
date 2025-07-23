@@ -26,7 +26,7 @@ namespace Entity_Back.Models.SecurityModels
         public int EpsId { get; set; }
         public Eps Eps { get; set; }
 
-
+        public List<RelatedPerson> RelatedPerson {  get; set; } = new List<RelatedPerson>();
         public List<Doctor> Doctor { get; set; } = new List<Doctor>();
 
     }
