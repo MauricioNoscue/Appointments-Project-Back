@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity_Back.Models;
 using Entity_Back.Models.HospitalModel;
+using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
@@ -88,7 +89,12 @@ namespace Entity_Back.Context
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Eps> Eps { get; set; }
 
+        //Infrastructure
 
+        public DbSet<Branch> Branch { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Departament> Departament { get; set; }
+        public DbSet<Institution> Institution { get; set; }
 
 
 
