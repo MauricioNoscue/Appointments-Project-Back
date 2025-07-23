@@ -2,7 +2,7 @@ using Entity_Back.Models;
 
 namespace Entity_Back
 {
-    public class DoctorListDto
+    public class DoctorListDto : BaseModel
     {
         public string Specialty { get; set; } = string.Empty;
         public bool Active { get; set; }
