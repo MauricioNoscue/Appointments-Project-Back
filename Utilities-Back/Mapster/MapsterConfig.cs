@@ -1,9 +1,14 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entity_Back;
+using Entity_Back.Dto.InfrastructureDto.BranchDto;
+using Entity_Back.Dto.InfrastructureDto.CityDto;
+using Entity_Back.Dto.InfrastructureDto.Departament;
+using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
+using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
 using Entity_Back.Dto.SecurityDto.PersonDto;
@@ -12,6 +17,7 @@ using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
+using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
@@ -190,7 +196,29 @@ namespace Utilities_Back.Mapster
 
 
 
+            //Infrastructure
+            //Branch
+            TypeAdapterConfig<BranchCreatedDto, Branch>.NewConfig();
+            TypeAdapterConfig<Branch, BranchListDto>.NewConfig()
+                .Map(dest => dest.InstitutionName, src => src.Institution.Name);
+            TypeAdapterConfig<BranchEditDto, Branch>.NewConfig();
 
+            //City
+            TypeAdapterConfig<CityCreatedDto, City>.NewConfig();
+            TypeAdapterConfig<City, CityListDto>.NewConfig()
+                .Map(dest => dest.DepartamentName, src => src.Departament.Name);
+            TypeAdapterConfig<CityEditDto, City>.NewConfig();
+
+            //Departament
+            TypeAdapterConfig<DepartamentCreatedDto, Departament>.NewConfig();
+            TypeAdapterConfig<Departament, DepartamentListDto>.NewConfig();
+            TypeAdapterConfig<DepartamentEditDto, Departament>.NewConfig();
+
+            //Institution
+            TypeAdapterConfig<InstitutionCreatedDto, Institution>.NewConfig();
+            TypeAdapterConfig<Institution, InstitutionListDto>.NewConfig()
+                .Map(dest => dest.CityName, src => src.City.Name);
+            TypeAdapterConfig<InstitutionEditDto, Institution>.NewConfig();
 
         }
     }

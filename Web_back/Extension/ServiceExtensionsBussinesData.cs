@@ -4,6 +4,7 @@ using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Services;
 using Data_Back;
 using Data_Back.Implements;
+using Data_Back.Implements.ModelDataImplement.Infrastructure;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
@@ -17,6 +18,7 @@ using Entity_Back.Dto.SecurityDto.RolDto;
 using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
+using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 
@@ -102,6 +104,11 @@ namespace Web_back.Extension
             services.AddScoped<ISheduleData, SheduleData>();
             services.AddScoped<IBaseModelBusiness<SheduleCreateDto, SheduleEditDto, SheduleListDto>, SheduleBusiness>();
             services.AddScoped<ISheduleBusiness, SheduleBusiness>();
+            //Infrastructure
+            services.AddScoped<IBaseModelData<Branch>, BranchData>();
+            services.AddScoped<IBaseModelData<Institution>, InstitutionData>();
+            services.AddScoped<IBaseModelData<City>, CityData>();
+            services.AddScoped<IBaseModelData<Departament>, DepartamentData>();
 
 
 
