@@ -8,6 +8,5 @@ namespace Entity_Back
         public bool Active { get; set; }
         public string Image { get; set; } = string.Empty;
         public string? FullName { get; set; }
-        public string? Email { get; set; }
     }
 }

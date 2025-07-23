@@ -82,7 +82,7 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.PermissionName, src => src.Permission.Name);
             TypeAdapterConfig<RolFormPermissionEditDto, RolFormPermission>.NewConfig();
 
-        
+
             // Citation
             TypeAdapterConfig<CitationCreateDto, Citation>.NewConfig()
                 .Map(dest => dest.Note, src => src.Note)
@@ -97,6 +97,98 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.State, src => src.State)
                 .Map(dest => dest.Note, src => src.Note)
                 .Map(dest => dest.CreationDate, src => src.CreationDate);
+
+            // ScheduleHour
+            TypeAdapterConfig<ScheduleHourCreateDto, ScheduleHour>.NewConfig()
+                .Map(dest => dest.StartTime, src => src.StartTime)
+                .Map(dest => dest.EndTime, src => src.EndTime)
+                .Map(dest => dest.ProgramateDate, src => src.ProgramateDate)
+                .Map(dest => dest.SheduleId, src => src.SheduleId);
+
+            TypeAdapterConfig<ScheduleHourEditDto, ScheduleHour>.NewConfig()
+                .Map(dest => dest.StartTime, src => src.StartTime)
+                .Map(dest => dest.EndTime, src => src.EndTime)
+                .Map(dest => dest.ProgramateDate, src => src.ProgramateDate);
+
+            TypeAdapterConfig<ScheduleHour, ScheduleHourListDto>.NewConfig()
+                .Map(dest => dest.StartTime, src => src.StartTime)
+                .Map(dest => dest.EndTime, src => src.EndTime)
+                .Map(dest => dest.ProgramateDate, src => src.ProgramateDate);
+
+            // ConsultingRoom
+            TypeAdapterConfig<ConsultingRoomCreateDto, ConsultingRoom>.NewConfig()
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.RoomNumber, src => src.RoomNumber)
+                .Map(dest => dest.Floor, src => src.Floor)
+                .Map(dest => dest.BranchId, src => src.BranchId);
+
+            TypeAdapterConfig<ConsultingRoomEditDto, ConsultingRoom>.NewConfig()
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.RoomNumber, src => src.RoomNumber)
+                .Map(dest => dest.Floor, src => src.Floor);
+
+            TypeAdapterConfig<ConsultingRoom, ConsultingRoomListDto>.NewConfig()
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.RoomNumber, src => src.RoomNumber)
+                .Map(dest => dest.Floor, src => src.Floor);
+
+            // Doctor
+            TypeAdapterConfig<DoctorCreateDto, Doctor>.NewConfig()
+                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.IdUser, src => src.IdUser)
+                .Map(dest => dest.Active, src => src.Active)
+                .Map(dest => dest.Image, src => src.Image);
+
+            TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
+                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.IdUser, src => src.IdUser)
+                .Map(dest => dest.Active, src => src.Active)
+                .Map(dest => dest.Image, src => src.Image);
+
+            TypeAdapterConfig<Doctor, DoctorListDto>.NewConfig()
+                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.Active, src => src.Active)
+                .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.FullName, src => src.Person.FullName);
+
+            // TypeCitation
+            TypeAdapterConfig<TypeCitationCreateDto, TypeCitation>.NewConfig()
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.Description, src => src.Description)
+                .Map(dest => dest.Icon, src => src.Icon);
+
+            TypeAdapterConfig<TypeCitationEditDto, TypeCitation>.NewConfig()
+                .Map(dest => dest.Description, src => src.Description)
+                .Map(dest => dest.Icon, src => src.Icon);
+
+            TypeAdapterConfig<TypeCitation, TypeCitationListDto>.NewConfig()
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.Description, src => src.Description)
+                .Map(dest => dest.Icon, src => src.Icon);
+
+            // Shedule
+            TypeAdapterConfig<SheduleCreateDto, Shedule>.NewConfig()
+                .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
+                .Map(dest => dest.DoctorId, src => src.DoctorId)
+                .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
+                .Map(dest => dest.NumberCitation, src => src.NumberCitation)
+                .Map(dest => dest.SheduleId, src => src.SheduleId);
+
+            TypeAdapterConfig<SheduleEditDto, Shedule>.NewConfig()
+                .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
+                .Map(dest => dest.DoctorId, src => src.DoctorId)
+                .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
+                .Map(dest => dest.NumberCitation, src => src.NumberCitation)
+                .Map(dest => dest.SheduleId, src => src.SheduleId);
+
+            TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()
+                .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
+                .Map(dest => dest.NameDoctor, src => src.Doctor.Person.FullName)
+                .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
+                .Map(dest => dest.NumberCitation, src => src.NumberCitation)
+                .Map(dest => dest.SheduleId, src => src.SheduleId);
+
+
 
 
 

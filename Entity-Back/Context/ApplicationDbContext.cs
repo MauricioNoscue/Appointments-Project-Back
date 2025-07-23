@@ -31,10 +31,10 @@ namespace Entity_Back.Context
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.Entity<Person>()
-           .HasOne(p => p.User)
-           .WithOne(u => u.Person)
-           .HasForeignKey<User>(u => u.PersonId)
-           .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(p => p.User)
+            .WithOne(u => u.Person)
+            .HasForeignKey<User>(u => u.PersonId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
 
@@ -88,8 +88,11 @@ namespace Entity_Back.Context
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Eps> Eps { get; set; }
         public DbSet<Citation> Citation { get; set; }
-
-
+        public DbSet<ScheduleHour> ScheduleHours { get; set; }
+        public DbSet<ConsultingRoom> ConsultingRooms { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<TypeCitation> TypeCitations { get; set; }
+        public DbSet<Shedule> Shedules { get; set; }
 
 
 
