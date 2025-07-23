@@ -11,7 +11,7 @@ namespace Entity_Back
         public int Floor { get; set; }
         public int BranchId { get; set; }
 
-         public Branch Branch { get; set; }
+        public Branch Branch { get; set; }
         public  List<Shedule> Shedules { get; set; }
     }
 

@@ -10,7 +10,7 @@ namespace Web_back.Factory.Implements
             return provider switch
             {
                 "SqlServer" => new SqlServerDbContextFactory(),
-             
+            
                 _ => throw new NotSupportedException($"proveedor{provider} no soportado"),
             };
         }
