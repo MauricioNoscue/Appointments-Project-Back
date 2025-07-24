@@ -19,6 +19,8 @@ builder.Services.AddProjectServices();
 builder.Services.AddDatabaseConfiguration(configuration);
 
 
+//Cors
+builder.Services.AddCorsConfiguration(configuration);
 // AutoMapper
 MapsterConfig.RegisterMappings();
 
