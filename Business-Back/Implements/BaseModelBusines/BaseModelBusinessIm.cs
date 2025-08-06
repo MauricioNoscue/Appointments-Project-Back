@@ -71,12 +71,12 @@ namespace Business_Back.Implements.BaseModelBusiness
                 return entiry.Adapt<Dl>();
 
             }
-            catch (DbUpdateException dbEx)
-            {
-                // Capturamos errores de la base de datos y tratamos errores de restricción única
-                var mensaje = ParseUniqueConstraintError(dbEx);
-                throw new ValidationException(mensaje);
-            }
+            //catch (DbUpdateException dbEx)
+            //{
+            //    // Capturamos errores de la base de datos y tratamos errores de restricción única
+            //    var mensaje = ParseUniqueConstraintError(dbEx);
+            //    throw new ValidationException(mensaje);
+            //}
             catch (BusinessException ex)
             {
                 _logger.LogError(ex, "Error al crear entidad {Entity}", typeof(T).Name);
@@ -95,12 +95,12 @@ namespace Business_Back.Implements.BaseModelBusiness
                 await _data.Update(entity);
                 return true;
             }
-            catch (DbUpdateException dbEx)
-            {
-                // Capturamos errores de la base de datos y tratamos errores de restricción única
-                var mensaje = ParseUniqueConstraintError(dbEx);
-                throw new ValidationException(mensaje);
-            }
+            //catch (DbUpdateException dbEx)
+            //{
+            //    // Capturamos errores de la base de datos y tratamos errores de restricción única
+            //    var mensaje = ParseUniqueConstraintError(dbEx);
+            //    throw new ValidationException(mensaje);
+            //}
             catch (BusinessException ex)
             {
                 _logger.LogError(ex, "Error al actualizar entidad {Entity}", typeof(T).Name);
