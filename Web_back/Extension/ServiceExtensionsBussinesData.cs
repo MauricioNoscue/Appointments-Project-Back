@@ -11,6 +11,7 @@ using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.FormModuleDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
+using Entity_Back.Dto.SecurityDto.PersonDto;
 using Entity_Back.Dto.SecurityDto.RolDto;
 using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
@@ -66,7 +67,9 @@ namespace Web_back.Extension
             services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
             services.AddScoped<IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>, RolFormPermissionBusiness>();
 
-
+            services.AddScoped<IBaseModelData<Person>, PersonData>();
+            services.AddScoped<IpersonData, PersonData>(); // si tienes una interfaz específica
+            services.AddScoped<IBaseModelBusiness<PersonCreatedDto, PersonEditDto, PersonListDto>, PersonBusiness>();
 
 
 

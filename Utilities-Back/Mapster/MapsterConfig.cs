@@ -34,10 +34,9 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<RolEditDto, Rol>.NewConfig();
 
             //User
-            TypeAdapterConfig<User, UserListDto>.NewConfig();
-            TypeAdapterConfig<UserCreatedDto, User>.NewConfig()
-            .Map(dest => dest.Person, src => src.Person)
-             .Map(dest => dest.Active, src => src.Active);
+            TypeAdapterConfig<User, UserListDto>.NewConfig().Map(des => des.PersonName, src => src.Person.FullName); ;
+            TypeAdapterConfig<UserCreatedDto, User>.NewConfig();
+           
             TypeAdapterConfig<UserEditDto, User>.NewConfig();
 
             //Person
@@ -87,6 +86,15 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.FormName, src => src.Form.Name)
                 .Map(dest => dest.PermissionName, src => src.Permission.Name);
             TypeAdapterConfig<RolFormPermissionEditDto, RolFormPermission>.NewConfig();
+
+
+            TypeAdapterConfig<Person, PersonListDto>.NewConfig().Map(des => des.DocumentTypeName, src =>src.DocumentType.Acronym);
+            TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig();
+            TypeAdapterConfig<PersonEditDto, Person>.NewConfig();
+
+            TypeAdapterConfig<Permission, PermissionListDto>.NewConfig();
+            TypeAdapterConfig<PermissionCreatedDto, Permission>.NewConfig();
+            TypeAdapterConfig<PermissionEditDto, Permission>.NewConfig();
 
 
             // Citation

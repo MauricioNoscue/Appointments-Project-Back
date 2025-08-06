@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Dto.SecurityDto.ModuleDto
 {
-    public class ModuleEditDto
+    public class ModuleEditDto 
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

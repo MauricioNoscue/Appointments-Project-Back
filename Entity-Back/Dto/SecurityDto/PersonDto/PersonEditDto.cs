@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Dto.SecurityDto.PersonDto
 {
-    public class PersonCreatedDto
+    public class PersonEditDto
     {
         public string FullName { get; set; }
         public string FullLastName { get; set; }
