@@ -1,12 +1,20 @@
 ﻿using Business_Back;
+using Business_Back.Implements.ModelBusinessImplements.Infrastructure;
 using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Services;
+using Data_Back.Implements.ModelDataImplement.Infrastructure;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
+using Data_Back.Interface.IDataModels.Infrastructure;
 using Data_Back.Interface.IDataModels.Security;
 using Entity_Back;
+using Entity_Back.Dto.InfrastructureDto.BranchDto;
+using Entity_Back.Dto.InfrastructureDto.CityDto;
+using Entity_Back.Dto.InfrastructureDto.Departament;
+using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
+using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.FormModuleDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
@@ -66,10 +74,28 @@ namespace Web_back.Extension
             services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
             services.AddScoped<IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>, RolFormPermissionBusiness>();
 
+            //Infrastructure
+            //Branch
+            services.AddScoped<IBaseModelData<Branch>, BranchData>();
+            services.AddScoped<IBranchData, BranchData>();
+            services.AddScoped<IBaseModelBusiness<BranchCreatedDto, BranchEditDto, BranchListDto>, BranchBusiness>();
 
+            //City
+            services.AddScoped<IBaseModelData<City>, CityData>();
+            services.AddScoped<ICityData, CityData>();
+            services.AddScoped<IBaseModelBusiness<CityCreatedDto, CityEditDto, CityListDto>, CityBusiness>();
 
+            //Departament
+            services.AddScoped<IBaseModelData<Departament>, DepartamentData>();
+            services.AddScoped<IDepartamentData, DepartamentData>();
+            services.AddScoped<IBaseModelBusiness<DepartamentCreatedDto, DepartamentEditDto, DepartamentListDto>, DepartamentBusiness>();
 
-
+            //Institution
+            services.AddScoped<IBaseModelData<Institution>, InstitutionData>();
+            services.AddScoped<IInstitutionData, InstitutionData>();
+            services.AddScoped<IBaseModelBusiness<InstitutionCreatedDto, InstitutionEditDto, InstitutionListDto>, InstitutionBusiness>();
+            
+            
             services.AddScoped<JWTService>();
 
             services.AddScoped<AuthService>();
