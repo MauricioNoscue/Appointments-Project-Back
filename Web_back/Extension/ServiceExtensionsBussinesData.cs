@@ -111,8 +111,31 @@ namespace Web_back.Extension
             services.AddScoped<IBaseModelData<Institution>, InstitutionData>();
             services.AddScoped<IInstitutionData, InstitutionData>();
             services.AddScoped<IBaseModelBusiness<InstitutionCreatedDto, InstitutionEditDto, InstitutionListDto>, InstitutionBusiness>();
-            
-            
+
+
+            //Branch
+            services.AddScoped<IBaseModelData<Branch>, BranchData>();
+            services.AddScoped<IBranchData, BranchData>();
+            services.AddScoped<IBaseModelBusiness<BranchCreatedDto, BranchEditDto, BranchListDto>, BranchBusiness>();
+
+            //City
+            services.AddScoped<IBaseModelData<City>, CityData>();
+            services.AddScoped<ICityData, CityData>();
+            services.AddScoped<IBaseModelBusiness<CityCreatedDto, CityEditDto, CityListDto>, CityBusiness>();
+
+            //Departament
+            services.AddScoped<IBaseModelData<Departament>, DepartamentData>();
+            services.AddScoped<IDepartamentData, DepartamentData>();
+            services.AddScoped<IBaseModelBusiness<DepartamentCreatedDto, DepartamentEditDto, DepartamentListDto>, DepartamentBusiness>();
+
+            services.AddScoped<IBaseModelData<Person>, PersonData>();
+            services.AddScoped<IpersonData, PersonData>(); 
+            services.AddScoped<IBaseModelBusiness<PersonCreatedDto, PersonEditDto, PersonListDto>, PersonBusiness>();
+
+
+
+
+
             services.AddScoped<JWTService>();
 
             services.AddScoped<AuthService>();
