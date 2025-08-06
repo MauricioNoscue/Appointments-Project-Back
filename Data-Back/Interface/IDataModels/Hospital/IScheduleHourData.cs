@@ -5,6 +5,6 @@ namespace Data_Back.Interface
 {
     public interface IScheduleHourData : IBaseModelData<ScheduleHour>
     {
-        // En el futuro puedes agregar aquí métodos como BuscarPorFecha, VerificarDisponibilidad, etc.
+        
     }
 }

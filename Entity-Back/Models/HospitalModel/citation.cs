@@ -13,7 +13,7 @@ namespace Entity_Back
         public int ScheduleHourId { get; set; }
 
         public  User User { get; set; }
-         public  List<Notification> Notification { get; set; }
+        public  List<Notification> Notification { get; set; }
         public  ScheduleHour ScheduleHour { get; set; }
     }
 
