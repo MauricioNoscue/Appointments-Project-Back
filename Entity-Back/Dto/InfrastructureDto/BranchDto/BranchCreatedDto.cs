@@ -13,5 +13,6 @@ namespace Entity_Back.Dto.InfrastructureDto.BranchDto
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public int InstitutionId { get; set; }
+
     }
 }
