@@ -13,5 +13,9 @@ namespace Data_Back.Interface.IDataModels.Security
     {
         public Task<Person> SavePerson(Person person);
         public Task<User?> validarCredenciales(string email, string password);
+
+
+        public Task<User> GetUserDetailAsync(int id);
+      
     }
 }

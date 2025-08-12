@@ -12,6 +12,8 @@ namespace Entity_Back.Models.Security
         public string Name { get; set; }
         public string Description { get; set; }
         public List<RolUser> RolUser { get; set; } = new List<RolUser>();
+        public List<RolFormPermission> RolFormPermission { get; set; } = new List<RolFormPermission>();
+
 
     }
 }

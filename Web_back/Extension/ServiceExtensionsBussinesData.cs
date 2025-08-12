@@ -2,6 +2,7 @@
 using Business_Back.Implements.ModelBusinessImplements.Infrastructure;
 using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
+using Business_Back.Interface.IBusinessModel.Security;
 using Business_Back.Services;
 using Data_Back;
 using Data_Back.Implements;
@@ -46,11 +47,17 @@ namespace Web_back.Extension
             services.AddScoped<IBaseModelData<User>, UserData>();
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IBaseModelBusiness<UserCreatedDto, UserEditDto, UserListDto>, UserBusiness>();
+            services.AddScoped<IUserBusiness, UserBusiness>();
 
 
             services.AddScoped<IBaseModelData<RolUser>, RolUserData>();
             services.AddScoped<IRolUserData, RolUserData>();
             services.AddScoped<IBaseModelBusiness<RolUserCreatedDto, RolUserEditDto, RolUserList>, RolUserBusiness>();
+            services.AddScoped<IRolUserBusiness, RolUserBusiness>();
+            services.AddScoped<IRolFormPermissionBusiness
+, RolFormPermissionBusiness
+>();
+
 
             // Permission
             services.AddScoped<IBaseModelData<Permission>, PermissionData>();

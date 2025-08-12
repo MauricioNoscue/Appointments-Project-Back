@@ -19,6 +19,45 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             
         }
 
+        public async Task<List<RolUser>> GetAllByUserIdAsync(int userId)
+        {
+            return await _context.RolUser
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task SaveChangesAsyncc()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<int>> GetExistingRolIdsForUser(int userId)
+        {
+            return await _context.RolUser
+                .Where(r => r.UserId == userId && !r.IsDeleted)
+                .Select(r => r.RolId)
+                .ToListAsync();
+        }
+
+        public async Task BulkInsertAsync(List<RolUser> rolUsers)
+        {
+            _context.RolUser.AddRange(rolUsers);
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<List<RolUser>> GetRolesAndPermissionsByUserIdAsync(int userId)
+        {
+            return await _context.RolUser
+                .Where(ru => ru.UserId == userId)
+                .Include(ru => ru.Rol)
+                    .ThenInclude(r => r.RolFormPermission)
+                        .ThenInclude(rfp => rfp.Permission)
+                .Include(ru => ru.Rol)
+                    .ThenInclude(r => r.RolFormPermission)
+                        .ThenInclude(rfp => rfp.Form)
+                .ToListAsync();
+        }
 
 
         public override async Task<IEnumerable<RolUser>> GetAll()

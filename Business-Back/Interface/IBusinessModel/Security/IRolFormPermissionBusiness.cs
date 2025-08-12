@@ -10,6 +10,8 @@ namespace Business_Back.Interface.IBusinessModel.Security
 {
     public interface IRolFormPermissionBusiness : IBaseModelBusiness<RolFormPermissionCreatedDto, RolFormPermissionEditDto, RolFormPermissionListDto>
     {
+        public  Task AssignPermissionsAsync(AssignPermissionsDto dto);
+        public Task UpdateRolFormPermissionsAsync(UpdateRolFormPermissionsDto dto);
     }
 
 }

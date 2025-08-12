@@ -10,5 +10,6 @@ namespace Business_Back.Interface.IBusinessModel.Security
 {
     public interface IUserBusiness : IBaseModelBusiness<UserCreatedDto,UserEditDto,UserListDto>
     {
+        public Task<UserDetailDto> GetUserDetailAsync(int id);
     }
 }

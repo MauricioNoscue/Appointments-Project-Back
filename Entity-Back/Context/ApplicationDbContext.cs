@@ -40,10 +40,10 @@ namespace Entity_Back.Context
 
 
             modelBuilder.Entity<Citation>()
-    .HasOne(c => c.User)
-    .WithMany() // ajusta según tu modelo
-    .HasForeignKey(c => c.UserId)
-    .OnDelete(DeleteBehavior.Restrict); // o .NoAction
+         .HasOne(c => c.User)
+         .WithMany(u => u.Citation)
+         .HasForeignKey(c => c.UserId)
+         .OnDelete(DeleteBehavior.Restrict); // o .NoAction
         }
 
 

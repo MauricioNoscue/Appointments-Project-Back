@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Business_Back.Implements.BaseModelBusiness;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
+using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface.IDataModels.Security;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
@@ -27,7 +28,33 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             : base(configuration, data, logger)
         {
             _data = data;
-        }   
+        }
+
+        public async Task<UserDetailDto> GetUserDetailAsync(int id)
+        {
+            var user = await _data.GetUserDetailAsync(id);
+            if (user == null) return null;
+
+                       return new UserDetailDto
+            {
+                FullName = user.Person.FullName,
+                FullLastName = user.Person.FullLastName,
+                Document = $"{user.Person.DocumentType.Name} {user.Person.Document}",
+                PhoneNumber = user.Person.PhoneNumber,
+                Email = user.Email,
+                DateBorn = user.Person.DateBorn,
+                RegisterDate = (DateTime)user.RegistrationDate,
+                Gender = user.Person.Gender.ToString(),            
+                HealthRegime = user.Person.HealthRegime.ToString(), 
+                Roles = user.RolUser.Select(r => r.Rol.Name).ToList()
+            };
+
+        }
+
+
+
+
+
 
         //public override async Task<UserListDto> Save(UserCreatedDto dto)
         //{
@@ -93,7 +120,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
         //    }
         //}
 
-        
+
         //public override async Task<bool> Update(UserEditDto dto)
         //{
         //    if (dto == null)
