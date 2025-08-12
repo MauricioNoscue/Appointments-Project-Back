@@ -10,5 +10,7 @@ namespace Entity_Back.Dto.InfrastructureDto.CityDto
     {
         public int DepartamentId { get; set; }
         public string Name { get; set; }
+       
+
     }
 }
