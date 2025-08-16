@@ -5,6 +5,6 @@ namespace Data_Back.Interface
 {
     public interface ISheduleData : IBaseModelData<Shedule>
     {
-
+        Task<Shedule?> GetByIdTypeCitation(int id);
     }
 }

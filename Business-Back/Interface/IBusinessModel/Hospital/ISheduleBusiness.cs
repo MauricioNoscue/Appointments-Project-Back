@@ -5,6 +5,7 @@ namespace Business_Back
 {
     public interface ISheduleBusiness : IBaseModelBusiness<SheduleCreateDto, SheduleEditDto, SheduleListDto>
     {
-        
+        Task<SheduleListDto?> GetByIdTypeCitation(int id);
+
     }
 }

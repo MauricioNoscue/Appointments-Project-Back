@@ -4,6 +4,7 @@ using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
 using Business_Back.Services;
+using Business_Back.Services.Citation;
 using Data_Back;
 using Data_Back.Implements;
 using Data_Back.Implements.ModelDataImplement.Infrastructure;
@@ -139,7 +140,12 @@ namespace Web_back.Extension
             services.AddScoped<IpersonData, PersonData>(); 
             services.AddScoped<IBaseModelBusiness<PersonCreatedDto, PersonEditDto, PersonListDto>, PersonBusiness>();
 
+            services.AddScoped<ISheduleBusiness, SheduleBusiness>();
+            services.AddScoped<IScheduleHourBusiness, ScheduleHourBusiness>();
 
+
+
+            services.AddScoped<CitationCoreService>();
 
 
 

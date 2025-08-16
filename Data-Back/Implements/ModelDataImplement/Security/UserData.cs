@@ -20,17 +20,17 @@ namespace Data_Back.Implements.ModelDataImplement.Security
 
         }
 
-       
+
 
         public async Task<User> GetUserDetailAsync(int id)
         {
             return await _context.User
-    .Include(u => u.Person)
-        .ThenInclude(p => p.DocumentType)
-    .Include(u => u.RolUser)
-        .ThenInclude(ru => ru.Rol)
-    .FirstOrDefaultAsync(u => u.Id == id);
-
+                .Where(u => !u.IsDeleted) // Usuario no eliminado
+                .Include(u => u.Person)
+                    .ThenInclude(p => p.DocumentType)
+                .Include(u => u.RolUser.Where(ru => !ru.IsDeleted)) // Relación no eliminada
+                    .ThenInclude(ru => ru.Rol)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> validarCredenciales(string email, string password)

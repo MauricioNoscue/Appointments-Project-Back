@@ -7,5 +7,7 @@ namespace Entity_Back
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public DateTime ProgramateDate { get; set; }
+        public TimeSpan? BreakStartTime { get; set; }
+        public TimeSpan? BreakEndTime { get; set; }
     }
 }

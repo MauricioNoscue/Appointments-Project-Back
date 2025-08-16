@@ -41,12 +41,11 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         }
 
 
-
         public async Task<List<RolFormPermission>> GetAllByRolIdAsync(int rolId)
         {
             return await _context.RolFormPermission
-                .Where(x => x.RolId == rolId)
-                .ToListAsync(); // Incluye activos e inactivos
+                .Where(x => x.RolId == rolId && !x.IsDeleted) // Solo activos
+                .ToListAsync();
         }
 
         public async Task SaveChangesAsyncx()

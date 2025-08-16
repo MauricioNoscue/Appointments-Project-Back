@@ -49,7 +49,7 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         public async Task<List<RolUser>> GetRolesAndPermissionsByUserIdAsync(int userId)
         {
             return await _context.RolUser
-                .Where(ru => ru.UserId == userId)
+                .Where(ru => ru.UserId == userId && !ru.IsDeleted) // Relación activa
                 .Include(ru => ru.Rol)
                     .ThenInclude(r => r.RolFormPermission)
                         .ThenInclude(rfp => rfp.Permission)

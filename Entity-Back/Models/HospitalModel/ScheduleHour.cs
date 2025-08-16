@@ -8,8 +8,10 @@ namespace Entity_Back
         public TimeSpan EndTime { get; set; }
         public DateTime ProgramateDate { get; set; }
         public int SheduleId { get; set; }
+        public TimeSpan? BreakStartTime { get; set; }
+        public TimeSpan? BreakEndTime { get; set; }
 
-        public  Shedule Shedule { get; set; }
+        public Shedule Shedule { get; set; }
         public  List<Citation> Citations { get; set; }
     }
 
