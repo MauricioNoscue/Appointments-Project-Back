@@ -5,6 +5,7 @@ namespace Business_Back
 {
     public interface ICitationsBusiness : IBaseModelBusiness<CitationCreateDto, CitationEditDto, CitationListDto>
     {
+        Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate);
 
     }
 }

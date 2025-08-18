@@ -15,6 +15,12 @@ namespace Business_Back
         {
             _data = data;
         }
+
+        public async Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
+        {
+            return await _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
+        }
+
     }
 }
 

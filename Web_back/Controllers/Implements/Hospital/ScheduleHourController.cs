@@ -27,7 +27,7 @@ namespace Web_back.Controllers.Implements.Medical
                 {
                     return BadRequest("El id debe ser mayor que cero.");
                 }
-                var result = await _business.GetByIdShedule(id);
+                var result = await _business.GetByDateAndSheduleAsync(id);
                 if (result == null)
                 {
                     return NotFound($"No se encontró el horario con el ID {id}.");

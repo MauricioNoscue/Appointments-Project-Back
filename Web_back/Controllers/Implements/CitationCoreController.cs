@@ -18,27 +18,27 @@ namespace Web_back.Controllers.Implements
         }
 
 
-        [HttpGet("core/{id}")]
-        public async Task<ActionResult<ScheduleHourListDto?>> GetByIdShedule(int id)
+        [HttpGet("core")]
+        public async Task<ActionResult<List<TimeSpan>>> GetAvailableBlocks([FromQuery] int typeCitationId, [FromQuery] DateTime date)
         {
             try
             {
-                if (id <= 0)
-                {
-                    return BadRequest("El id debe ser mayor que cero.");
-                }
-                var result = await _service.GetAvailableTimeBlocksByTypeCitationIdAsync(id);
-                if (result == null)
-                {
-                    return NotFound($"No se encontró el horario con el ID {id}.");
-                }
+                if (typeCitationId <= 0)
+                    return BadRequest("El tipo de cita debe ser mayor que cero.");
+
+                var result = await _service.GetAvailableTimeBlocksByTypeCitationIdAsync(typeCitationId, date.Date);
+
+                if (result == null || result.Count == 0)
+                    return NotFound($"No hay bloques disponibles para el tipo de cita {typeCitationId} en {date:yyyy-MM-dd}.");
+
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener el horario por ID {id}: {ex.Message}", ex);
+                return StatusCode(500, $"Error al obtener bloques: {ex.Message}");
             }
         }
+
 
     }
 }

@@ -5,6 +5,6 @@ namespace Data_Back.Interface
 {
     public interface IScheduleHourData : IBaseModelData<ScheduleHour>
     {
-        Task<ScheduleHour?> GetByIdShedule(int id);
+        Task<ScheduleHour?> GetByDateAndSheduleAsync(int sheduleId);
     }
 }

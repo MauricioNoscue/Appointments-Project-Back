@@ -16,21 +16,19 @@ namespace Data_Back.Implements
             _context = context;
         }
 
-        public async Task<ScheduleHour?> GetByIdShedule(int id)
+        public async Task<ScheduleHour?> GetByDateAndSheduleAsync(int sheduleId)
         {
             try
             {
-                var ltsModel = await _context.Set<ScheduleHour>()
-                .Where(e => !e.IsDeleted && e.SheduleId == id)
-                .FirstOrDefaultAsync();
-                return ltsModel;
+                return await _context.Set<ScheduleHour>()
+           .Where(e => !e.IsDeleted && e.SheduleId == sheduleId)
+           .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
-                // Log the exception (you can use a logging framework here)
-                throw new Exception($"Error retrieving ScheduleHours by ScheduleId {id}: {ex.Message}", ex);
+                throw new Exception($"Error al obtener ScheduleHour: {ex.Message}", ex);
             }
-
         }
+
     }
 }

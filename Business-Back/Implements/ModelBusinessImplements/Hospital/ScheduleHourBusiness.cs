@@ -17,22 +17,22 @@ namespace Business_Back
             _data = data;
         }
 
-        public async Task<ScheduleHourListDto?> GetByIdShedule(int id)
+        public async Task<ScheduleHourListDto?> GetByDateAndSheduleAsync(int sheduleId)
         {
             try
             {
-                if(id <= 0)
+                if(sheduleId <= 0)
                 {
-                    throw new ArgumentException("ScheduleId must be greater than zero.", nameof(id));
+                    throw new ArgumentException("ScheduleId must be greater than zero.", nameof(sheduleId));
                 }
 
-                var sheduleHour = await _data.GetByIdShedule(id);
+                var sheduleHour = await _data.GetByDateAndSheduleAsync(sheduleId);
                 return sheduleHour.Adapt<ScheduleHourListDto>();
             }
             catch (Exception ex)
             {
                 // Log the exception (you can use a logging framework here)
-                throw new Exception($"Error retrieving ScheduleHours by ScheduleId {id}: {ex.Message}", ex);
+                throw new Exception($"Error retrieving ScheduleHours by ScheduleId {sheduleId}: {ex.Message}", ex);
             }
         }
     }

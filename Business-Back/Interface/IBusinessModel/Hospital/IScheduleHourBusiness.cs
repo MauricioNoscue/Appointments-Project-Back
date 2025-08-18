@@ -5,7 +5,7 @@ namespace Business_Back
 {
     public interface IScheduleHourBusiness : IBaseModelBusiness<ScheduleHourCreateDto, ScheduleHourEditDto, ScheduleHourListDto>
     {
-        Task<ScheduleHourListDto?> GetByIdShedule(int id);
+        Task<ScheduleHourListDto?> GetByDateAndSheduleAsync(int sheduleId);
 
     }
 }

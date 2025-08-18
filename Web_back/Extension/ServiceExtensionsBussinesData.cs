@@ -142,6 +142,8 @@ namespace Web_back.Extension
 
             services.AddScoped<ISheduleBusiness, SheduleBusiness>();
             services.AddScoped<IScheduleHourBusiness, ScheduleHourBusiness>();
+            services.AddScoped<ICitationsBusiness, CitationBusiness>();
+
 
 
 

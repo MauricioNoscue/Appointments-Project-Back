@@ -14,7 +14,7 @@ namespace Entity_Back
                 {
                     Id = 1,
                     UserId = 1,
-                    CreationDate = staticDate,
+                    AppointmentDate = staticDate,
                     State = "Pendiente",
                     Note = "Cita para revisión general",
                     ScheduleHourId = 1,
@@ -25,7 +25,7 @@ namespace Entity_Back
                 {
                     Id = 2,
                     UserId = 2,
-                    CreationDate = staticDate.AddHours(1),
+                    AppointmentDate = staticDate.AddHours(1),
                     State = "Confirmada",
                     Note = "Control postoperatorio",
                     ScheduleHourId = 2,

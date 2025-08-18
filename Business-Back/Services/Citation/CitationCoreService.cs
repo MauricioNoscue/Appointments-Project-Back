@@ -12,43 +12,51 @@ namespace Business_Back.Services.Citation
     {
         private readonly IScheduleHourBusiness _scheduleHourBusiness;
         private readonly ISheduleBusiness _sheduleBusiness;
-        public CitationCoreService(IScheduleHourBusiness scheduleHourBusiness, ISheduleBusiness sheduleBusiness)
+        private readonly ICitationsBusiness _citationBusiness;
+        public CitationCoreService(IScheduleHourBusiness scheduleHourBusiness, ISheduleBusiness sheduleBusiness,ICitationsBusiness citationBusiness)
         {
             _scheduleHourBusiness = scheduleHourBusiness;
             _sheduleBusiness = sheduleBusiness;
+            _citationBusiness = citationBusiness;
         }
 
 
-        public async Task<List<TimeSpan>> GetAvailableTimeBlocksByTypeCitationIdAsync(int typeCitationId)
+        public async Task<List<TimeSpan>> GetAvailableTimeBlocksByTypeCitationIdAsync(int typeCitationId, DateTime fecha)
         {
             try
             {
-                // Paso 1: Obtener el Schedule (configuración general)
+                // Paso 1: Obtener el Shedule por tipo de cita
                 var shedule = await _sheduleBusiness.GetByIdTypeCitation(typeCitationId);
                 if (shedule == null)
                     throw new Exception("No se encontró un horario (Shedule) para el tipo de cita.");
 
-                // Paso 2: Obtener el ScheduleHour (configuración del día)
-                var scheduleHour = await _scheduleHourBusiness.GetByIdShedule(shedule.Id);
+                // Paso 2: Obtener el ScheduleHour asociado al Shedule (sin fecha)
+                var scheduleHour = await _scheduleHourBusiness.GetByDateAndSheduleAsync(shedule.Id);
                 if (scheduleHour == null)
-                    throw new Exception("No se encontró una configuración horaria (ScheduleHour) para este horario.");
+                    throw new Exception("No se encontró configuración horaria para el tipo de cita.");
 
-                // Paso 3: Mapear de DTO a entidad si lo necesitas (porque CalcularBloquesHorarios espera entidad)
+                // Paso 3: Mapear a entidad y unir el Shedule
                 var scheduleHourEntity = scheduleHour.Adapt<ScheduleHour>();
-
-                // Inyectar el Schedule dentro del objeto, ya que viene como entidad separada
                 scheduleHourEntity.Shedule = shedule.Adapt<Shedule>();
 
-                // Paso 4: Calcular bloques horarios
-                var bloques = CalcularBloquesHorarios(scheduleHourEntity);
+                // Paso 4: Generar los bloques posibles
+                var todosLosBloques = CalcularBloquesHorarios(scheduleHourEntity);
 
-                return bloques;
+                // Paso 5: Consultar citas ya agendadas en esa fecha
+                var bloquesOcupados = await _citationBusiness
+                    .GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourEntity.Id, fecha.Date);
+
+                // Paso 6: Filtrar los bloques disponibles
+                var disponibles = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados);
+
+                return disponibles;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error al obtener bloques horarios disponibles: {ex.Message}", ex);
             }
         }
+
 
         public List<TimeSpan> CalcularBloquesHorarios(ScheduleHour scheduleHour)
         {
@@ -61,33 +69,24 @@ namespace Business_Back.Services.Citation
             TimeSpan horaInicio = scheduleHour.StartTime;
             TimeSpan horaFin = scheduleHour.EndTime;
 
-            // Definir la duración efectiva (excluyendo la pausa)
             TimeSpan? pausaInicio = scheduleHour.BreakStartTime;
             TimeSpan? pausaFin = scheduleHour.BreakEndTime;
-            TimeSpan duracionDisponible;
 
-            if (pausaInicio.HasValue && pausaFin.HasValue)
-                duracionDisponible = (pausaInicio.Value - horaInicio) + (horaFin - pausaFin.Value);
-            else
-                duracionDisponible = horaFin - horaInicio;
+            TimeSpan duracionDisponible = pausaInicio.HasValue && pausaFin.HasValue
+                ? (pausaInicio.Value - horaInicio) + (horaFin - pausaFin.Value)
+                : horaFin - horaInicio;
 
-            // Calcular duración de cada cita (ajustada)
             TimeSpan duracionCita = TimeSpan.FromMinutes(duracionDisponible.TotalMinutes / cantidadCitas);
-
             TimeSpan actual = horaInicio;
 
             for (int i = 0; i < cantidadCitas; i++)
             {
-                // Si la hora actual cae en la pausa, saltarla
-                if (pausaInicio.HasValue && pausaFin.HasValue)
+                if (pausaInicio.HasValue && pausaFin.HasValue &&
+                    actual >= pausaInicio.Value && actual < pausaFin.Value)
                 {
-                    if (actual >= pausaInicio.Value && actual < pausaFin.Value)
-                    {
-                        actual = pausaFin.Value;
-                    }
+                    actual = pausaFin.Value;
                 }
 
-                // Validar que el bloque no se pase del horario
                 if (actual + duracionCita <= horaFin)
                 {
                     bloques.Add(actual);
@@ -100,6 +99,13 @@ namespace Business_Back.Services.Citation
             }
 
             return bloques;
+        }
+
+        public List<TimeSpan> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques, List<TimeSpan> bloquesOcupados)
+        {
+            return todosLosBloques
+                .Where(b => !bloquesOcupados.Contains(b))
+                .ToList();
         }
 
     }

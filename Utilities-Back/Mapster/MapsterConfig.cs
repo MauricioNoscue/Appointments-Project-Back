@@ -110,7 +110,7 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.State, src => src.State)
                 .Map(dest => dest.Note, src => src.Note)
-                .Map(dest => dest.CreationDate, src => src.CreationDate);
+                .Map(dest => dest.AppointmentDate, src => src.AppointmentDate);
 
             // ScheduleHour
             TypeAdapterConfig<ScheduleHourCreateDto, ScheduleHour>.NewConfig()
