@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entity_Back;
+using Entity_Back.Dto.HospitalDto.Citation;
 using Mapster;
 
 namespace Business_Back.Services.Citation
@@ -21,7 +22,7 @@ namespace Business_Back.Services.Citation
         }
 
 
-        public async Task<List<TimeSpan>> GetAvailableTimeBlocksByTypeCitationIdAsync(int typeCitationId, DateTime fecha)
+        public async Task<List<TimeBlockEstado>> GetAvailableTimeBlocksByTypeCitationIdAsync(int typeCitationId, DateTime fecha, bool incluirOcupados = false)
         {
             try
             {
@@ -30,7 +31,7 @@ namespace Business_Back.Services.Citation
                 if (shedule == null)
                     throw new Exception("No se encontró un horario (Shedule) para el tipo de cita.");
 
-                // Paso 2: Obtener el ScheduleHour asociado al Shedule (sin fecha)
+                // Paso 2: Obtener el ScheduleHour asociado al Shedule
                 var scheduleHour = await _scheduleHourBusiness.GetByDateAndSheduleAsync(shedule.Id);
                 if (scheduleHour == null)
                     throw new Exception("No se encontró configuración horaria para el tipo de cita.");
@@ -46,10 +47,10 @@ namespace Business_Back.Services.Citation
                 var bloquesOcupados = await _citationBusiness
                     .GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourEntity.Id, fecha.Date);
 
-                // Paso 6: Filtrar los bloques disponibles
-                var disponibles = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados);
+                // Paso 6: Filtrar/etiquetar los bloques según el parámetro
+                var resultado = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados, incluirOcupados);
 
-                return disponibles;
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -101,11 +102,25 @@ namespace Business_Back.Services.Citation
             return bloques;
         }
 
-        public List<TimeSpan> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques, List<TimeSpan> bloquesOcupados)
+        public List<TimeBlockEstado> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques,List<TimeSpan> bloquesOcupados, bool incluirOcupados = false)
         {
+
+            if (!incluirOcupados)
+            {
+                // Solo disponibles
+                return todosLosBloques
+                    .Where(b => !bloquesOcupados.Contains(b))
+                    .Select(b => new TimeBlockEstado { Hora = b, EstaDisponible = true })
+                    .ToList();
+            }
+
+            // Todos, pero con flag
             return todosLosBloques
-                .Where(b => !bloquesOcupados.Contains(b))
-                .ToList();
+                .Select(b => new TimeBlockEstado
+                {
+                    Hora = b,
+                    EstaDisponible = !bloquesOcupados.Contains(b)
+                }).ToList();
         }
 
     }
