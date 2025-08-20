@@ -193,7 +193,7 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.NumberCitation, src => src.NumberCitation)
                 .Map(dest => dest.SheduleId, src => src.SheduleId);
 
-            TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()
+            TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()  
                 .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
                 .Map(dest => dest.NameDoctor, src => src.Doctor.Person.FullName)
                 .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
