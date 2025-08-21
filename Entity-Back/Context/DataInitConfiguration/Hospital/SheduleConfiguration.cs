@@ -43,6 +43,18 @@ namespace Entity_Back.Context.DataInitConfiguration.Medical
                     RegistrationDate = staticDate,
                     IsDeleted = false
                 }
+                ,
+                new Shedule
+                {
+                    Id = 4,
+                    TypeCitationId = 4, // Laboratorio
+                    DoctorId = 3,       // Dr. Inactivo (por ejemplo)
+                    ConsultingRoomId = 3, // Laboratorio Clínico
+                    NumberCitation = 8,
+                    SheduleId = null,
+                    RegistrationDate = staticDate,
+                    IsDeleted = false
+                }
             );
 
             builder.ToTable("Shedule", schema: "Medical");

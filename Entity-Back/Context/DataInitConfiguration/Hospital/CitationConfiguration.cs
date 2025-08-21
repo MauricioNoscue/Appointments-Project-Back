@@ -20,18 +20,19 @@ namespace Entity_Back
                     ScheduleHourId = 1,
                     IsDeleted = false,
                     RegistrationDate = staticDate
-                },
-                new Citation
+                },new Citation
                 {
                     Id = 2,
-                    UserId = 2,
-                    AppointmentDate = staticDate.AddHours(1),
-                    State = "Confirmada",
-                    Note = "Control postoperatorio",
-                    ScheduleHourId = 2,
+                    UserId = 1, 
+                    AppointmentDate = new DateTime(2025, 8, 23, 17, 34, 12, 220), 
+                    TimeBlock = new TimeSpan(8, 45, 0), 
+                    State = "Agendada",
+                    Note = "string",
+                    ScheduleHourId = 4,
                     IsDeleted = false,
-                    RegistrationDate = staticDate
+                    RegistrationDate = staticDate 
                 }
+
             );
 
             builder.ToTable("Citation", schema: "Medical");

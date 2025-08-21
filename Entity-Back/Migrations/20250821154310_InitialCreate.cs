@@ -461,6 +461,8 @@ namespace Entity_Back.Migrations
                     RoomNumber = table.Column<int>(type: "int", nullable: false),
                     Floor = table.Column<int>(type: "int", nullable: false),
                     BranchId = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -528,6 +530,8 @@ namespace Entity_Back.Migrations
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     ProgramateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SheduleId = table.Column<int>(type: "int", nullable: false),
+                    BreakStartTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    BreakEndTime = table.Column<TimeSpan>(type: "time", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -551,11 +555,11 @@ namespace Entity_Back.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeBlock = table.Column<TimeSpan>(type: "time", nullable: true),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScheduleHourId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -576,12 +580,6 @@ namespace Entity_Back.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Citation_User_UserId1",
-                        column: x => x.UserId1,
-                        principalSchema: "ModelSecurity",
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -683,7 +681,8 @@ namespace Entity_Back.Migrations
                 {
                     { 1, "Evaluación médica básica con revisión general del paciente.", "general.png", false, "Consulta General", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2, "Atención en salud bucal, limpieza, diagnósticos y tratamientos.", "odontologia.png", false, "Odontología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "Citas para toma de muestras y análisis clínicos.", "laboratorio.png", false, "Laboratorio Clínico", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 3, "Citas para toma de muestras y análisis clínicos.", "laboratorio.png", false, "Laboratorio Clínico", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Citas para toma de muestras y análisis clínicos.", "CExterna.png", false, "Consulta Externa", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -794,12 +793,12 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "Hospital",
                 table: "ConsultingRoom",
-                columns: new[] { "Id", "BranchId", "Floor", "IsDeleted", "Name", "RegistrationDate", "RoomNumber" },
+                columns: new[] { "Id", "BranchId", "Floor", "Image", "IsActive", "IsDeleted", "Name", "RegistrationDate", "RoomNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, false, "Consultorio General", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 101 },
-                    { 2, 1, 2, false, "Pediatría", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 202 },
-                    { 3, 2, 3, false, "Dermatología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 303 }
+                    { 1, 1, 1, null, null, false, "Consultorio General", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 101 },
+                    { 2, 1, 2, null, null, false, "Pediatría", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 202 },
+                    { 3, 2, 3, null, null, false, "Dermatología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 303 }
                 });
 
             migrationBuilder.InsertData(
@@ -810,28 +809,30 @@ namespace Entity_Back.Migrations
                 {
                     { 1, 1, 1, false, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1 },
                     { 2, 2, 2, false, 6, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2 },
-                    { 3, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 3 }
+                    { 3, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 3 },
+                    { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "ScheduleHour",
-                columns: new[] { "Id", "EndTime", "IsDeleted", "ProgramateDate", "RegistrationDate", "SheduleId", "StartTime" },
+                columns: new[] { "Id", "BreakEndTime", "BreakStartTime", "EndTime", "IsDeleted", "ProgramateDate", "RegistrationDate", "SheduleId", "StartTime" },
                 values: new object[,]
                 {
-                    { 1, new TimeSpan(0, 8, 30, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 0, 0, 0) },
-                    { 2, new TimeSpan(0, 9, 0, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 30, 0, 0) },
-                    { 3, new TimeSpan(0, 9, 30, 0, 0), false, new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 9, 0, 0, 0) }
+                    { 1, null, null, new TimeSpan(0, 8, 30, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 0, 0, 0) },
+                    { 2, null, null, new TimeSpan(0, 9, 0, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 30, 0, 0) },
+                    { 3, null, null, new TimeSpan(0, 9, 30, 0, 0), false, new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 9, 0, 0, 0) },
+                    { 4, new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 16, 0, 0, 0), false, new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 8, 0, 0, 0) }
                 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "Citation",
-                columns: new[] { "Id", "CreationDate", "IsDeleted", "Note", "RegistrationDate", "ScheduleHourId", "State", "UserId", "UserId1" },
+                columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ScheduleHourId", "State", "TimeBlock", "UserId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cita para revisión general", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Pendiente", 1, null },
-                    { 2, new DateTime(2024, 7, 16, 1, 0, 0, 0, DateTimeKind.Unspecified), false, "Control postoperatorio", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Confirmada", 2, null }
+                    { 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cita para revisión general", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Pendiente", null, 1 },
+                    { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -858,12 +859,6 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Citation",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Citation_UserId1",
-                schema: "Medical",
-                table: "Citation",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_City_DepartamentId",

@@ -37,6 +37,16 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                     IsDeleted = false,
                     RegistrationDate = staticDate
                 }
+                ,
+                new TypeCitation
+                {
+                    Id = 4,
+                    Name = "Consulta Externa",
+                    Description = "Citas para toma de muestras y análisis clínicos.",
+                    Icon = "CExterna.png",
+                    IsDeleted = false,
+                    RegistrationDate = staticDate
+                }
             );
 
             builder.ToTable("TypeCitation", schema: "Hospital");

@@ -40,6 +40,20 @@ namespace Entity_Back
                     IsDeleted = false,
                     RegistrationDate = staticDate
                 }
+                ,
+                new ScheduleHour
+                {
+                    Id = 4,
+                    StartTime = new TimeSpan(8, 0, 0),     // 08:00:00
+                    EndTime = new TimeSpan(16, 0, 0),      // 16:00:00
+                    ProgramateDate = new DateTime(2025, 8, 16), // 2025-08-16
+                    BreakStartTime = new TimeSpan(12, 0, 0),    // 12:00:00
+                    BreakEndTime = new TimeSpan(14, 0, 0),      // 14:00:00
+                    SheduleId = 4,
+                    IsDeleted = false,
+                    RegistrationDate = staticDate
+                }
+
             );
 
             builder.ToTable("ScheduleHour", schema: "Medical");

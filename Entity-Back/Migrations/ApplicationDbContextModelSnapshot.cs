@@ -79,13 +79,14 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 2,
-                            AppointmentDate = new DateTime(2024, 7, 16, 1, 0, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentDate = new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified),
                             IsDeleted = false,
-                            Note = "Control postoperatorio",
+                            Note = "string",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ScheduleHourId = 2,
-                            State = "Confirmada",
-                            UserId = 2
+                            ScheduleHourId = 4,
+                            State = "Agendada",
+                            TimeBlock = new TimeSpan(0, 8, 45, 0, 0),
+                            UserId = 1
                         });
                 });
 
@@ -1559,6 +1560,18 @@ namespace Entity_Back.Migrations
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SheduleId = 2,
                             StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BreakEndTime = new TimeSpan(0, 14, 0, 0, 0),
+                            BreakStartTime = new TimeSpan(0, 12, 0, 0, 0),
+                            EndTime = new TimeSpan(0, 16, 0, 0, 0),
+                            IsDeleted = false,
+                            ProgramateDate = new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SheduleId = 4,
+                            StartTime = new TimeSpan(0, 8, 0, 0, 0)
                         });
                 });
 
@@ -1631,6 +1644,16 @@ namespace Entity_Back.Migrations
                             NumberCitation = 8,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TypeCitationId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ConsultingRoomId = 3,
+                            DoctorId = 3,
+                            IsDeleted = false,
+                            NumberCitation = 8,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeCitationId = 4
                         });
                 });
 
@@ -1690,6 +1713,15 @@ namespace Entity_Back.Migrations
                             Icon = "laboratorio.png",
                             IsDeleted = false,
                             Name = "Laboratorio Clínico",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Citas para toma de muestras y análisis clínicos.",
+                            Icon = "CExterna.png",
+                            IsDeleted = false,
+                            Name = "Consulta Externa",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
