@@ -17,10 +17,10 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
         public string Email { get; set; }
 
         [Required(ErrorMessage = "La contraseña es obligatoria")]
+
         [StringLength(50, MinimumLength = 8, ErrorMessage = "La contraseña debe tener entre 8 y 50 caracteres")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "El estado es obligatorio")]
         public bool Active { get; set; }
 
         [Required(ErrorMessage = "La persona asociada es obligatoria")]

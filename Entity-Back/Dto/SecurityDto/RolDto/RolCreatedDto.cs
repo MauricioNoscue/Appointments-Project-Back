@@ -14,9 +14,8 @@ namespace Entity_Back.Dto.SecurityDto.RolDto
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 50 caracteres")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "La descripción es obligatoria")]
         [StringLength(200, MinimumLength = 5, ErrorMessage = "La descripción debe tener entre 5 y 200 caracteres")]
-        public string Description { get; set; }
+        public string? Description { get; set; }   // opcional, pero validada si llega
     }
 
 }

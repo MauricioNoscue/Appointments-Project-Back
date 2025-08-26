@@ -24,4 +24,3 @@ namespace Entity_Back.Dto.SecurityDto.RolFormPermissionDto
 
 
 }
-s
