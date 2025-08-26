@@ -15,6 +15,13 @@ namespace Entity_Back.Models.SecurityModels
         public int? PersonId { get; set; }
         public string? CodePassword { get; set; }
         public int? RestrictionPoint { get; set; }
+
+
+        // Token temporal para resetear la contraseña
+        public string? PasswordResetToken { get; set; }
+
+        // Fecha de expiración del token
+        public DateTime? PasswordResetTokenExpiration { get; set; }
         public Person Person { get; set; }
         public List<Citation> Citation { get; set; }
 

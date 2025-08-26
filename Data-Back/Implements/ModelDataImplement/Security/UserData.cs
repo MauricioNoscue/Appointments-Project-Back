@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Data_Back.Implements.BaseModelData;
@@ -8,19 +9,21 @@ using Data_Back.Interface.IDataModels.Security;
 using Entity_Back.Context;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utilities_Back.Helper;
+using Utilities_Back.Message.Email;
 
 namespace Data_Back.Implements.ModelDataImplement.Security
 {
     public class UserData : BaseModelData<User>, IUserData
     {
-        public UserData(ApplicationDbContext context, ILogger<UserData> logger) : base(context, logger)
+        private readonly IConfiguration _configuration;
+
+        public UserData(ApplicationDbContext context, ILogger<UserData> logger, IConfiguration configuration) : base(context, logger)
         {
-
+            _configuration = configuration;
         }
-
-
 
         public async Task<User> GetUserDetailAsync(int id)
         {
@@ -35,13 +38,20 @@ namespace Data_Back.Implements.ModelDataImplement.Security
 
         public async Task<User?> validarCredenciales(string email, string password)
         {
-            var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            // Buscar solo por email
+            var user = await _context.Set<User>()
+                                     .AsNoTracking()
+                                     .FirstOrDefaultAsync(u => u.Email == email);
 
-           // if (user == null || !PasswordHelper.VerifyPassword(password, user.Password))
-               // return null;
+            if (user == null)
+                return null;
 
-            return user;
+            // Verificar contraseña (password plano vs hash guardado)
+            bool isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+            return isValid ? user : null;
         }
+
 
         public async Task<Person> SavePerson(Person person)
         {
@@ -50,8 +60,6 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             return person;
         }
 
-
-       
 
         public override async Task<IEnumerable<User>> GetAll()
         {
@@ -87,7 +95,49 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             }
         }
 
-        
 
+        public async Task<string?> RequestPasswordResetAsync(string email)
+        {
+            var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return null;
+
+            // Generar token seguro
+            var tokenBytes = RandomNumberGenerator.GetBytes(32);
+            var token = Convert.ToBase64String(tokenBytes)
+                                .Replace("+", "-")
+                                .Replace("/", "_")
+                                .Replace("=", "");
+
+            user.PasswordResetToken = token;
+            user.PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1);
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return token; // para que la capa Business lo use (ej: enviar correo)
+        }
+
+
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return false;
+
+            // Validar token
+            if (user.PasswordResetToken != token || user.PasswordResetTokenExpiration < DateTime.UtcNow)
+                return false;
+
+            // Hashear nueva contraseña
+            user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword, workFactor: 12);
+
+            // Limpiar token
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenExpiration = null;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

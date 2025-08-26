@@ -11,5 +11,9 @@ namespace Business_Back.Interface.IBusinessModel.Security
     public interface IUserBusiness : IBaseModelBusiness<UserCreatedDto,UserEditDto,UserListDto>
     {
         public Task<UserDetailDto> GetUserDetailAsync(int id);
+
+        Task<string?> RequestPasswordResetAsync(string email);
+
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
     }
 }

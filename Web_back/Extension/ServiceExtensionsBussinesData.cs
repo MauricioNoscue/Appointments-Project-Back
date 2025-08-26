@@ -8,11 +8,13 @@ using Business_Back.Services.Citation;
 using Data_Back;
 using Data_Back.Implements;
 using Data_Back.Implements.ModelDataImplement.Infrastructure;
+using Data_Back.Implements.ModelDataImplement.Refresh;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
 using Data_Back.Interface.IDataModels.Infrastructure;
 using Data_Back.Interface.IDataModels.Security;
+using Data_Back.Interface.Refresh;
 using Entity_Back;
 using Entity_Back.Dto.InfrastructureDto.BranchDto;
 using Entity_Back.Dto.InfrastructureDto.CityDto;
@@ -56,9 +58,12 @@ namespace Web_back.Extension
             services.AddScoped<IBaseModelBusiness<RolUserCreatedDto, RolUserEditDto, RolUserList>, RolUserBusiness>();
             services.AddScoped<IRolUserBusiness, RolUserBusiness>();
             services.AddScoped<IRolFormPermissionBusiness
-, RolFormPermissionBusiness
->();
+                    , RolFormPermissionBusiness
+                    >();
 
+            services.AddScoped<IRefreshTokenData, RefreshTokenData>();
+
+            services.AddScoped<IPersonBusiness, PersonBusiness>();
 
             // Permission
             services.AddScoped<IBaseModelData<Permission>, PermissionData>();

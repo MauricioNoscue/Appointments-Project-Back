@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Data_Back.Interface.ICrud;
@@ -19,5 +20,8 @@ namespace Data_Back.Interface.IBaseModelData
     /// <typeparam name="T">Tipo de la entidad (clase) sobre la que se realizarán las operaciones.</typeparam>
     public interface  IBaseModelData <T> : ISave<T>,IGetAll<T>,IUpdate<T>,IDelete<T>,IDeleteLogic<T> where T : BaseModel
     {
+        Task<bool> ExistsByAsync(
+     Expression<Func<T, object>> fieldSelector,
+     object? value);
     }
 }
