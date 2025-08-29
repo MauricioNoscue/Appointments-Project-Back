@@ -6,8 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Data-Back\Data-Back.csproj" />
     <ProjectReference Include="..\Entity-Back\Entity-Back.csproj" />
     <ProjectReference Include="..\Utilities-Back\Utilities-Back.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interface\Refresh\" />
   </ItemGroup>
 </Project>

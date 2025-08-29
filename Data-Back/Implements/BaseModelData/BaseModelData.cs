@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Entity_Back.Context;
@@ -106,6 +107,7 @@ namespace Data_Back.Implements.BaseModelData
         {
             try
             {
+
                 await _context.Set<T>().AddAsync(entity);
 
                 await _context.SaveChangesAsync();
@@ -198,7 +200,30 @@ namespace Data_Back.Implements.BaseModelData
 
 
 
+        public override async Task<bool> ExistsByAsync(
+        Expression<Func<T, object>> fieldSelector,
+        object? value)
+        {
+            if (fieldSelector == null)
+                throw new ArgumentNullException(nameof(fieldSelector));
 
+            // extraer nombre de la propiedad
+            Expression body = fieldSelector.Body is UnaryExpression u && u.NodeType == ExpressionType.Convert
+                ? u.Operand
+                : fieldSelector.Body;
+
+            if (body is not MemberExpression m)
+                throw new ArgumentException("Selector must be a simple property access, e.g., x => x.Property.");
+
+            string propName = m.Member.Name;
+            string p = propName;
+            object? v = value;
+
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .Where(e => EF.Property<object>(e, p) == v)
+                .AnyAsync();
+        }
 
 
 

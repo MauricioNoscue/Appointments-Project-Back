@@ -16,6 +16,12 @@ namespace Data_Back.Interface.IDataModels.Security
 
 
         public Task<User> GetUserDetailAsync(int id);
-      
+
+
+        Task<string?> RequestPasswordResetAsync(string email);
+
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
+
+
     }
 }

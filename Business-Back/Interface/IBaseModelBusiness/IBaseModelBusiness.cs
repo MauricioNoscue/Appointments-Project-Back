@@ -15,5 +15,6 @@ namespace Business_Back.Interface.BaseModelBusiness
         Task<bool> Delete(int id);
         Task<bool> DeleteLogical(int id);
 
+
     }
 }

@@ -8,6 +8,7 @@ using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface.IDataModels.Security;
+using Entity_Back.Dto.SecurityDto.PersonDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
@@ -23,11 +24,13 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
     public class UserBusiness : BaseModelBusinessIm<User, UserCreatedDto, UserEditDto, UserListDto>, IUserBusiness
     {
         private readonly IUserData _data;
+        private readonly IPersonBusiness _dataPerson;
 
-        public UserBusiness(IConfiguration configuration, IUserData data, ILogger<UserBusiness> logger)
+        public UserBusiness(IConfiguration configuration, IUserData data, ILogger<UserBusiness> logger, IPersonBusiness dataPerson)
             : base(configuration, data, logger)
         {
             _data = data;
+            _dataPerson = dataPerson;
         }
 
         public async Task<UserDetailDto> GetUserDetailAsync(int id)
@@ -52,7 +55,86 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
         }
 
 
+        public override async Task<UserListDto> Save(UserCreatedDto Dto)
+        {
 
+            if (Dto == null)
+                throw new ValidationException(nameof(Dto), "Los datos enviados son nulos o inválidos.");
+
+            // Validación mínima de contraseña (evitar null/empty)
+            if (string.IsNullOrWhiteSpace(Dto.Password))
+                throw new ValidationException(nameof(Dto.Password), "La contraseña es obligatoria.");
+            try
+            {
+
+
+                var entidad = Dto.Adapt<User>();
+
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
+
+
+                entidad.Password = passwordHash;
+                await ValidateAsync(entidad);
+
+
+                var entiry = await _data.Save(entidad);
+
+                PersonListDto? person = await _dataPerson.GetById(Dto.PersonId);
+
+               
+
+                var asunto = "¡Bienvenido a nuestro sistema!";
+                var cuerpo = $@"
+                                   <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+                                        <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+                                            <h2 style=""color: #4CAF50;"">¡Bienvenido, {person?.FullName}!</h2>
+                                          <p style=""font-size: 16px; color: #333;"">
+                                              Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
+                                         </p>
+                                          <p style=""font-size: 14px; color: #666;"">
+                                               Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
+                                          </p>
+                                          <div style=""margin-top: 30px; text-align: center;"">
+                                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
+                                          </div>
+                                           <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+                                        <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                                               Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
+                                           </p>
+                                     </div>
+                                 </div>
+                   ";
+
+
+               await CorreoMensaje.EnviarAsync(_configuration, entiry.Email, asunto, cuerpo);
+
+
+                return entiry.Adapt<UserListDto>();
+
+            }
+            catch (ValidationException vex)
+            {
+                _logger.LogWarning(vex, "Validación fallida en {Entity}", typeof(User).Name);
+                throw;
+            }
+
+            catch (BusinessException ex)
+            {
+                _logger.LogError(ex, "Error al crear entidad {Entity}", typeof(User).Name);
+                throw new BusinessException("Error al intentar crear el registro.", ex);
+            }
+        }
+
+
+
+
+
+        public override async Task ValidateAsync(User entity)
+        {
+
+            if (await _data.ExistsByAsync(x => x.Email, entity.Email))
+                throw new ValidationException(nameof(User.Email), "El email ya está registrado.");
+        }
 
 
 
@@ -148,6 +230,59 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
         //    }
         //}
 
+
+        public async Task<string?> RequestPasswordResetAsync(string email)
+        {
+            try
+            {
+                var token = await _data.RequestPasswordResetAsync(email);
+
+                var resetLink = $"http://localhost:4200/reset-password?token={token}&email={email}";
+                var subject = "Recuperación de contraseña";
+                var body = $@"
+                    <p>Hola {email},</p>
+                    <p>Has solicitado recuperar tu contraseña. Haz clic en el siguiente enlace para restablecerla:</p>
+                    <p><a href='{resetLink}'>Restablecer Contraseña</a></p>
+                    <p>Este enlace expirará en 1 hora.</p>";
+
+                await CorreoMensaje.EnviarAsync(_configuration, email, subject, body);
+
+
+                if (token == null)
+                {
+                    _logger.LogWarning("Password reset requested for non-existing email: {Email}", email);
+                    return null;
+                }
+
+                return token;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error requesting password reset for {Email}", email);
+                throw new BusinessException("An error occurred while requesting password reset.", ex);
+            }
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            try
+            {
+                var result = await _data.ResetPasswordAsync(email, token, newPassword);
+
+                if (!result)
+                {
+                    _logger.LogWarning("Invalid reset attempt for {Email} with token {Token}", email, token);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resetting password for {Email}", email);
+                throw new BusinessException("An error occurred while resetting the password.", ex);
+            }
+        }
 
     }
 }

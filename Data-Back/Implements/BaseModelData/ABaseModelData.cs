@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Data_Back.Interface.IBaseModelData;
@@ -61,5 +62,10 @@ namespace Data_Back.Implements.BaseModelData
         /// <param name="entity">Entidad con los datos actualizados.</param>
         /// <returns>True si la operación fue exitosa; de lo contrario, false.</returns>
         public abstract Task<bool> Update(T entity);
+
+        public abstract Task<bool> ExistsByAsync(
+     Expression<Func<T, object>> fieldSelector,
+     object? value);
+
     }
 }

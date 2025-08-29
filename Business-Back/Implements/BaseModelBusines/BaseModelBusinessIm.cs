@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Business_Back.Interface.BaseModelBusiness;
 using Data_Back.Interface.IBaseModelData;
 using Entity_Back.Models;
+using Entity_Back.Models.SecurityModels;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -66,17 +68,22 @@ namespace Business_Back.Implements.BaseModelBusiness
                 throw new ValidationException(nameof(Dto), "Los datos enviados son nulos o inválidos.");
             try
             {
+
+              
                 var entidad = Dto.Adapt<T>();
+                await ValidateAsync(entidad);
+
+
                 var entiry = await _data.Save(entidad);
                 return entiry.Adapt<Dl>();
 
             }
-            //catch (DbUpdateException dbEx)
-            //{
-            //    // Capturamos errores de la base de datos y tratamos errores de restricción única
-            //    var mensaje = ParseUniqueConstraintError(dbEx);
-            //    throw new ValidationException(mensaje);
-            //}
+            catch (ValidationException vex)
+            {
+                _logger.LogWarning(vex, "Validación fallida en {Entity}", typeof(T).Name);
+                throw;
+            }   
+
             catch (BusinessException ex)
             {
                 _logger.LogError(ex, "Error al crear entidad {Entity}", typeof(T).Name);
@@ -142,16 +149,7 @@ namespace Business_Back.Implements.BaseModelBusiness
             }
         }
 
-        public override void ValidateCreated(Dc dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ValidateUpdate(Dc dto)
-        {
-            throw new NotImplementedException();
-        }
-
+      
 
         public virtual string ParseUniqueConstraintError(Exception ex)
         {
@@ -173,6 +171,25 @@ namespace Business_Back.Implements.BaseModelBusiness
             // Mensaje genérico por defecto
             return "Ya existe un registro con esta combinación de datos. Verifica la información.";
         }
+        // Valida duplicado por Name en el base, pasando un selector "simple property access" (x => (object)x.Name)
+        public override async Task ValidateAsync(T entity)
+        {
+            // obtener valor de Name desde la instancia (T no expone Name en el base)
+            var nameProp = entity.GetType().GetProperty("Name");
+            if (nameProp == null) return; // si no existe Name, no valida
+            var nameValue = nameProp.GetValue(entity);
+
+            // construir x => (object)x.Name  (MemberExpression + Convert) para cumplir tu ExistsByAsync
+            var p = Expression.Parameter(typeof(T), "x");
+            var member = Expression.Property(p, "Name");
+            var body = Expression.Convert(member, typeof(object));
+            var selector = Expression.Lambda<Func<T, object>>(body, p);
+
+            if (await _data.ExistsByAsync(selector, nameValue))
+                throw new ValidationException("Name", "El nombre ya está registrado.");
+        }
+
+
 
     }
 }

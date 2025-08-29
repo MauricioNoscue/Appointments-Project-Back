@@ -88,7 +88,7 @@ namespace Entity_Back.Context
         public DbSet<FormModule> Formmodule { get; set; }
         public DbSet<Permission> Permission { get; set; }
         public DbSet<RolFormPermission> RolFormPermission { get; set; }
-
+        public DbSet<RefreshToken> RefreshToken { get; set; }
 
 
 

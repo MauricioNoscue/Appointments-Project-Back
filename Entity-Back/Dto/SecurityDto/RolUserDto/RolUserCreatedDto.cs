@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,13 @@ namespace Entity_Back.Dto.SecurityDto.RolUserDto
 {
     public class RolUserCreatedDto
     {
-
+        [Required(ErrorMessage = "El rol es obligatorio")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un rol válido")]
         public int RolId { get; set; }
-        public int UserId { get; set; }
 
+        [Required(ErrorMessage = "El usuario es obligatorio")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario válido")]
+        public int UserId { get; set; }
     }
+
 }
