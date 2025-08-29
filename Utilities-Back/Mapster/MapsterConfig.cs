@@ -154,7 +154,6 @@ namespace Utilities_Back.Mapster
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
-                .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image);
 
             TypeAdapterConfig<Doctor, DoctorListDto>.NewConfig()

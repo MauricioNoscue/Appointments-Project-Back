@@ -25,6 +25,23 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             _configuration = configuration;
         }
 
+        public override async Task<User> Save(User entity)
+        {
+            try
+            {
+
+                await _context.Set<User>().AddAsync(entity);
+
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al crear el registro para la entidad: {typeof(User).Name}");
+                throw;
+            }
+        }
+
         public async Task<User> GetUserDetailAsync(int id)
         {
             return await _context.User

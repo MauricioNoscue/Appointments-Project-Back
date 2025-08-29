@@ -67,7 +67,6 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             try
             {
 
-
                 var entidad = Dto.Adapt<User>();
 
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
@@ -124,9 +123,6 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 throw new BusinessException("Error al intentar crear el registro.", ex);
             }
         }
-
-
-
 
 
         public override async Task ValidateAsync(User entity)

@@ -19,6 +19,11 @@ namespace Entity_Back
         [Required(ErrorMessage = "El piso es obligatorio")]
         [Range(0, 100, ErrorMessage = "El piso debe estar entre 0 y 100")]
         public int Floor { get; set; }
+
+
+        [Required(ErrorMessage = "La sucursal es obligatoria")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una sucursal válida")]
+        public int BranchId { get; set; }
     }
 
 }

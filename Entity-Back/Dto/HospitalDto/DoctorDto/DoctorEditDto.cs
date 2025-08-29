@@ -14,10 +14,8 @@ namespace Entity_Back
 
         [Required(ErrorMessage = "El usuario es obligatorio")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario válido")]
-        public int IdUser { get; set; }
+        public int PersonId { get; set; }
 
-        [Required(ErrorMessage = "El estado es obligatorio")]
-        public bool Active { get; set; }
 
         [StringLength(250, ErrorMessage = "La URL de la imagen no puede superar los 250 caracteres")]
         public string Image { get; set; } = string.Empty;

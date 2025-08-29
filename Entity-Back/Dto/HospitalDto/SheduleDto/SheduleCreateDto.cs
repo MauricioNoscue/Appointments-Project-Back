@@ -21,7 +21,7 @@ namespace Entity_Back
         public int NumberCitation { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario válido")]
-        public int? SheduleId { get; set; }
+        public int SheduleId { get; set; }
     }
 
 }

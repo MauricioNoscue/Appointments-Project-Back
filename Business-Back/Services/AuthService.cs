@@ -15,9 +15,9 @@ namespace Business_Back.Services
 {
     public class AuthService
     {
-        private readonly IUserData _userData;                   // ya lo tienes
-        private readonly IRefreshTokenData _refreshTokenData;   // data de refresh (Create/GetActive/Save)
-        private readonly JWTService _jwtService;                // tu servicio JWT existente
+        private readonly IUserData _userData;                 
+        private readonly IRefreshTokenData _refreshTokenData;   
+        private readonly JWTService _jwtService;               
         private readonly ILogger<AuthService> _logger;
 
         // TTL configurables

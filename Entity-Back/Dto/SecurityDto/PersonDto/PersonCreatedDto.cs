@@ -31,7 +31,7 @@ namespace Entity_Back.Dto.SecurityDto.PersonDto
 
         [Required(ErrorMessage = "El número de teléfono es obligatorio")]
         [Phone(ErrorMessage = "Formato de teléfono no válido")]
-        [StringLength(20, MinimumLength = 7, ErrorMessage = "El teléfono debe tener entre 7 y 20 dígitos")]
+        [StringLength(10, MinimumLength = 8, ErrorMessage = "El teléfono debe tener entre 8 y 10 dígitos")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "La EPS es obligatoria")]

@@ -10,7 +10,8 @@ namespace Entity_Back
 
         [Required(ErrorMessage = "El usuario es obligatorio")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario válido")]
-        public int IdUser { get; set; }
+        public int PersonId { get; set; }
+
 
         [Required(ErrorMessage = "El estado es obligatorio")]
         public bool Active { get; set; }

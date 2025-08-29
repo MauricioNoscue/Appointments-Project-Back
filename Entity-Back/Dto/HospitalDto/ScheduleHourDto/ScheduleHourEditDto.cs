@@ -21,6 +21,9 @@ namespace Entity_Back
         public TimeSpan? BreakStartTime { get; set; }
 
         public TimeSpan? BreakEndTime { get; set; }
+        [Required(ErrorMessage = "El horario es obligatorio")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario válido")]
+        public int SheduleId { get; set; }
     }
 
 }
