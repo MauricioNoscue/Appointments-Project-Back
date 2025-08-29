@@ -150,17 +150,22 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<DoctorCreateDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
                 .Map(dest => dest.Active, src => src.Active)
-                .Map(dest => dest.Image, src => src.Image);
+                .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor)
+                .Map(dest => dest.PersonId, src => src.IdUser);
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
                 .Map(dest => dest.Active, src => src.Active)
-                .Map(dest => dest.Image, src => src.Image);
+                .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor)
+                .Map(dest => dest.PersonId, src => src.IdUser);
 
             TypeAdapterConfig<Doctor, DoctorListDto>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor)
                 .Map(dest => dest.FullName, src => src.Person.FullName);
 
             // TypeCitation

@@ -150,6 +150,11 @@ namespace Web_back.Extension
             services.AddScoped<ICitationsBusiness, CitationBusiness>();
 
 
+            //Doctor
+            services.AddScoped<IDoctorBusiness, DoctorBusiness>();
+            services.AddScoped<IDoctorData, DoctorData>();
+
+
 
 
             services.AddScoped<CitationCoreService>();

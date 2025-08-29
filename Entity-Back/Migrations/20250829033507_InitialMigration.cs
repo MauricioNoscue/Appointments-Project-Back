@@ -377,6 +377,8 @@ namespace Entity_Back.Migrations
                     PersonId = table.Column<int>(type: "int", nullable: true),
                     CodePassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RestrictionPoint = table.Column<int>(type: "int", nullable: true),
+                    PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordResetTokenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -415,6 +417,33 @@ namespace Entity_Back.Migrations
                         column: x => x.InstitutionId,
                         principalSchema: "ModelInfrastructure",
                         principalTable: "Institution",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedByIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RevokedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RevokedByIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReplacedByToken = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -763,11 +792,11 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "User",
-                columns: new[] { "Id", "Active", "CodePassword", "Email", "IsDeleted", "Password", "PersonId", "RegistrationDate", "RestrictionPoint" },
+                columns: new[] { "Id", "Active", "CodePassword", "Email", "IsDeleted", "Password", "PasswordResetToken", "PasswordResetTokenExpiration", "PersonId", "RegistrationDate", "RestrictionPoint" },
                 values: new object[,]
                 {
-                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "M1d!Citas2025", 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 2, false, "no hay", "isaTovarp.18@gmail.com", false, "M2d!Citas2025", 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
+                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "M1d!Citas2025", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 2, false, "no hay", "isaTovarp.18@gmail.com", false, "M2d!Citas2025", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -933,6 +962,11 @@ namespace Entity_Back.Migrations
                 column: "EpsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RelatedPerson_PersonId",
                 table: "RelatedPerson",
                 column: "PersonId");
@@ -1012,6 +1046,9 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notification");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "RelatedPerson");

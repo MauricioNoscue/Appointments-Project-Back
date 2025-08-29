@@ -5,5 +5,7 @@ namespace Data_Back.Interface
 {
     public interface IDoctorData : IBaseModelData<Doctor>
     {
+        Task<IEnumerable<DoctorListDto>> GetAllDoctorWithPerson();
+        Task<DoctorListDto?> GetDoctorWithPersonById(int id);
     }
 }
