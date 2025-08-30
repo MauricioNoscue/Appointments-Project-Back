@@ -9,17 +9,16 @@ namespace Entity_Back
         public string Specialty { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El usuario es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario válido")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario vï¿½lido")]
         public int IdUser { get; set; }
 
         [Required(ErrorMessage = "El estado es obligatorio")]
         public bool Active { get; set; }
 
-        [StringLength(250, ErrorMessage = "La URL de la imagen no puede superar los 250 caracteres")]
         public string Image { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El correo del doctor es obligatorio")]
-        [EmailAddress(ErrorMessage = "Formato de correo no válido")]
+        [EmailAddress(ErrorMessage = "Formato de correo no vï¿½lido")]
         [StringLength(100, ErrorMessage = "El correo no puede superar los 100 caracteres")]
         public string EmailDoctor { get; set; }
     }
