@@ -9,5 +9,7 @@ namespace Entity_Back
         public DateTime ProgramateDate { get; set; }
         public TimeSpan? BreakStartTime { get; set; }
         public TimeSpan? BreakEndTime { get; set; }
+
+        public int SheduleId { get; set; }
     }
 }

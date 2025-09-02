@@ -9,6 +9,7 @@ using Entity_Back.Dto.InfrastructureDto.CityDto;
 using Entity_Back.Dto.InfrastructureDto.Departament;
 using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
+using Entity_Back.Dto.Notification;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
@@ -19,6 +20,8 @@ using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.Infrastructure;
+using Entity_Back.Models.Notification;
+
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
@@ -226,6 +229,22 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<Institution, InstitutionListDto>.NewConfig()
                 .Map(dest => dest.CityName, src => src.City.Name);
             TypeAdapterConfig<InstitutionEditDto, Institution>.NewConfig();
+
+            //Notification
+            // Notification (Create -> Entity, ya lo tienes)
+            TypeAdapterConfig<NotificationCreateDto, Notification>
+                .NewConfig()
+                .Map(d => d.StateNotification, s => s.StateNotification ?? false);
+
+            // Notification (Entity -> List, ya lo tienes)
+            TypeAdapterConfig<Notification, NotificationListDto>.NewConfig()
+                .Map(d => d.TypeCitationName, s => s.citation.ScheduleHour.Shedule.TypeCitation.Name);
+
+            // ⬇️  DESCOMENTAR / AÑADIR  ⬇️
+            TypeAdapterConfig<NotificationEditDto, Notification>
+                .NewConfig()
+                .IgnoreNullValues(true); // solo ignora null; false SÍ se aplica
+
 
         }
     }
