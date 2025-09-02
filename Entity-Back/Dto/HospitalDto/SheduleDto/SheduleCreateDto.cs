@@ -20,8 +20,7 @@ namespace Entity_Back
         [Range(1, 500, ErrorMessage = "El número de citas debe estar entre 1 y 500")]
         public int NumberCitation { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario válido")]
-        public int SheduleId { get; set; }
+  
     }
 
 }

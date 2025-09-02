@@ -149,16 +149,21 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<DoctorCreateDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
                 .Map(dest => dest.Active, src => src.Active)
-                .Map(dest => dest.Image, src => src.Image);
+                .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor);
+
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
-                .Map(dest => dest.Image, src => src.Image);
+
+                .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor);
 
             TypeAdapterConfig<Doctor, DoctorListDto>.NewConfig()
                 .Map(dest => dest.Specialty, src => src.Specialty)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image)
+                .Map(dest => dest.EmailDoctor, src => src.EmailDoctor)
                 .Map(dest => dest.FullName, src => src.Person.FullName);
 
             // TypeCitation
@@ -181,15 +186,13 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
                 .Map(dest => dest.DoctorId, src => src.DoctorId)
                 .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
-                .Map(dest => dest.NumberCitation, src => src.NumberCitation)
-                .Map(dest => dest.SheduleId, src => src.SheduleId);
+                .Map(dest => dest.NumberCitation, src => src.NumberCitation);
 
             TypeAdapterConfig<SheduleEditDto, Shedule>.NewConfig()
                 .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
                 .Map(dest => dest.DoctorId, src => src.DoctorId)
                 .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
-                .Map(dest => dest.NumberCitation, src => src.NumberCitation)
-                .Map(dest => dest.SheduleId, src => src.SheduleId);
+                .Map(dest => dest.NumberCitation, src => src.NumberCitation);
 
             TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()  
                 .Map(dest => dest.TypeCitationName, src => src.TypeCitation.Name)

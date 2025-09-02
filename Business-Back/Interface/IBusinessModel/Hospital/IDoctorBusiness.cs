@@ -5,5 +5,7 @@ namespace Business_Back
 {
     public interface IDoctorBusiness : IBaseModelBusiness<DoctorCreateDto, DoctorEditDto, DoctorListDto>
     {
+        Task<IEnumerable<DoctorListDto>> GetAllDoctorWithPerson();
+        Task<DoctorListDto?> GetDoctorWithPersonById(int id);
     }
 }

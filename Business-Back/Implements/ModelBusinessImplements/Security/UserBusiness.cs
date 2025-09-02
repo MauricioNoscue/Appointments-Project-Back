@@ -38,7 +38,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             var user = await _data.GetUserDetailAsync(id);
             if (user == null) return null;
 
-                       return new UserDetailDto
+            return new UserDetailDto
             {
                 FullName = user.Person.FullName,
                 FullLastName = user.Person.FullLastName,
@@ -47,8 +47,8 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 Email = user.Email,
                 DateBorn = user.Person.DateBorn,
                 RegisterDate = (DateTime)user.RegistrationDate,
-                Gender = user.Person.Gender.ToString(),            
-                HealthRegime = user.Person.HealthRegime.ToString(), 
+                Gender = user.Person.Gender.ToString(),
+                HealthRegime = user.Person.HealthRegime.ToString(),
                 Roles = user.RolUser.Select(r => r.Rol.Name).ToList()
             };
 
@@ -80,7 +80,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 
                 PersonListDto? person = await _dataPerson.GetById(Dto.PersonId);
 
-               
+
 
                 var asunto = "¡Bienvenido a nuestro sistema!";
                 var cuerpo = $@"
@@ -105,7 +105,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                    ";
 
 
-               await CorreoMensaje.EnviarAsync(_configuration, entiry.Email, asunto, cuerpo);
+                await CorreoMensaje.EnviarAsync(_configuration, entiry.Email, asunto, cuerpo);
 
 
                 return entiry.Adapt<UserListDto>();
@@ -233,7 +233,14 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             {
                 var token = await _data.RequestPasswordResetAsync(email);
 
-                var resetLink = $"http://localhost:4200/reset-password?token={token}&email={email}";
+                // Ejemplo .NET (mejor usando config para no hardcodear)
+                var baseUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:4200";
+                // -> en appsettings.json: "Frontend": { "BaseUrl": "http://localhost:4200" }
+
+                var resetLink = $"{baseUrl}/auth/reset-password" +
+                                $"?token={Uri.EscapeDataString(token)}" +
+                                $"&email={Uri.EscapeDataString(email)}";
+
                 var subject = "Recuperación de contraseña";
                 var body = $@"
                     <p>Hola {email},</p>
