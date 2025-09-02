@@ -12,8 +12,10 @@ namespace Entity_Back.Models.SecurityModels
         public string Description { get; set; }
         public string Url { get; set; }
 
-        public List<FormModule> FormModule { get; set; } = new List<FormModule>();
 
+        public string? Icon { get; set; } // <-- Nuevo campo
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
 
     }
 }

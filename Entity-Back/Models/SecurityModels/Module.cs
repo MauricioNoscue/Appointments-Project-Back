@@ -10,7 +10,9 @@ namespace Entity_Back.Models.SecurityModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<FormModule> FormModule { get; set; } = new List<FormModule>();
+        public string? Icon { get; set; } // <-- Nuevo campo
+
+        public List<Form> Form { get; set; } = new List<Form>();
 
     }
 }

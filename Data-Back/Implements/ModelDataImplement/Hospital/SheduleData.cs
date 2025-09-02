@@ -17,6 +17,31 @@ namespace Data_Back.Implements
         }
 
 
+
+
+
+        public override async Task<IEnumerable<Shedule>> GetAll()
+        {
+            try
+            {
+                var ltsModel = await _context.Set<Shedule>()
+                    .Include(e => e.Doctor)
+                    .Include(t => t.TypeCitation)
+                    .Include(c => c.ConsultingRoom)
+                .Where(e => !e.IsDeleted)
+                .ToListAsync();
+
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(Shedule).Name}");
+                throw;
+            }
+        }
+
+
+
         public async Task<Shedule?>  GetByIdTypeCitation(int id)
         {
             try

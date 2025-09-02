@@ -1157,9 +1157,9 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Rol de administrador",
+                            Description = "Rol de administrador con todos los permisos",
                             IsDeleted = false,
-                            Name = "Admin",
+                            Name = "SuperAdmin",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -1168,6 +1168,22 @@ namespace Entity_Back.Migrations
                             Description = "Rol estándar",
                             IsDeleted = false,
                             Name = "Usuario",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Rol estándar de los doctores",
+                            IsDeleted = false,
+                            Name = "Doctor",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Rol de administrador ",
+                            IsDeleted = false,
+                            Name = "Admin",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -1184,12 +1200,18 @@ namespace Entity_Back.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -1200,36 +1222,201 @@ namespace Entity_Back.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Form");
-                });
-
-            modelBuilder.Entity("Entity_Back.Models.SecurityModels.FormModule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FormId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FormId");
-
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Formmodule");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Form", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Panel principal",
+                            Icon = "dashboard",
+                            IsDeleted = false,
+                            ModuleId = 1,
+                            Name = "Dashboard",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/dashboard"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Gestión de formularios",
+                            Icon = "topic",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Formulario",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/form"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Gestión de roles",
+                            Icon = "admin_panel_settings",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Rol",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/rol"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Gestión de usuarios",
+                            Icon = "person",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Usuario",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/user"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Gestión de permisos",
+                            Icon = "vpn_key",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Permisos",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/permission"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Gestión de módulos",
+                            Icon = "view_module",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Módulos",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/module"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Gestión de usuarios y roles",
+                            Icon = "supervisor_account",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Gestión de usuarios y roles",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/gestion"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Gestión de permisos en formularios",
+                            Icon = "rule",
+                            IsDeleted = false,
+                            ModuleId = 2,
+                            Name = "Gestión de formularios",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/security/gestionFormularios"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Gestión de doctores",
+                            Icon = "medical_services",
+                            IsDeleted = false,
+                            ModuleId = 3,
+                            Name = "Doctor",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/doctor"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "Gestión de consultorios",
+                            Icon = "local_hospital",
+                            IsDeleted = false,
+                            ModuleId = 3,
+                            Name = "Consultorio",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/consultorio"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Description = "Gestión de tipos de cita",
+                            Icon = "event_note",
+                            IsDeleted = false,
+                            ModuleId = 3,
+                            Name = "Tipo de cita",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/typecitation"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Description = "Visualización de citas disponibles",
+                            Icon = "event_available",
+                            IsDeleted = false,
+                            ModuleId = 3,
+                            Name = "Citas disponibles",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/CitationAviable"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Description = "Gestión de horarios",
+                            Icon = "schedule",
+                            IsDeleted = false,
+                            ModuleId = 3,
+                            Name = "Horarios",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/horarios"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "Gestión de sucursales",
+                            Icon = "store",
+                            IsDeleted = false,
+                            ModuleId = 4,
+                            Name = "Sucursal",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/branch"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Description = "Gestión de ciudades",
+                            Icon = "location_city",
+                            IsDeleted = false,
+                            ModuleId = 4,
+                            Name = "Ciudad",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/city"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Description = "Gestión de departamentos",
+                            Icon = "domain",
+                            IsDeleted = false,
+                            ModuleId = 4,
+                            Name = "Departamento",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/departament"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Description = "Gestión de instituciones",
+                            Icon = "account_balance",
+                            IsDeleted = false,
+                            ModuleId = 4,
+                            Name = "Instituciones",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/admin/institusions"
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Module", b =>
@@ -1244,19 +1431,63 @@ namespace Entity_Back.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Module");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Module", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Módulo de panel principal",
+                            Icon = "home",
+                            IsDeleted = false,
+                            Name = "Inicio",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Módulo de seguridad (roles/usuarios/permisos)",
+                            Icon = "security",
+                            IsDeleted = false,
+                            Name = "Seguridad",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Módulo de citas (consultorios/horarios/tipos)",
+                            Icon = "calendar_month",
+                            IsDeleted = false,
+                            Name = "Citas",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Catálogos y parámetros del sistema",
+                            Icon = "tune",
+                            IsDeleted = false,
+                            Name = "Parámetros",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Permission", b =>
@@ -1276,14 +1507,59 @@ namespace Entity_Back.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permission");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Permission", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Permite ver un registro",
+                            IsDeleted = false,
+                            Name = "View",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Permite ver todos los registros (solo Admin)",
+                            IsDeleted = false,
+                            Name = "ViewAll",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Permite crear registros",
+                            IsDeleted = false,
+                            Name = "Create",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Permite editar registros",
+                            IsDeleted = false,
+                            Name = "Edit",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Permite eliminar registros",
+                            IsDeleted = false,
+                            Name = "Delete",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Person", b =>
@@ -1415,7 +1691,553 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("RolFormPermission");
+                    b.ToTable("RolFormPermission", "ModelSecurity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FormId = 1,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FormId = 1,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FormId = 1,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FormId = 1,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FormId = 2,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FormId = 2,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FormId = 2,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FormId = 2,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FormId = 3,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FormId = 3,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 11,
+                            FormId = 3,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 12,
+                            FormId = 3,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 13,
+                            FormId = 4,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 14,
+                            FormId = 4,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 15,
+                            FormId = 4,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 16,
+                            FormId = 4,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 17,
+                            FormId = 5,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            FormId = 5,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 19,
+                            FormId = 5,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 20,
+                            FormId = 5,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 21,
+                            FormId = 6,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 22,
+                            FormId = 6,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 23,
+                            FormId = 6,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 24,
+                            FormId = 6,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 25,
+                            FormId = 7,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 26,
+                            FormId = 7,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 27,
+                            FormId = 7,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 28,
+                            FormId = 7,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 29,
+                            FormId = 8,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 30,
+                            FormId = 8,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 31,
+                            FormId = 8,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 32,
+                            FormId = 8,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 33,
+                            FormId = 9,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 34,
+                            FormId = 9,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 35,
+                            FormId = 9,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 36,
+                            FormId = 9,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 37,
+                            FormId = 10,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 38,
+                            FormId = 10,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 39,
+                            FormId = 10,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 40,
+                            FormId = 10,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 41,
+                            FormId = 11,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 42,
+                            FormId = 11,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 43,
+                            FormId = 11,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 44,
+                            FormId = 11,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 45,
+                            FormId = 12,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 46,
+                            FormId = 12,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 47,
+                            FormId = 12,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 48,
+                            FormId = 12,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 49,
+                            FormId = 13,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 50,
+                            FormId = 13,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 51,
+                            FormId = 13,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 52,
+                            FormId = 13,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 53,
+                            FormId = 14,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 54,
+                            FormId = 14,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 55,
+                            FormId = 14,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 56,
+                            FormId = 14,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 57,
+                            FormId = 15,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 58,
+                            FormId = 15,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 59,
+                            FormId = 15,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 60,
+                            FormId = 15,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 61,
+                            FormId = 16,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 62,
+                            FormId = 16,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 63,
+                            FormId = 16,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 64,
+                            FormId = 16,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 65,
+                            FormId = 17,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 66,
+                            FormId = 17,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 67,
+                            FormId = 17,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 4
+                        },
+                        new
+                        {
+                            Id = 68,
+                            FormId = 17,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 4
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.RolUser", b =>
@@ -1879,21 +2701,13 @@ namespace Entity_Back.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Entity_Back.Models.SecurityModels.FormModule", b =>
+            modelBuilder.Entity("Entity_Back.Models.SecurityModels.Form", b =>
                 {
-                    b.HasOne("Entity_Back.Models.SecurityModels.Form", "Form")
-                        .WithMany("FormModule")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Entity_Back.Models.SecurityModels.Module", "Module")
-                        .WithMany("FormModule")
+                        .WithMany("Form")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Form");
 
                     b.Navigation("Module");
                 });
@@ -2063,14 +2877,9 @@ namespace Entity_Back.Migrations
                     b.Navigation("RolUser");
                 });
 
-            modelBuilder.Entity("Entity_Back.Models.SecurityModels.Form", b =>
-                {
-                    b.Navigation("FormModule");
-                });
-
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Module", b =>
                 {
-                    b.Navigation("FormModule");
+                    b.Navigation("Form");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Permission", b =>

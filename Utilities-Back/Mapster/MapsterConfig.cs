@@ -9,6 +9,7 @@ using Entity_Back.Dto.InfrastructureDto.CityDto;
 using Entity_Back.Dto.InfrastructureDto.Departament;
 using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
+using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
 using Entity_Back.Dto.SecurityDto.PersonDto;
@@ -67,11 +68,11 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<ModuleEditDto, Module>.NewConfig();
 
             //Form
-            TypeAdapterConfig<Module, ModuleListDto>.NewConfig();
-            TypeAdapterConfig<ModuleCreatedDto, Module>.NewConfig();
-            TypeAdapterConfig<ModuleEditDto, Module>.NewConfig();
+            TypeAdapterConfig<Form, FormListDto>.NewConfig().Map(dest =>dest.ModuloName, src => src.Module.Name);
+            TypeAdapterConfig<FormCreatedDto, Form>.NewConfig();
+            TypeAdapterConfig<FormEditDto, Form>.NewConfig();
 
-            //FormModule
+            //roluser
             TypeAdapterConfig<RolUserCreatedDto, RolUser>.NewConfig();
             TypeAdapterConfig<RolUser, RolUserList>.NewConfig()
                 .Map(dest => dest.RolName, src => src.Rol.Name)
@@ -92,9 +93,7 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig();
             TypeAdapterConfig<PersonEditDto, Person>.NewConfig();
 
-            TypeAdapterConfig<Permission, PermissionListDto>.NewConfig();
-            TypeAdapterConfig<PermissionCreatedDto, Permission>.NewConfig();
-            TypeAdapterConfig<PermissionEditDto, Permission>.NewConfig();
+        
 
 
             // Citation
@@ -193,11 +192,11 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.SheduleId, src => src.SheduleId);
 
             TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()  
-                .Map(dest => dest.TypeCitationId, src => src.TypeCitationId)
+                .Map(dest => dest.TypeCitationName, src => src.TypeCitation.Name)
                 .Map(dest => dest.NameDoctor, src => src.Doctor.Person.FullName)
-                .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
+                .Map(dest => dest.ConsultingRoomName, src => src.ConsultingRoom.Name)
                 .Map(dest => dest.NumberCitation, src => src.NumberCitation)
-                .Map(dest => dest.SheduleId, src => src.SheduleId);
+                .Map(dest => dest.RoomNumber, src => src.ConsultingRoom.RoomNumber);
 
 
 

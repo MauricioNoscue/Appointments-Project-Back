@@ -1,18 +1,22 @@
 ﻿using Business_Back;
 using Business_Back.Implements.ModelBusinessImplements.Infrastructure;
+using Business_Back.Implements.ModelBusinessImplements.Menu;
 using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
+using Business_Back.Interface.IBusinessModel.Menu;
 using Business_Back.Interface.IBusinessModel.Security;
 using Business_Back.Services;
 using Business_Back.Services.Citation;
 using Data_Back;
 using Data_Back.Implements;
 using Data_Back.Implements.ModelDataImplement.Infrastructure;
+using Data_Back.Implements.ModelDataImplement.Menu;
 using Data_Back.Implements.ModelDataImplement.Refresh;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
 using Data_Back.Interface.IDataModels.Infrastructure;
+using Data_Back.Interface.IDataModels.Menu;
 using Data_Back.Interface.IDataModels.Security;
 using Data_Back.Interface.Refresh;
 using Entity_Back;
@@ -22,7 +26,6 @@ using Entity_Back.Dto.InfrastructureDto.Departament;
 using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
 using Entity_Back.Dto.SecurityDto.FormDto;
-using Entity_Back.Dto.SecurityDto.FormModuleDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
 using Entity_Back.Dto.SecurityDto.PersonDto;
@@ -80,10 +83,7 @@ namespace Web_back.Extension
             services.AddScoped<IFormData, FormData>();
             services.AddScoped<IBaseModelBusiness<FormCreatedDto, FormEditDto, FormListDto>, FormBusiness>();
 
-            // FormModule
-            services.AddScoped<IBaseModelData<FormModule>, FormModuleData>();
-            services.AddScoped<IFormModuleData, FormModuleData>();
-            services.AddScoped<IBaseModelBusiness<FormModuleCreatedDto, FormModuleEditDto, FormModuleListDto>, FormModuleBusiness>();
+            
 
             // RolFormPermission
             services.AddScoped<IBaseModelData<RolFormPermission>, RolFormPermissionData>();
@@ -150,7 +150,8 @@ namespace Web_back.Extension
             services.AddScoped<ICitationsBusiness, CitationBusiness>();
 
 
-
+            services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuBusiness, MenuBusiness>();
 
             services.AddScoped<CitationCoreService>();
 
@@ -159,6 +160,11 @@ namespace Web_back.Extension
             services.AddScoped<JWTService>();
 
             services.AddScoped<AuthService>();
+
+
+
+
+
 
 
 

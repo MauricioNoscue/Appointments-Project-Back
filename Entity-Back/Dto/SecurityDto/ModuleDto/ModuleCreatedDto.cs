@@ -13,6 +13,9 @@ namespace Entity_Back.Dto.SecurityDto.ModuleDto
         [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener entre 3 y 50 caracteres")]
         public string Name { get; set; }
 
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El icomo debe tener entre 3 y 50 caracteres")]
+        public string? Icon { get; set; } // <-- Nuevo campo
+
         [StringLength(200, MinimumLength = 5, ErrorMessage = "La descripción debe tener entre 5 y 200 caracteres")]
         public string? Description { get; set; }   // opcional, pero validada si llega
     }

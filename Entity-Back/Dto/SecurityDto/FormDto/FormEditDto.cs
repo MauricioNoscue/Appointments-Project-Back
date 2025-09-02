@@ -24,6 +24,14 @@ namespace Entity_Back.Dto.SecurityDto.FormDto
         [Url(ErrorMessage = "La URL no tiene un formato válido")]
         [StringLength(200, MinimumLength = 5, ErrorMessage = "La URL debe tener entre 5 y 200 caracteres")]
         public string Url { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El icomo debe tener entre 3 y 50 caracteres")]
+        public string? Icon { get; set; } // <-- Nuevo campo
+
+        [Required(ErrorMessage = "El Módulo es obligatorio")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un Módulo válida")]
+        public int ModuleId { get; set; }
+
     }
 
 }

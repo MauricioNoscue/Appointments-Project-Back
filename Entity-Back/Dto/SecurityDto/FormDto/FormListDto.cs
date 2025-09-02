@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,5 +13,9 @@ namespace Entity_Back.Dto.SecurityDto.FormDto
         public string Name { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
+         public string ModuloName { get; set; }
+        public string? Icon { get; set; } // <-- Nuevo campo
+
+        public int ModuleId { get; set; }
     }
 }

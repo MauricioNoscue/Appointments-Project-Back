@@ -17,12 +17,12 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
             builder.HasIndex(f => f.Name).IsUnique();
        
 
-            builder.HasData(
+          builder.HasData(
           new Rol
           {
               Id = 1,
-              Name = "Admin",
-              Description = "Rol de administrador",
+              Name = "SuperAdmin",
+              Description = "Rol de administrador con todos los permisos",
               RegistrationDate = new DateTime(2024, 7, 16)
           },
           new Rol
@@ -30,6 +30,22 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
               Id = 2,
               Name = "Usuario",
               Description = "Rol estándar",
+              RegistrationDate = new DateTime(2024, 7, 16)
+          }
+          ,
+          new Rol
+          {
+              Id = 3,
+              Name = "Doctor",
+              Description = "Rol estándar de los doctores",
+              RegistrationDate = new DateTime(2024, 7, 16)
+          }
+          ,
+          new Rol
+          {
+              Id = 4,
+              Name = "Admin",
+              Description = "Rol de administrador ",
               RegistrationDate = new DateTime(2024, 7, 16)
           }
       );
