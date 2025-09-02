@@ -1069,12 +1069,10 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StateNotification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("StateNotification")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TypeNotification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

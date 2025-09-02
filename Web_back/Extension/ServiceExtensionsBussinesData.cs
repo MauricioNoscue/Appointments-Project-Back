@@ -1,5 +1,6 @@
 ﻿using Business_Back;
 using Business_Back.Implements.ModelBusinessImplements.Infrastructure;
+using Business_Back.Implements.ModelBusinessImplements.Notification1;
 using Business_Back.Implements.ModelBusinessImplements.Security;
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
@@ -8,11 +9,13 @@ using Business_Back.Services.Citation;
 using Data_Back;
 using Data_Back.Implements;
 using Data_Back.Implements.ModelDataImplement.Infrastructure;
+using Data_Back.Implements.ModelDataImplement.Notification1;
 using Data_Back.Implements.ModelDataImplement.Refresh;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface;
 using Data_Back.Interface.IBaseModelData;
 using Data_Back.Interface.IDataModels.Infrastructure;
+using Data_Back.Interface.IDataModels.Notifation;
 using Data_Back.Interface.IDataModels.Security;
 using Data_Back.Interface.Refresh;
 using Entity_Back;
@@ -21,6 +24,7 @@ using Entity_Back.Dto.InfrastructureDto.CityDto;
 using Entity_Back.Dto.InfrastructureDto.Departament;
 using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
+using Entity_Back.Dto.Notification;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.FormModuleDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
@@ -31,6 +35,7 @@ using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Models.Infrastructure;
+using Entity_Back.Models.Notification;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 
@@ -149,6 +154,10 @@ namespace Web_back.Extension
             services.AddScoped<IScheduleHourBusiness, ScheduleHourBusiness>();
             services.AddScoped<ICitationsBusiness, CitationBusiness>();
 
+            //Notificaciones
+            services.AddScoped<IBaseModelData<Notification>, NotificationData>();
+            services.AddScoped<INotificationData, NotificationData>();
+            services.AddScoped<IBaseModelBusiness<NotificationCreateDto, NotificationEditDto, NotificationListDto>, NotificationBusiness>();
 
 
 

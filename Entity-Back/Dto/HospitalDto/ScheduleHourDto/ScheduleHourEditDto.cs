@@ -21,6 +21,7 @@ namespace Entity_Back
         public TimeSpan? BreakStartTime { get; set; }
 
         public TimeSpan? BreakEndTime { get; set; }
+        public int SheduleId { get; set; }
     }
 
 }
