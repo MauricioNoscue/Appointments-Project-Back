@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProjectServices();
 
 
-// Configuración de base de datos
+// Configuraciï¿½n de base de datos
 builder.Services.AddDatabaseConfiguration(configuration);
 
 
@@ -37,8 +37,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-//// Archivos estáticos
+
+//// Archivos estï¿½ticos
 //app.UseStaticFiles();
 
 //// Swagger
