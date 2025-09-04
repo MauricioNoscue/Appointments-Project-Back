@@ -67,23 +67,12 @@ namespace Entity_Back.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            AppointmentDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Note = "Cita para revisión general",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ScheduleHourId = 1,
-                            State = "Pendiente",
-                            UserId = 1
-                        },
-                        new
-                        {
                             Id = 2,
                             AppointmentDate = new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Note = "string",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ScheduleHourId = 4,
+                            ScheduleHourId = 1,
                             State = "Agendada",
                             TimeBlock = new TimeSpan(0, 8, 45, 0, 0),
                             UserId = 1
@@ -1689,7 +1678,7 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("RolFormPermission", "ModelSecurity");
+                    b.ToTable("RolFormPermission");
 
                     b.HasData(
                         new
@@ -2400,36 +2389,6 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 1,
-                            EndTime = new TimeSpan(0, 8, 30, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 1,
-                            StartTime = new TimeSpan(0, 8, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndTime = new TimeSpan(0, 9, 0, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 1,
-                            StartTime = new TimeSpan(0, 8, 30, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EndTime = new TimeSpan(0, 9, 30, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 2,
-                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 4,
                             BreakEndTime = new TimeSpan(0, 14, 0, 0, 0),
                             BreakStartTime = new TimeSpan(0, 12, 0, 0, 0),
                             EndTime = new TimeSpan(0, 16, 0, 0, 0),
@@ -2481,36 +2440,6 @@ namespace Entity_Back.Migrations
                     b.ToTable("Shedule", "Medical");
 
                     b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConsultingRoomId = 1,
-                            DoctorId = 1,
-                            IsDeleted = false,
-                            NumberCitation = 4,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConsultingRoomId = 2,
-                            DoctorId = 2,
-                            IsDeleted = false,
-                            NumberCitation = 6,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConsultingRoomId = 3,
-                            DoctorId = 3,
-                            IsDeleted = false,
-                            NumberCitation = 8,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 3
-                        },
                         new
                         {
                             Id = 4,

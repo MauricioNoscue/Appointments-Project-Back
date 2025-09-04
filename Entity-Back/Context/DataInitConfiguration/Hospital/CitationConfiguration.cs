@@ -10,17 +10,7 @@ namespace Entity_Back
             var staticDate = new DateTime(2024, 7, 16);
 
             builder.HasData(
-                new Citation
-                {
-                    Id = 1,
-                    UserId = 1,
-                    AppointmentDate = staticDate,
-                    State = "Pendiente",
-                    Note = "Cita para revisión general",
-                    ScheduleHourId = 1,
-                    IsDeleted = false,
-                    RegistrationDate = staticDate
-                },new Citation
+               new Citation
                 {
                     Id = 2,
                     UserId = 1, 
@@ -28,7 +18,7 @@ namespace Entity_Back
                     TimeBlock = new TimeSpan(8, 45, 0), 
                     State = "Agendada",
                     Note = "string",
-                    ScheduleHourId = 4,
+                    ScheduleHourId = 1,
                     IsDeleted = false,
                     RegistrationDate = staticDate 
                 }

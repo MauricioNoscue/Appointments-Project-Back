@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrations : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,30 +75,15 @@ namespace Entity_Back.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Form",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Form", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Module",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -109,11 +94,12 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Permission",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -224,65 +210,28 @@ namespace Entity_Back.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Formmodule",
+                name: "Form",
+                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModuleId = table.Column<int>(type: "int", nullable: false),
-                    FormId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Formmodule", x => x.Id);
+                    table.PrimaryKey("PK_Form", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Formmodule_Form_FormId",
-                        column: x => x.FormId,
-                        principalTable: "Form",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Formmodule_Module_ModuleId",
+                        name: "FK_Form_Module_ModuleId",
                         column: x => x.ModuleId,
-                        principalTable: "Module",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RolFormPermission",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RolId = table.Column<int>(type: "int", nullable: false),
-                    FormId = table.Column<int>(type: "int", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolFormPermission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RolFormPermission_Form_FormId",
-                        column: x => x.FormId,
-                        principalTable: "Form",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolFormPermission_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolFormPermission_Rol_RolId",
-                        column: x => x.RolId,
                         principalSchema: "ModelSecurity",
-                        principalTable: "Rol",
+                        principalTable: "Module",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -390,6 +339,44 @@ namespace Entity_Back.Migrations
                         column: x => x.PersonId,
                         principalSchema: "ModelSecurity",
                         principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RolFormPermission",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RolId = table.Column<int>(type: "int", nullable: false),
+                    FormId = table.Column<int>(type: "int", nullable: false),
+                    PermissionId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RolFormPermission", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RolFormPermission_Form_FormId",
+                        column: x => x.FormId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "Form",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RolFormPermission_Permission_PermissionId",
+                        column: x => x.PermissionId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "Permission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RolFormPermission_Rol_RolId",
+                        column: x => x.RolId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "Rol",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -694,12 +681,39 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
+                table: "Module",
+                columns: new[] { "Id", "Description", "Icon", "IsDeleted", "Name", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, "Módulo de panel principal", "home", false, "Inicio", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Módulo de seguridad (roles/usuarios/permisos)", "security", false, "Seguridad", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "Módulo de citas (consultorios/horarios/tipos)", "calendar_month", false, "Citas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Catálogos y parámetros del sistema", "tune", false, "Parámetros", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
+                table: "Permission",
+                columns: new[] { "Id", "Description", "IsDeleted", "Name", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, "Permite ver un registro", false, "View", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Permite ver todos los registros (solo Admin)", false, "ViewAll", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "Permite crear registros", false, "Create", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Permite editar registros", false, "Edit", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, "Permite eliminar registros", false, "Delete", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
                 table: "Rol",
                 columns: new[] { "Id", "Description", "IsDeleted", "Name", "RegistrationDate" },
                 values: new object[,]
                 {
-                    { 1, "Rol de administrador", false, "Admin", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "Rol estándar", false, "Usuario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "Rol de administrador con todos los permisos", false, "SuperAdmin", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Rol estándar", false, "Usuario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "Rol estándar de los doctores", false, "Doctor", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Rol de administrador ", false, "Admin", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -760,6 +774,31 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
+                table: "Form",
+                columns: new[] { "Id", "Description", "Icon", "IsDeleted", "ModuleId", "Name", "RegistrationDate", "Url" },
+                values: new object[,]
+                {
+                    { 1, "Panel principal", "dashboard", false, 1, "Dashboard", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/dashboard" },
+                    { 2, "Gestión de doctores", "medical_services", false, 3, "Doctor", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/doctor" },
+                    { 3, "Gestión de formularios", "topic", false, 2, "Formulario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/form" },
+                    { 4, "Gestión de roles", "admin_panel_settings", false, 2, "Rol", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/rol" },
+                    { 5, "Gestión de usuarios", "person", false, 2, "Usuario", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/user" },
+                    { 6, "Gestión de permisos", "vpn_key", false, 2, "Permisos", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/permission" },
+                    { 7, "Gestión de módulos", "view_module", false, 2, "Módulos", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/module" },
+                    { 8, "Gestión de usuarios y roles", "supervisor_account", false, 2, "Gestión de usuarios y roles", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/gestion" },
+                    { 9, "Gestión de permisos en formularios", "rule", false, 2, "Gestión de formularios", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/security/gestionFormularios" },
+                    { 10, "Gestión de consultorios", "local_hospital", false, 3, "Consultorio", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/consultorio" },
+                    { 11, "Gestión de sucursales", "store", false, 4, "Sucursal", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/branch" },
+                    { 12, "Gestión de ciudades", "location_city", false, 4, "Ciudad", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/city" },
+                    { 13, "Gestión de departamentos", "domain", false, 4, "Departamento", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/departament" },
+                    { 14, "Gestión de instituciones", "account_balance", false, 4, "Instituciones", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/institusions" },
+                    { 15, "Gestión de tipos de cita", "event_note", false, 3, "Tipo de cita", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/typecitation" },
+                    { 16, "Visualización de citas disponibles", "event_available", false, 3, "Citas disponibles", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/CitationAviable" },
+                    { 17, "Gestión de horarios", "schedule", false, 3, "Horarios", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/horarios" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "ModelSecurity",
                 table: "Person",
                 columns: new[] { "Id", "Active", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
                 values: new object[,]
@@ -787,6 +826,81 @@ namespace Entity_Back.Migrations
                 {
                     { 10, 1, "info@saludhuila.com", false, "Salud Huila IPS", "900123456-7", new DateTime(2024, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 11, 2, "contacto@pitalitomedico.com", false, "Centro Médico Pitalito", "900987654-3", new DateTime(2024, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RolFormPermission",
+                columns: new[] { "Id", "FormId", "IsDeleted", "PermissionId", "RegistrationDate", "RolId" },
+                values: new object[,]
+                {
+                    { 1, 1, false, 1, null, 4 },
+                    { 2, 1, false, 3, null, 4 },
+                    { 3, 1, false, 4, null, 4 },
+                    { 4, 1, false, 5, null, 4 },
+                    { 5, 2, false, 1, null, 4 },
+                    { 6, 2, false, 3, null, 4 },
+                    { 7, 2, false, 4, null, 4 },
+                    { 8, 2, false, 5, null, 4 },
+                    { 9, 3, false, 1, null, 4 },
+                    { 10, 3, false, 3, null, 4 },
+                    { 11, 3, false, 4, null, 4 },
+                    { 12, 3, false, 5, null, 4 },
+                    { 13, 4, false, 1, null, 4 },
+                    { 14, 4, false, 3, null, 4 },
+                    { 15, 4, false, 4, null, 4 },
+                    { 16, 4, false, 5, null, 4 },
+                    { 17, 5, false, 1, null, 4 },
+                    { 18, 5, false, 3, null, 4 },
+                    { 19, 5, false, 4, null, 4 },
+                    { 20, 5, false, 5, null, 4 },
+                    { 21, 6, false, 1, null, 4 },
+                    { 22, 6, false, 3, null, 4 },
+                    { 23, 6, false, 4, null, 4 },
+                    { 24, 6, false, 5, null, 4 },
+                    { 25, 7, false, 1, null, 4 },
+                    { 26, 7, false, 3, null, 4 },
+                    { 27, 7, false, 4, null, 4 },
+                    { 28, 7, false, 5, null, 4 },
+                    { 29, 8, false, 1, null, 4 },
+                    { 30, 8, false, 3, null, 4 },
+                    { 31, 8, false, 4, null, 4 },
+                    { 32, 8, false, 5, null, 4 },
+                    { 33, 9, false, 1, null, 4 },
+                    { 34, 9, false, 3, null, 4 },
+                    { 35, 9, false, 4, null, 4 },
+                    { 36, 9, false, 5, null, 4 },
+                    { 37, 10, false, 1, null, 4 },
+                    { 38, 10, false, 3, null, 4 },
+                    { 39, 10, false, 4, null, 4 },
+                    { 40, 10, false, 5, null, 4 },
+                    { 41, 11, false, 1, null, 4 },
+                    { 42, 11, false, 3, null, 4 },
+                    { 43, 11, false, 4, null, 4 },
+                    { 44, 11, false, 5, null, 4 },
+                    { 45, 12, false, 1, null, 4 },
+                    { 46, 12, false, 3, null, 4 },
+                    { 47, 12, false, 4, null, 4 },
+                    { 48, 12, false, 5, null, 4 },
+                    { 49, 13, false, 1, null, 4 },
+                    { 50, 13, false, 3, null, 4 },
+                    { 51, 13, false, 4, null, 4 },
+                    { 52, 13, false, 5, null, 4 },
+                    { 53, 14, false, 1, null, 4 },
+                    { 54, 14, false, 3, null, 4 },
+                    { 55, 14, false, 4, null, 4 },
+                    { 56, 14, false, 5, null, 4 },
+                    { 57, 15, false, 1, null, 4 },
+                    { 58, 15, false, 3, null, 4 },
+                    { 59, 15, false, 4, null, 4 },
+                    { 60, 15, false, 5, null, 4 },
+                    { 61, 16, false, 1, null, 4 },
+                    { 62, 16, false, 3, null, 4 },
+                    { 63, 16, false, 4, null, 4 },
+                    { 64, 16, false, 5, null, 4 },
+                    { 65, 17, false, 1, null, 4 },
+                    { 66, 17, false, 3, null, 4 },
+                    { 67, 17, false, 4, null, 4 },
+                    { 68, 17, false, 5, null, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -834,35 +948,19 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Shedule",
                 columns: new[] { "Id", "ConsultingRoomId", "DoctorId", "IsDeleted", "NumberCitation", "RegistrationDate", "SheduleId", "TypeCitationId" },
-                values: new object[,]
-                {
-                    { 1, 1, 1, false, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1 },
-                    { 2, 2, 2, false, 6, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2 },
-                    { 3, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 3 },
-                    { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 }
-                });
+                values: new object[] { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "ScheduleHour",
                 columns: new[] { "Id", "BreakEndTime", "BreakStartTime", "EndTime", "IsDeleted", "ProgramateDate", "RegistrationDate", "SheduleId", "StartTime" },
-                values: new object[,]
-                {
-                    { 1, null, null, new TimeSpan(0, 8, 30, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 0, 0, 0) },
-                    { 2, null, null, new TimeSpan(0, 9, 0, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 30, 0, 0) },
-                    { 3, null, null, new TimeSpan(0, 9, 30, 0, 0), false, new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 9, 0, 0, 0) },
-                    { 4, new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 16, 0, 0, 0), false, new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 8, 0, 0, 0) }
-                });
+                values: new object[] { 1, new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 16, 0, 0, 0), false, new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 8, 0, 0, 0) });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "Citation",
                 columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ScheduleHourId", "State", "TimeBlock", "UserId" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cita para revisión general", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Pendiente", null, 1 },
-                    { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 }
-                });
+                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branch_InstitutionId",
@@ -922,14 +1020,17 @@ namespace Entity_Back.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Formmodule_FormId",
-                table: "Formmodule",
-                column: "FormId");
+                name: "IX_Form_ModuleId",
+                schema: "ModelSecurity",
+                table: "Form",
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Formmodule_ModuleId",
-                table: "Formmodule",
-                column: "ModuleId");
+                name: "IX_Form_Name",
+                schema: "ModelSecurity",
+                table: "Form",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Institution_CityId",
@@ -945,9 +1046,23 @@ namespace Entity_Back.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Module_Name",
+                schema: "ModelSecurity",
+                table: "Module",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notification_CitationId",
                 table: "Notification",
                 column: "CitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Permission_Name",
+                schema: "ModelSecurity",
+                table: "Permission",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Person_DocumentTypeId",
@@ -1042,9 +1157,6 @@ namespace Entity_Back.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Formmodule");
-
-            migrationBuilder.DropTable(
                 name: "Notification");
 
             migrationBuilder.DropTable(
@@ -1061,17 +1173,16 @@ namespace Entity_Back.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "Module");
-
-            migrationBuilder.DropTable(
                 name: "Citation",
                 schema: "Medical");
 
             migrationBuilder.DropTable(
-                name: "Form");
+                name: "Form",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "Permission");
+                name: "Permission",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
                 name: "Rol",
@@ -1083,6 +1194,10 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.DropTable(
                 name: "User",
+                schema: "ModelSecurity");
+
+            migrationBuilder.DropTable(
+                name: "Module",
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(

@@ -1,0 +1,106 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Web_back/Dockerfile
+    container_name: web_back_api   # 👈 aparece SOLO aquí
+    ports:
+      - "8080:8080"
+    environment:
+      DatabaseProvider: "sqlserver"
+      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=TuPass123!;TrustServerCertificate=true;Encrypt=false"
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=proyectoCtT;Username=postgres;Password=postgres"
+      ConnectionStrings__MySql: "Server=mysql;Port=3306;Database=proyectoCtT;User=root;Password=Root123!"
+    depends_on:
+      sql:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  migrator:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: ef_migrator   # 👈 también aparece una sola vez aquí
+    working_dir: /src
+    volumes:
+      - ./:/src
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=TuPass123!;TrustServerCertificate=true;Encrypt=false"
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=proyectoCtT;Username=postgres;Password=postgres"
+      ConnectionStrings__MySql: "Server=mysql;Port=3306;Database=proyectoCtT;User=root;Password=Root123!"
+    depends_on:
+      sql:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    command: >
+      bash -c "
+        dotnet tool install --global dotnet-ef &&
+
+        echo '==> Migrando SQL Server' &&
+        DatabaseProvider=sqlserver /root/.dotnet/tools/dotnet-ef database update --project ./Entity-Back/Entity-Back.csproj --startup-project ./Web_back/Web_back.csproj --context ApplicationDbContext &&
+
+        echo '==> Migrando Postgres' &&
+        DatabaseProvider=postgres /root/.dotnet/tools/dotnet-ef database update --project ./Entity-Back/Entity-Back.csproj --startup-project ./Web_back/Web_back.csproj --context ApplicationDbContext &&
+
+        echo '==> Migrando MySQL' &&
+        DatabaseProvider=mysql /root/.dotnet/tools/dotnet-ef database update --project ./Entity-Back/Entity-Back.csproj --startup-project ./Web_back/Web_back.csproj --context ApplicationDbContext
+      "
+
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_db
+    environment:
+      SA_PASSWORD: "TuPass123!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/1433"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "proyectoCtT"
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:8.4
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: "Root123!"
+      MYSQL_DATABASE: "proyectoCtT"
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pRoot123!"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  sql_data:
+  pg_data:
+  mysql_data:
