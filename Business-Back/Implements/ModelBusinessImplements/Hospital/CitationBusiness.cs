@@ -11,16 +11,14 @@ namespace Business_Back
         private readonly ICitationsData _data;
 
         public CitationBusiness(IConfiguration configuration, ICitationsData data, ILogger<CitationBusiness> logger)
-            : base(configuration, data, logger)
-        {
-            _data = data;
-        }
+            : base(configuration, data, logger) => _data = data;
 
-        public async Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
-        {
-            return await _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
-        }
+        public Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
+            => _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
 
+        public Task<List<CitationListDto>> GetAllForListAsync()
+            => _data.GetAllForListAsync(); // este método ya lo hicimos en Data
     }
+
 }
 

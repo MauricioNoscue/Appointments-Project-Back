@@ -112,7 +112,11 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.State, src => src.State)
                 .Map(dest => dest.Note, src => src.Note)
-                .Map(dest => dest.AppointmentDate, src => src.AppointmentDate);
+                .Map(dest => dest.AppointmentDate, src => src.AppointmentDate)
+  
+                .Map(dest => dest.NameDoctor, src => src.ScheduleHour.Shedule.Doctor.Person.FullName)  // ajusta si tu Doctor no tiene Person
+                .Map(dest => dest.ConsultingRoomName, src => src.ScheduleHour.Shedule.ConsultingRoom.Name)
+                .Map(dest => dest.RoomNumber, src => src.ScheduleHour.Shedule.ConsultingRoom.RoomNumber);
 
             // ScheduleHour
             TypeAdapterConfig<ScheduleHourCreateDto, ScheduleHour>.NewConfig()
