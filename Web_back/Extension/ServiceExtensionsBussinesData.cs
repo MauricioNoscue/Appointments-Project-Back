@@ -41,6 +41,12 @@ using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
+using Business_Back.Implements.ModelBusinessImplements.Hospital;
+using Business_Back.Interface.IBusinessModel.Hospital;
+using Data_Back.Implements.ModelDataImplement.Hospital;
+using Data_Back.Interface.IDataModels.Hospital;
+using Entity_Back.Dto.HospitalDto.RelatedPerson;
+using Entity_Back.Models.HospitalModel;
 
 namespace Web_back.Extension
 {
@@ -168,7 +174,16 @@ namespace Web_back.Extension
             services.AddScoped<IBaseModelBusiness<NotificationCreateDto, NotificationEditDto, NotificationListDto>, NotificationBusiness>();
 
 
+            // RelatedPerson: Data
+            services.AddScoped<IBaseModelData<RelatedPerson>, RelatedPersonData>();
+            services.AddScoped<IRelatedPersonData, RelatedPersonData>();
 
+            // RelatedPerson: Business
+            services.AddScoped<IRelatedPersonBusiness, RelatedPersonBussiness>();
+
+            // IMPORTANTe: el controller pide el genérico, así que lo resolvemos con el específico
+            services.AddScoped<IBaseModelBusiness<RelatedPersonCreatedDto, RelatedPersonEditDto, RelatedPersonListDto>>(sp =>
+                sp.GetRequiredService<IRelatedPersonBusiness>());
 
             services.AddScoped<CitationCoreService>();
 
@@ -177,14 +192,6 @@ namespace Web_back.Extension
             services.AddScoped<JWTService>();
 
             services.AddScoped<AuthService>();
-
-
-
-
-
-
-
-
             return services;
         }
     }

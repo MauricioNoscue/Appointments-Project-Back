@@ -529,12 +529,26 @@ namespace Entity_Back.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
@@ -542,11 +556,13 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TypeRelation")
+                    b.Property<string>("Relation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
 
                     b.HasIndex("PersonId");
 
@@ -2564,11 +2580,19 @@ namespace Entity_Back.Migrations
 
             modelBuilder.Entity("Entity_Back.Models.HospitalModel.RelatedPerson", b =>
                 {
+                    b.HasOne("Entity_Back.Models.HospitalModel.DocumentType", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity_Back.Models.SecurityModels.Person", "Person")
                         .WithMany("RelatedPerson")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("DocumentType");
 
                     b.Navigation("Person");
                 });
