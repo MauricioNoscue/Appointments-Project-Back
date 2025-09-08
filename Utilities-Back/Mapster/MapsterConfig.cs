@@ -107,9 +107,11 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.UserId, src => src.UserId)
                 .Map(dest => dest.ScheduleHourId, src => src.ScheduleHourId);
 
-            TypeAdapterConfig<CitationEditDto, Citation>.NewConfig()
-                .Map(dest => dest.State, src => src.State)
-                .Map(dest => dest.Note, src => src.Note);
+            TypeAdapterConfig<CitationEditDto, Citation>
+                .NewConfig()
+                .IgnoreNullValues(true)
+                .Map(d => d.State, s => s.State)
+                .Map(d => d.Note, s => s.Note);
 
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.State, src => src.State)
