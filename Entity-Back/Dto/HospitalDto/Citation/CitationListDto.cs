@@ -9,6 +9,9 @@ namespace Entity_Back
         public DateTime AppointmentDate { get; set; }
         public TimeSpan? TimeBlock { get; set; }
         public int ScheduleHourId { get; set; }
+        public string NameDoctor { get; set; }
+        public string ConsultingRoomName { get; set; }
+        public int RoomNumber { get; set; }
 
 
 
