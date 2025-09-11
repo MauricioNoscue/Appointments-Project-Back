@@ -19,45 +19,13 @@ namespace Data_Back.Implements
             _context = context;
         }
 
-        public async Task<Doctor?> GetDoctorWithPersonById(int id)
-        {
-            try
-            {
-                return await _context.Doctors
-                            .Include(d => d.Person)
-                            .Where(d => d.PersonId == id && !d.IsDeleted)
-                            .FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                throw new Exception($"Error al obtener el doctor por PersonId {id}: {ex.Message}", ex);
-            }
-        }
-        
-        public async Task<IEnumerable<Doctor>> GetAllDoctorWithPerson()
-        {
-            try
-            {
-                return await _context.Doctors
-                            .Include(d => d.Person)
-                            .Where(d => !d.IsDeleted)
-                            .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                throw new Exception($"Error al obtener los doctores por SpecialtyId: {ex.Message}", ex);
-            }
-        }
-
-        async Task<DoctorListDto?> IDoctorData.GetDoctorWithPersonById(int id)
+        public async Task<DoctorListDto?> GetDoctorWithPersonById(int id)
         {
             try
             {
                 var doctor = await _context.Doctors
                     .Include(d => d.Person)
-                    .Where(d => d.PersonId == id && !d.IsDeleted)
+                    .Where(d => d.Id == id && !d.IsDeleted)
                     .FirstOrDefaultAsync();
 
                 return doctor?.Adapt<DoctorListDto>();
@@ -68,7 +36,7 @@ namespace Data_Back.Implements
             }
         }
 
-        async Task<IEnumerable<DoctorListDto>> IDoctorData.GetAllDoctorWithPerson()
+        public async Task<IEnumerable<DoctorListDto>> GetAllDoctorWithPerson()
         {
             try
             {
