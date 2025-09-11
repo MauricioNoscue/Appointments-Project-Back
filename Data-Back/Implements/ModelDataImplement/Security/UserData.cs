@@ -118,20 +118,18 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return null;
 
-            // Generar token seguro
-            var tokenBytes = RandomNumberGenerator.GetBytes(32);
-            var token = Convert.ToBase64String(tokenBytes)
-                                .Replace("+", "-")
-                                .Replace("/", "_")
-                                .Replace("=", "");
+            // Generar un código de 4 dígitos (ej: 1234)
+            var random = new Random();
+            var code = random.Next(1000, 10000).ToString(); // siempre entre 1000 y 9999
 
-            user.PasswordResetToken = token;
-            user.PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1);
+            user.PasswordResetToken = code; // puedes seguir usando esta columna
+            user.PasswordResetTokenExpiration = DateTime.UtcNow.AddMinutes(10); // ejemplo: 10 min de validez
+
 
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-            return token; // para que la capa Business lo use (ej: enviar correo)
+            return code; // para que la capa Business lo use (ej: enviar correo)
         }
 
 

@@ -44,7 +44,21 @@ namespace Entity_Back.Context
          .WithMany(u => u.Citation)
          .HasForeignKey(c => c.UserId)
          .OnDelete(DeleteBehavior.Restrict); // o .NoAction
+
+            modelBuilder.Entity<RelatedPerson>()
+         .HasOne(rp => rp.Person)
+         .WithMany(p => p.RelatedPerson)
+         .HasForeignKey(rp => rp.PersonId)
+         .OnDelete(DeleteBehavior.Restrict);  // o .NoAction()
+
+            modelBuilder.Entity<RelatedPerson>()
+         .HasOne(rp => rp.DocumentType)
+         .WithMany()
+         .HasForeignKey(rp => rp.DocumentTypeId)
+         .OnDelete(DeleteBehavior.Restrict);  // o .NoAction()
         }
+
+
 
 
         public override int SaveChanges()

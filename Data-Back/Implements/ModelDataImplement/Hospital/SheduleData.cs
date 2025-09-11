@@ -47,7 +47,7 @@ namespace Data_Back.Implements
             try
             {
                 var shedule = await _context.Set<Shedule>()
-                    .Where(s => s.TypeCitationId == id && !s.IsDeleted)
+                    .Where(s => s.TypeCitationId == id)
                     .FirstOrDefaultAsync();
                 return shedule;
             }

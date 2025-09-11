@@ -25,5 +25,42 @@ namespace Data_Back
                 .ToListAsync();
         }
 
+        public async Task<List<CitationListDto>> GetAllForListAsync()
+        {
+            var lts = await _context.Set<Citation>()
+                .AsNoTracking()
+                .Include(c => c.ScheduleHour)
+                    .ThenInclude(sh => sh.Shedule)
+                        .ThenInclude(s => s.Doctor)
+                            .ThenInclude(d => d.Person) // si tu Doctor tiene Person.FullName
+                .Include(c => c.ScheduleHour)
+                    .ThenInclude(sh => sh.Shedule)
+                        .ThenInclude(s => s.ConsultingRoom)
+                .Where(c => !c.IsDeleted)
+                .Select(c => new CitationListDto
+                {
+                    // BaseModel (tu BaseModel tiene Id/IsDeleted/RegistrationDate)
+                    Id = c.Id,
+                    IsDeleted = c.IsDeleted,
+                    RegistrationDate = c.RegistrationDate,
+
+                    // Propias de Citation
+                    State = c.State,
+                    Note = c.Note,
+                    AppointmentDate = c.AppointmentDate,
+                    TimeBlock = c.TimeBlock,
+                    ScheduleHourId = c.ScheduleHourId,
+
+                    // Desde Shedule
+                    NameDoctor = c.ScheduleHour.Shedule.Doctor.Person.FullName, // ajusta si no usas Person
+                    ConsultingRoomName = c.ScheduleHour.Shedule.ConsultingRoom.Name,
+                    RoomNumber = c.ScheduleHour.Shedule.ConsultingRoom.RoomNumber
+                })
+                .ToListAsync();
+
+            return lts;
+        }
+
+
     }
 }

@@ -7,11 +7,13 @@ namespace Web_back.Factory.Implements
     {
         public static IDbContextFactory GetFactory(string provider)
         {
-            return provider switch
+            return provider?.ToLower() switch
             {
-                "SqlServer" => new SqlServerDbContextFactory(),
-            
-                _ => throw new NotSupportedException($"proveedor{provider} no soportado"),
+                "sqlserver" => new SqlServerDbContextFactory(),
+                "postgres" => new PostgresDbContextFactory(),
+                "mysql" => new MySqlDbContextFactory(),
+
+                _ => throw new NotSupportedException($"Proveedor '{provider}' no soportado"),
             };
         }
     }

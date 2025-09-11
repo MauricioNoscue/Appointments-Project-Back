@@ -10,8 +10,10 @@ namespace Entity_Back.Models.Notification
     {
         public int CitationId { get; set; }
         public string Message { get; set; }
-        public string StateNotification { get; set; }
-        public string TypeNotification { get; set; }
+        public bool StateNotification { get; set; }
+        public string? TypeNotification { get; set; }
         public Citation citation { get; set; }
+  
+
     }
 }

@@ -13,7 +13,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
     {
         public void Configure(EntityTypeBuilder<RolFormPermission> builder)
         {
-            builder.ToTable("RolFormPermission", schema: "ModelSecurity");
+            //builder.ToTable("RolFormPermission", schema: "ModelSecurity");
 
             var data = new List<RolFormPermission>();
             int id = 1;

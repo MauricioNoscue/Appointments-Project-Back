@@ -21,7 +21,7 @@ namespace Entity_Back.Dto.SecurityDto.FormDto
         public string? Description { get; set; } // opcional, pero validada si llega
 
         [Required(ErrorMessage = "La URL es obligatoria")]
-        [Url(ErrorMessage = "La URL no tiene un formato válido")]
+      
         [StringLength(200, MinimumLength = 5, ErrorMessage = "La URL debe tener entre 5 y 200 caracteres")]
         public string Url { get; set; }
 
