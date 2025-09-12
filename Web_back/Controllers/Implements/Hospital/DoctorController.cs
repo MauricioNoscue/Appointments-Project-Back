@@ -55,5 +55,31 @@ namespace Web_back.Controllers.Implements.Hospital
                 return StatusCode(500, "Error interno del servidor.");
             }
         }
+
+        /// <summary>
+        /// Obtiene todas las citas asignadas a un doctor específico
+        /// Endpoint: GET /api/Doctor/{id}/citas
+        /// </summary>
+        /// <param name="id">ID del doctor</param>
+        /// <returns>Lista de citas del doctor</returns>
+        [HttpGet("{id}/citas")]
+        public async Task<IActionResult> GetCitationsByDoctor(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("El id del doctor debe ser mayor que cero.");
+                }
+
+                var citations = await _business.GetCitationsByDoctorId(id);
+                return Ok(citations);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener las citas del doctor {DoctorId}", id);
+                return StatusCode(500, "Error interno del servidor.");
+            }
+        }
     }
 }

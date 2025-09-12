@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250902141508_InitialMigration")]
+    [Migration("20250912035451_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -70,23 +70,12 @@ namespace Entity_Back.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            AppointmentDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            Note = "Cita para revisión general",
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ScheduleHourId = 1,
-                            State = "Pendiente",
-                            UserId = 1
-                        },
-                        new
-                        {
                             Id = 2,
                             AppointmentDate = new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Note = "string",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ScheduleHourId = 4,
+                            ScheduleHourId = 1,
                             State = "Agendada",
                             TimeBlock = new TimeSpan(0, 8, 45, 0, 0),
                             UserId = 1
@@ -543,12 +532,26 @@ namespace Entity_Back.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
@@ -556,11 +559,13 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TypeRelation")
+                    b.Property<string>("Relation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
 
                     b.HasIndex("PersonId");
 
@@ -1072,12 +1077,10 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StateNotification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("StateNotification")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TypeNotification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1694,7 +1697,7 @@ namespace Entity_Back.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("RolFormPermission", "ModelSecurity");
+                    b.ToTable("RolFormPermission");
 
                     b.HasData(
                         new
@@ -2405,36 +2408,6 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 1,
-                            EndTime = new TimeSpan(0, 8, 30, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 1,
-                            StartTime = new TimeSpan(0, 8, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndTime = new TimeSpan(0, 9, 0, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 1,
-                            StartTime = new TimeSpan(0, 8, 30, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EndTime = new TimeSpan(0, 9, 30, 0, 0),
-                            IsDeleted = false,
-                            ProgramateDate = new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SheduleId = 2,
-                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 4,
                             BreakEndTime = new TimeSpan(0, 14, 0, 0, 0),
                             BreakStartTime = new TimeSpan(0, 12, 0, 0, 0),
                             EndTime = new TimeSpan(0, 16, 0, 0, 0),
@@ -2486,36 +2459,6 @@ namespace Entity_Back.Migrations
                     b.ToTable("Shedule", "Medical");
 
                     b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConsultingRoomId = 1,
-                            DoctorId = 1,
-                            IsDeleted = false,
-                            NumberCitation = 4,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConsultingRoomId = 2,
-                            DoctorId = 2,
-                            IsDeleted = false,
-                            NumberCitation = 6,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConsultingRoomId = 3,
-                            DoctorId = 3,
-                            IsDeleted = false,
-                            NumberCitation = 8,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeCitationId = 3
-                        },
                         new
                         {
                             Id = 4,
@@ -2640,11 +2583,19 @@ namespace Entity_Back.Migrations
 
             modelBuilder.Entity("Entity_Back.Models.HospitalModel.RelatedPerson", b =>
                 {
+                    b.HasOne("Entity_Back.Models.HospitalModel.DocumentType", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity_Back.Models.SecurityModels.Person", "Person")
                         .WithMany("RelatedPerson")
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("DocumentType");
 
                     b.Navigation("Person");
                 });

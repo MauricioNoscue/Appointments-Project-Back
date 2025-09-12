@@ -52,5 +52,47 @@ namespace Data_Back.Implements
                 throw new Exception($"Error al obtener todos los doctores: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Obtiene todas las citas asignadas a un doctor específico siguiendo la relación:
+        /// Citation -> ScheduleHour -> Shedule -> Doctor
+        /// </summary>
+        /// <param name="doctorId">ID del doctor</param>
+        /// <returns>Lista de citas del doctor</returns>
+        public async Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId)
+        {
+            try
+            {
+                var citations = await _context.Citation
+                    .Include(c => c.ScheduleHour)
+                        .ThenInclude(sh => sh.Shedule)
+                            .ThenInclude(s => s.Doctor)
+                                .ThenInclude(d => d.Person)
+                    .Include(c => c.ScheduleHour)
+                        .ThenInclude(sh => sh.Shedule)
+                            .ThenInclude(s => s.ConsultingRoom)
+                    .Where(c => c.ScheduleHour.Shedule.DoctorId == doctorId && !c.IsDeleted)
+                    .Select(c => new CitationListDto
+                    {
+                        Id = c.Id,
+                        State = c.State,
+                        Note = c.Note,
+                        AppointmentDate = c.AppointmentDate,
+                        TimeBlock = c.TimeBlock,
+                        ScheduleHourId = c.ScheduleHourId,
+                        NameDoctor = c.ScheduleHour.Shedule.Doctor.Person.FullName + " " + c.ScheduleHour.Shedule.Doctor.Person.FullLastName,
+                        ConsultingRoomName = c.ScheduleHour.Shedule.ConsultingRoom.Name,
+                        RoomNumber = c.ScheduleHour.Shedule.ConsultingRoom.RoomNumber,
+                        RegistrationDate = c.RegistrationDate
+                    })
+                    .ToListAsync();
+
+                return citations;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener las citas del doctor {doctorId}: {ex.Message}", ex);
+            }
+        }
     }
 }

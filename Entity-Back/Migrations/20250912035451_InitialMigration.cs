@@ -296,8 +296,12 @@ namespace Entity_Back.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PersonId = table.Column<int>(type: "int", nullable: false),
-                    TypeRelation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Relation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentTypeId = table.Column<int>(type: "int", nullable: false),
+                    Document = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -305,12 +309,19 @@ namespace Entity_Back.Migrations
                 {
                     table.PrimaryKey("PK_RelatedPerson", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_RelatedPerson_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
+                        principalSchema: "Hospital",
+                        principalTable: "DocumentType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_RelatedPerson_Person_PersonId",
                         column: x => x.PersonId,
                         principalSchema: "ModelSecurity",
                         principalTable: "Person",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -345,7 +356,6 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RolFormPermission",
-                schema: "ModelSecurity",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -607,8 +617,8 @@ namespace Entity_Back.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CitationId = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StateNotification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeNotification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StateNotification = table.Column<bool>(type: "bit", nullable: false),
+                    TypeNotification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -830,7 +840,6 @@ namespace Entity_Back.Migrations
                 });
 
             migrationBuilder.InsertData(
-                schema: "ModelSecurity",
                 table: "RolFormPermission",
                 columns: new[] { "Id", "FormId", "IsDeleted", "PermissionId", "RegistrationDate", "RolId" },
                 values: new object[,]
@@ -950,35 +959,19 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Shedule",
                 columns: new[] { "Id", "ConsultingRoomId", "DoctorId", "IsDeleted", "NumberCitation", "RegistrationDate", "SheduleId", "TypeCitationId" },
-                values: new object[,]
-                {
-                    { 1, 1, 1, false, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1 },
-                    { 2, 2, 2, false, 6, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2 },
-                    { 3, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 3 },
-                    { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 }
-                });
+                values: new object[] { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "ScheduleHour",
                 columns: new[] { "Id", "BreakEndTime", "BreakStartTime", "EndTime", "IsDeleted", "ProgramateDate", "RegistrationDate", "SheduleId", "StartTime" },
-                values: new object[,]
-                {
-                    { 1, null, null, new TimeSpan(0, 8, 30, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 0, 0, 0) },
-                    { 2, null, null, new TimeSpan(0, 9, 0, 0, 0), false, new DateTime(2024, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 8, 30, 0, 0) },
-                    { 3, null, null, new TimeSpan(0, 9, 30, 0, 0), false, new DateTime(2024, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 9, 0, 0, 0) },
-                    { 4, new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 16, 0, 0, 0), false, new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 8, 0, 0, 0) }
-                });
+                values: new object[] { 1, new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 16, 0, 0, 0), false, new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 8, 0, 0, 0) });
 
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "Citation",
                 columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ScheduleHourId", "State", "TimeBlock", "UserId" },
-                values: new object[,]
-                {
-                    { 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cita para revisión general", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Pendiente", null, 1 },
-                    { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 }
-                });
+                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branch_InstitutionId",
@@ -1100,6 +1093,11 @@ namespace Entity_Back.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RelatedPerson_DocumentTypeId",
+                table: "RelatedPerson",
+                column: "DocumentTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RelatedPerson_PersonId",
                 table: "RelatedPerson",
                 column: "PersonId");
@@ -1113,19 +1111,16 @@ namespace Entity_Back.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolFormPermission_FormId",
-                schema: "ModelSecurity",
                 table: "RolFormPermission",
                 column: "FormId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolFormPermission_PermissionId",
-                schema: "ModelSecurity",
                 table: "RolFormPermission",
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolFormPermission_RolId",
-                schema: "ModelSecurity",
                 table: "RolFormPermission",
                 column: "RolId");
 
@@ -1187,8 +1182,7 @@ namespace Entity_Back.Migrations
                 name: "RelatedPerson");
 
             migrationBuilder.DropTable(
-                name: "RolFormPermission",
-                schema: "ModelSecurity");
+                name: "RolFormPermission");
 
             migrationBuilder.DropTable(
                 name: "RolUser",
