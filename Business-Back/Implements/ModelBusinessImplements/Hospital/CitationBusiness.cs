@@ -1,8 +1,10 @@
 using Business_Back.Implements.BaseModelBusiness;
 using Data_Back;
 using Entity_Back;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Utilities_Back.Exceptions;
 
 namespace Business_Back
 {
@@ -11,16 +13,28 @@ namespace Business_Back
         private readonly ICitationsData _data;
 
         public CitationBusiness(IConfiguration configuration, ICitationsData data, ILogger<CitationBusiness> logger)
-            : base(configuration, data, logger)
-        {
-            _data = data;
-        }
+            : base(configuration, data, logger) => _data = data;
 
-        public async Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
-        {
-            return await _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
-        }
+        public Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
+            => _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
 
+        public Task<List<CitationListDto>> GetAllForListAsync()
+            => _data.GetAllForListAsync(); // este método ya lo hicimos en Data
+
+        public override async Task<bool> Update(CitationEditDto dto)
+        {
+            if (dto == null) throw new ValidationException(nameof(dto), "Datos inválidos");
+
+            var entity = await _data.GetById(dto.Id);
+            if (entity is null) throw new EntityNotFoundException($"Citation {dto.Id} no existe");
+
+            // Merge solo de los campos presentes (gracias a IgnoreNullValues)
+            dto.Adapt(entity);
+
+            // Ahora entity mantiene ScheduleHourId/UserId/AppointmentDate/TimeBlock, etc.
+            return await _data.Update(entity);
+        }
     }
+
 }
 

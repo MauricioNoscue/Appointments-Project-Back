@@ -18,12 +18,5 @@ namespace Business_Back.Implements.BaseModelBusiness
         public abstract Task<bool> Update(De dto);
 
         public  abstract Task ValidateAsync(T entity);
-       
-
-     
-
-
-
-
     }
 }

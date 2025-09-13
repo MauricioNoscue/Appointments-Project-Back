@@ -1,9 +1,10 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entity_Back;
+using Entity_Back.Dto.HospitalDto.RelatedPerson;
 using Entity_Back.Dto.InfrastructureDto.BranchDto;
 using Entity_Back.Dto.InfrastructureDto.CityDto;
 using Entity_Back.Dto.InfrastructureDto.Departament;
@@ -19,6 +20,7 @@ using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
+using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
 
@@ -40,7 +42,7 @@ namespace Utilities_Back.Mapster
             //User
             TypeAdapterConfig<User, UserListDto>.NewConfig().Map(des => des.PersonName, src => src.Person.FullName); ;
             TypeAdapterConfig<UserCreatedDto, User>.NewConfig();
-           
+
             TypeAdapterConfig<UserEditDto, User>.NewConfig();
 
             //Person
@@ -71,7 +73,7 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<ModuleEditDto, Module>.NewConfig();
 
             //Form
-            TypeAdapterConfig<Form, FormListDto>.NewConfig().Map(dest =>dest.ModuloName, src => src.Module.Name);
+            TypeAdapterConfig<Form, FormListDto>.NewConfig().Map(dest => dest.ModuloName, src => src.Module.Name);
             TypeAdapterConfig<FormCreatedDto, Form>.NewConfig();
             TypeAdapterConfig<FormEditDto, Form>.NewConfig();
 
@@ -92,11 +94,11 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<RolFormPermissionEditDto, RolFormPermission>.NewConfig();
 
 
-            TypeAdapterConfig<Person, PersonListDto>.NewConfig().Map(des => des.DocumentTypeName, src =>src.DocumentType.Acronym);
+            TypeAdapterConfig<Person, PersonListDto>.NewConfig().Map(des => des.DocumentTypeName, src => src.DocumentType.Acronym);
             TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig();
             TypeAdapterConfig<PersonEditDto, Person>.NewConfig();
 
-        
+
 
 
             // Citation
@@ -105,14 +107,20 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.UserId, src => src.UserId)
                 .Map(dest => dest.ScheduleHourId, src => src.ScheduleHourId);
 
-            TypeAdapterConfig<CitationEditDto, Citation>.NewConfig()
-                .Map(dest => dest.State, src => src.State)
-                .Map(dest => dest.Note, src => src.Note);
+            TypeAdapterConfig<CitationEditDto, Citation>
+                .NewConfig()
+                .IgnoreNullValues(true)
+                .Map(d => d.State, s => s.State)
+                .Map(d => d.Note, s => s.Note);
 
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.State, src => src.State)
                 .Map(dest => dest.Note, src => src.Note)
-                .Map(dest => dest.AppointmentDate, src => src.AppointmentDate);
+                .Map(dest => dest.AppointmentDate, src => src.AppointmentDate)
+
+                .Map(dest => dest.NameDoctor, src => src.ScheduleHour.Shedule.Doctor.Person.FullName)  // ajusta si tu Doctor no tiene Person
+                .Map(dest => dest.ConsultingRoomName, src => src.ScheduleHour.Shedule.ConsultingRoom.Name)
+                .Map(dest => dest.RoomNumber, src => src.ScheduleHour.Shedule.ConsultingRoom.RoomNumber);
 
             // ScheduleHour
             TypeAdapterConfig<ScheduleHourCreateDto, ScheduleHour>.NewConfig()
@@ -197,14 +205,44 @@ namespace Utilities_Back.Mapster
                 .Map(dest => dest.ConsultingRoomId, src => src.ConsultingRoomId)
                 .Map(dest => dest.NumberCitation, src => src.NumberCitation);
 
-            TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()  
+            TypeAdapterConfig<Shedule, SheduleListDto>.NewConfig()
                 .Map(dest => dest.TypeCitationName, src => src.TypeCitation.Name)
                 .Map(dest => dest.NameDoctor, src => src.Doctor.Person.FullName)
                 .Map(dest => dest.ConsultingRoomName, src => src.ConsultingRoom.Name)
                 .Map(dest => dest.NumberCitation, src => src.NumberCitation)
                 .Map(dest => dest.RoomNumber, src => src.ConsultingRoom.RoomNumber);
 
+            TypeAdapterConfig<RelatedPersonCreatedDto, RelatedPerson>
+                .NewConfig()
+                .Map(d => d.PersonId, s => s.PersonId)
+                .Map(d => d.FirstName, s => s.FirstName)
+                .Map(d => d.LastName, s => s.LastName)
+                .Map(d => d.Relation, s => s.Relation)
+                .Map(d => d.DocumentTypeId, s => s.DocumentTypeId)
+                .Map(d => d.Document, s => s.Document)
+                .IgnoreNullValues(true);
+            
+            // RelatedPerson (Edit -> Entity)
+            TypeAdapterConfig<RelatedPersonEditDto, RelatedPerson>
+                .NewConfig()
+                .Map(d => d.Id, s => s.Id)
+                .Map(d => d.FirstName, s => s.FirstName)
+                .Map(d => d.LastName, s => s.LastName)
+                .Map(d => d.Relation, s => s.Relation)
+                .Map(d => d.DocumentTypeId, s => s.DocumentTypeId)
+                .Map(d => d.Document, s => s.Document)
+                .Ignore(d => d.PersonId)
+                .IgnoreNullValues(true);
 
+            // RelatedPerson (Entity -> List)
+            TypeAdapterConfig<RelatedPerson, RelatedPersonListDto>
+                .NewConfig()
+                .Map(d => d.PersonId, s => s.PersonId)
+                .Map(d => d.FullName, s => s.FirstName + " " + s.LastName)
+                .Map(d => d.Relation, s => s.Relation)
+              // Usa Acronym si lo tienes (como en Person), si no existe usa Name.
+                .Map(d => d.DocumentTypeName, s => s.DocumentType != null ? s.DocumentType.Acronym : null)
+                .Map(d => d.Document, s => s.Document);
 
             //Infrastructure
             //Branch

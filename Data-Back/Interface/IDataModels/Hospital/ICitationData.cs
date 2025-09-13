@@ -5,6 +5,7 @@ namespace Data_Back
 {
     public interface ICitationsData : IBaseModelData<Citation>
     {
+        Task<List<CitationListDto>> GetAllForListAsync();
         Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate);
     }
 }
