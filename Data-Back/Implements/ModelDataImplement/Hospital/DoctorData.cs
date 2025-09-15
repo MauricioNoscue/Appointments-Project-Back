@@ -56,6 +56,7 @@ namespace Data_Back.Implements
         /// <summary>
         /// Obtiene todas las citas asignadas a un doctor específico siguiendo la relación:
         /// Citation -> ScheduleHour -> Shedule -> Doctor
+        /// Incluye información del paciente (User -> Person)
         /// </summary>
         /// <param name="doctorId">ID del doctor</param>
         /// <returns>Lista de citas del doctor</returns>
@@ -64,6 +65,8 @@ namespace Data_Back.Implements
             try
             {
                 var citations = await _context.Citation
+                    .Include(c => c.User)
+                        .ThenInclude(u => u.Person)
                     .Include(c => c.ScheduleHour)
                         .ThenInclude(sh => sh.Shedule)
                             .ThenInclude(s => s.Doctor)
@@ -83,6 +86,7 @@ namespace Data_Back.Implements
                         NameDoctor = c.ScheduleHour.Shedule.Doctor.Person.FullName + " " + c.ScheduleHour.Shedule.Doctor.Person.FullLastName,
                         ConsultingRoomName = c.ScheduleHour.Shedule.ConsultingRoom.Name,
                         RoomNumber = c.ScheduleHour.Shedule.ConsultingRoom.RoomNumber,
+                        PatientName = c.User.Person.FullName + " " + c.User.Person.FullLastName,
                         RegistrationDate = c.RegistrationDate
                     })
                     .ToListAsync();

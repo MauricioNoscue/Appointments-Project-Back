@@ -8,21 +8,21 @@ namespace Entity_Back
     public class CitationCreateDto
     {
         [Required(ErrorMessage = "La fecha de la cita es obligatoria")]
-        [DataType(DataType.Date, ErrorMessage = "Formato de fecha inválido")]
+        [DataType(DataType.Date, ErrorMessage = "Formato de fecha invï¿½lido")]
         public DateTime AppointmentDate { get; set; }
 
         [Required(ErrorMessage = "El bloque de hora es obligatorio")]
         public TimeSpan? TimeBlock { get; set; }
 
         [Required(ErrorMessage = "El usuario es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario válido")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un usuario vï¿½lido")]
         public int UserId { get; set; }
 
-        [StringLength(300, ErrorMessage = "La nota no puede superar los 300 caracteres")]
+        [StringLength(1000, ErrorMessage = "La nota no puede superar los 1000 caracteres")]
         public string Note { get; set; }
 
         [Required(ErrorMessage = "El horario es obligatorio")]
-        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario válido")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario vï¿½lido")]
         public int ScheduleHourId { get; set; }
 
         [Required(ErrorMessage = "El estado es obligatorio")]
