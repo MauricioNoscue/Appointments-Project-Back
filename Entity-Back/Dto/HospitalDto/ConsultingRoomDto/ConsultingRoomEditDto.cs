@@ -24,6 +24,7 @@ namespace Entity_Back
         [Required(ErrorMessage = "La sucursal es obligatoria")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una sucursal válida")]
         public int BranchId { get; set; }
+        public string? Image { get; set; }
     }
 
 }

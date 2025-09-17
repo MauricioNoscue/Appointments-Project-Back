@@ -30,26 +30,3 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 }
 
 
-
-//public override void ValidateCreated(RolCreatedDto dto)
-//{
-//    if (dto == null)
-//        throw new ValidationException("El formulario no puede ser nulo.");
-
-//    var errors = new List<string>();
-
-//    if (string.IsNullOrWhiteSpace(dto.Name))
-//        errors.Add("El nombre es obligatorio.");
-
-
-
-//    // Validación de unicidad
-//    if (.Forms.Any(f => f.Name == dto.Name))
-//        errors.Add("El nombre ya está en uso.");
-
-//    if (_context.Forms.Any(f => f.Url == dto.Url))
-//        errors.Add("La URL ya está en uso.");
-
-//    if (errors.Any())
-//        throw new ValidationException(string.Join(" | ", errors));
-//}
