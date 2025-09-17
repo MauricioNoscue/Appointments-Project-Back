@@ -2,6 +2,10 @@ using Utilities_Back.Mapster;
 using Mapster;
 using Web_back.Extension;
 using Microsoft.Extensions.Configuration;
+using Business_Back.Implements.Socket;
+using Business_Back.Interface.Socket;
+using Web_back.Hub;
+using Microsoft.AspNetCore.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
@@ -23,6 +27,27 @@ builder.Services.AddDatabaseConfiguration(configuration);
 builder.Services.AddCorsConfiguration(configuration);
 // AutoMapper
 MapsterConfig.RegisterMappings();
+
+
+
+
+// (ES): SignalR
+builder.Services.AddSignalR();
+
+// (ES): Cache distribuida (Redis). Para dev puedes usar MemoryDistributedCache.
+builder.Services.AddStackExchangeRedisCache(opt =>
+{
+    opt.Configuration = builder.Configuration.GetConnectionString("Redis"); // p. ej. "localhost:6379"
+});
+
+// (ES): DI
+builder.Services.AddScoped<ISlotLockStore, RedisSlotLockStore>();
+builder.Services.AddScoped<IAppointmentOrchestrator, AppointmentOrchestrator>();
+
+builder.Services.AddScoped<IAppointmentNotifier, SignalRAppointmentNotifier>();
+
+builder.Services.AddSingleton<IUserIdProvider, SubUserIdProvider>();
+
 
 
 // JWT auht2.0
@@ -60,5 +85,6 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<AppointmentHub>("/hubs/appointments");
 
 app.Run();
