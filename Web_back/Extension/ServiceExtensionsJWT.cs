@@ -35,7 +35,7 @@ namespace Web_back.Extension
                     )
                 };
 
-                // 👇 Necesario para soportar token en query string (SignalR)
+                // Necesario para soportar token en query string (SignalR)
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>

@@ -48,7 +48,22 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                      Description = "Catálogos y parámetros del sistema",
                      Icon = "tune",
                      RegistrationDate = new DateTime(2024, 7, 16)
-                 }
+                 },
+                     new Module
+                     {
+                         Id = 5,
+                         Name = "Paciente",
+                         Description = "Catálogos y parámetros del sistema",
+                         Icon = "tune",
+                         RegistrationDate = new DateTime(2024, 7, 16)
+                     }, new Module
+                     {
+                         Id = 6,
+                         Name = "Doctor",
+                         Description = "Catálogos y parámetros del sistema",
+                         Icon = "tune",
+                         RegistrationDate = new DateTime(2024, 7, 16)
+                     }
              );
 
 
