@@ -10,5 +10,7 @@ namespace Data_Back.Interface.IDataModels.Security
 {
     public interface IpersonData:IBaseModelData<Person>
     {
+        Task<IEnumerable<Person>> GetAllWithIncludesAsync();
+        Task<Person?> GetByIdWithIncludesAsync(int id);
     }
 }

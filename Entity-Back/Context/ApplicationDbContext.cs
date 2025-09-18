@@ -56,6 +56,12 @@ namespace Entity_Back.Context
          .WithMany()
          .HasForeignKey(rp => rp.DocumentTypeId)
          .OnDelete(DeleteBehavior.Restrict);  // o .NoAction()
+
+            modelBuilder.Entity<Doctor>()
+         .HasOne(d => d.Specialty)
+         .WithMany(s => s.Doctors)
+         .HasForeignKey(d => d.SpecialtyId)
+         .OnDelete(DeleteBehavior.Restrict);
         }
 
 
@@ -108,6 +114,7 @@ namespace Entity_Back.Context
         //hospital
         public DbSet<DocumentType> DocumentType { get; set; }
         public DbSet<Eps> Eps { get; set; }
+        public DbSet<Specialty> Specialty { get; set; }
         public DbSet<Citation> Citation { get; set; }
         public DbSet<ScheduleHour> ScheduleHours { get; set; }
         public DbSet<ConsultingRoom> ConsultingRooms { get; set; }

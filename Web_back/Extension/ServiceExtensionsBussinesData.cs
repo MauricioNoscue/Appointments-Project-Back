@@ -131,6 +131,21 @@ namespace Web_back.Extension
             services.AddScoped<ITypeCitationData, TypeCitationData>();
             services.AddScoped<IBaseModelBusiness<TypeCitationCreateDto, TypeCitationEditDto, TypeCitationListDto>, TypeCitationBusiness>();
 
+            // Eps
+            services.AddScoped<IBaseModelData<Eps>, EpsData>();
+            services.AddScoped<IEpsData, EpsData>();
+            services.AddScoped<IBaseModelBusiness<EpsCreatedDto, EpsEditDto, EpsListDto>, EpsBusiness>();
+
+            // DocumentType
+            services.AddScoped<IBaseModelData<DocumentType>, DocumentTypeData>();
+            services.AddScoped<IDocumentTypeData, DocumentTypeData>();
+            services.AddScoped<IBaseModelBusiness<DocumentTypeCreatedDto, DocumentTypeEditDto, DocumentTypeListDto>, DocumentTypeBusiness>();
+
+            // Specialty
+            services.AddScoped<IBaseModelData<Specialty>, SpecialtyData>();
+            services.AddScoped<ISpecialtyData, SpecialtyData>();
+            services.AddScoped<IBaseModelBusiness<SpecialtyCreatedDto, SpecialtyEditDto, SpecialtyListDto>, SpecialtyBusiness>();
+
             //Institution
             services.AddScoped<IBaseModelData<Institution>, InstitutionData>();
             services.AddScoped<IInstitutionData, InstitutionData>();

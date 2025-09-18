@@ -4,7 +4,7 @@ namespace Entity_Back
 {
     public class DoctorListDto : BaseModel
     {
-        public string Specialty { get; set; } = string.Empty;
+        public string SpecialtyName { get; set; } = string.Empty;
         public bool Active { get; set; }
         public string Image { get; set; } = string.Empty;
         public string? FullName { get; set; }

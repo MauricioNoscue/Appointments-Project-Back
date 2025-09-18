@@ -94,7 +94,10 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<RolFormPermissionEditDto, RolFormPermission>.NewConfig();
 
 
-            TypeAdapterConfig<Person, PersonListDto>.NewConfig().Map(des => des.DocumentTypeName, src => src.DocumentType.Acronym);
+            TypeAdapterConfig<Person, PersonListDto>.NewConfig()
+                .Map(des => des.DocumentTypeName, src => src.DocumentType.Name)
+                .Map(des => des.DocumentTypeAcronymName, src => src.DocumentType.Acronym)
+                .Map(des => des.EpsName, src => src.Eps.Name);
             TypeAdapterConfig<PersonCreatedDto, Person>.NewConfig();
             TypeAdapterConfig<PersonEditDto, Person>.NewConfig();
 
@@ -158,20 +161,20 @@ namespace Utilities_Back.Mapster
 
             // Doctor
             TypeAdapterConfig<DoctorCreateDto, Doctor>.NewConfig()
-                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.SpecialtyId, src => src.SpecialtyId)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image)
                 .Map(dest => dest.EmailDoctor, src => src.EmailDoctor);
 
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
-                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.SpecialtyId, src => src.SpecialtyId)
 
                 .Map(dest => dest.Image, src => src.Image)
                 .Map(dest => dest.EmailDoctor, src => src.EmailDoctor);
 
             TypeAdapterConfig<Doctor, DoctorListDto>.NewConfig()
-                .Map(dest => dest.Specialty, src => src.Specialty)
+                .Map(dest => dest.SpecialtyName, src => src.Specialty.Name)
                 .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image)
                 .Map(dest => dest.EmailDoctor, src => src.EmailDoctor)

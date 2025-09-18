@@ -57,10 +57,23 @@ namespace Data_Back.Implements
             {
                 var doctor = await _context.Doctors
                     .Include(d => d.Person)
+                    .Include(d => d.Specialty)
                     .Where(d => d.PersonId == id && !d.IsDeleted)
                     .FirstOrDefaultAsync();
 
-                return doctor?.Adapt<DoctorListDto>();
+                if (doctor == null) return null;
+
+                return new DoctorListDto
+                {
+                    Id = doctor.Id,
+                    IsDeleted = doctor.IsDeleted,
+                    RegistrationDate = doctor.RegistrationDate,
+                    SpecialtyName = doctor.Specialty?.Name ?? string.Empty,
+                    Active = doctor.Active,
+                    Image = doctor.Image,
+                    FullName = doctor.Person?.FullName,
+                    EmailDoctor = doctor.EmailDoctor
+                };
             }
             catch (Exception ex)
             {
@@ -74,10 +87,21 @@ namespace Data_Back.Implements
             {
                 var doctors = await _context.Doctors
                     .Include(d => d.Person)
+                    .Include(d => d.Specialty)
                     .Where(d => !d.IsDeleted)
                     .ToListAsync();
 
-                return doctors.Adapt<IEnumerable<DoctorListDto>>();
+                return doctors.Select(d => new DoctorListDto
+                {
+                    Id = d.Id,
+                    IsDeleted = d.IsDeleted,
+                    RegistrationDate = d.RegistrationDate,
+                    SpecialtyName = d.Specialty?.Name ?? string.Empty,
+                    Active = d.Active,
+                    Image = d.Image,
+                    FullName = d.Person?.FullName,
+                    EmailDoctor = d.EmailDoctor
+                });
             }
             catch (Exception ex)
             {

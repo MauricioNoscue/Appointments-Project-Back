@@ -13,7 +13,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 new Doctor
                 {
                     Id = 1,
-                    Specialty = "Medicina General",
+                    SpecialtyId = 1, // Medicina General
                     PersonId = 1,
                     Active = true,
                     Image = "doctor1.jpg",
@@ -24,7 +24,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 new Doctor
                 {
                     Id = 2,
-                    Specialty = "Pediatría",
+                    SpecialtyId = 3, // Pediatría
                     PersonId = 2,
                     Active = true,
                     Image = "doctor2.jpg",
@@ -34,7 +34,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 new Doctor
                 {
                     Id = 3,
-                    Specialty = "Dermatología",
+                    SpecialtyId = 6, // Dermatología
                     PersonId = 1,
                     Active = false,
                     Image = "doctor3.jpg",

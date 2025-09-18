@@ -5,8 +5,8 @@ namespace Entity_Back
     public class DoctorCreateDto
     {
         [Required(ErrorMessage = "La especialidad es obligatoria")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "La especialidad debe tener entre 3 y 100 caracteres")]
-        public string Specialty { get; set; } = string.Empty;
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una especialidad válida")]
+        public int SpecialtyId { get; set; }
 
       
         public int PersonId { get; set; }

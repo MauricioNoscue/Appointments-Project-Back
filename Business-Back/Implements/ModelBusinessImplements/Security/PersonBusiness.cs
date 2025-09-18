@@ -9,6 +9,7 @@ using Data_Back.Interface.IDataModels.Security;
 using Entity_Back.Dto.SecurityDto.PersonDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Utilities_Back.Exceptions;
@@ -24,6 +25,37 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             base(configuration, data, logger)
         {
             _data = data;
+        }
+
+        public override async Task<IEnumerable<PersonListDto>> GetAll()
+        {
+            try
+            {
+                var persons = await _data.GetAllWithIncludesAsync();
+                return persons.Adapt<IEnumerable<PersonListDto>>();
+            }
+            catch (BusinessException ex)
+            {
+                _logger.LogError(ex, $"Error al obtener las personas");
+                throw new BusinessException("Ocurrió un error inesperado al consultar las personas.", ex);
+            }
+        }
+
+        public override async Task<PersonListDto?> GetById(int id)
+        {
+            if (id <= 0)
+                throw new ValidationException(nameof(id), "El identificador debe ser mayor que cero.");
+
+            try
+            {
+                var person = await _data.GetByIdWithIncludesAsync(id);
+                return person.Adapt<PersonListDto>();
+            }
+            catch (BusinessException ex)
+            {
+                _logger.LogError(ex, "Error al obtener la persona con ID {Id}", id);
+                throw new BusinessException("Ocurrió un error inesperado al consultar la persona.", ex);
+            }
         }
 
 
