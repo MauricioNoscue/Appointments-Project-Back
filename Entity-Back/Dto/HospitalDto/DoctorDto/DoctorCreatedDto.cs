@@ -8,7 +8,6 @@ namespace Entity_Back
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una especialidad válida")]
         public int SpecialtyId { get; set; }
 
-      
         public int PersonId { get; set; }
 
 
@@ -20,7 +19,7 @@ namespace Entity_Back
         [Required(ErrorMessage = "El correo del doctor es obligatorio")]
         [EmailAddress(ErrorMessage = "Formato de correo no v�lido")]
         [StringLength(100, ErrorMessage = "El correo no puede superar los 100 caracteres")]
-        public string EmailDoctor { get; set; }
+        public string EmailDoctor { get; set; } = string.Empty;
     }
 
 }

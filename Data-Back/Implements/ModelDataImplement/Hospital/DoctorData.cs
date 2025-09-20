@@ -72,7 +72,8 @@ namespace Data_Back.Implements
                     Active = doctor.Active,
                     Image = doctor.Image,
                     FullName = doctor.Person?.FullName,
-                    EmailDoctor = doctor.EmailDoctor
+                    EmailDoctor = doctor.EmailDoctor,
+                    PersonId = doctor.PersonId
                 };
             }
             catch (Exception ex)
@@ -100,7 +101,8 @@ namespace Data_Back.Implements
                     Active = d.Active,
                     Image = d.Image,
                     FullName = d.Person?.FullName,
-                    EmailDoctor = d.EmailDoctor
+                    EmailDoctor = d.EmailDoctor,
+                    PersonId = d.PersonId
                 });
             }
             catch (Exception ex)

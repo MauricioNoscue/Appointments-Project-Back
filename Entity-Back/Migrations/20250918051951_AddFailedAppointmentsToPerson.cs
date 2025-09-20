@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class AddFailedAppointmentsToPerson : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -203,6 +203,7 @@ namespace Entity_Back.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     HealthRegime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EpsId = table.Column<int>(type: "int", nullable: false),
+                    FailedAppointments = table.Column<int>(type: "int", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -863,11 +864,11 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "Person",
-                columns: new[] { "Id", "Active", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
+                columns: new[] { "Id", "Active", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FailedAppointments", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(

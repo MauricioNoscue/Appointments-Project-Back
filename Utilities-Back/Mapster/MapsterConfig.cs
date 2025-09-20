@@ -169,7 +169,8 @@ namespace Utilities_Back.Mapster
 
             TypeAdapterConfig<DoctorEditDto, Doctor>.NewConfig()
                 .Map(dest => dest.SpecialtyId, src => src.SpecialtyId)
-
+                .Map(dest => dest.PersonId, src => src.PersonId)
+                .Map(dest => dest.Active, src => src.Active)
                 .Map(dest => dest.Image, src => src.Image)
                 .Map(dest => dest.EmailDoctor, src => src.EmailDoctor);
 

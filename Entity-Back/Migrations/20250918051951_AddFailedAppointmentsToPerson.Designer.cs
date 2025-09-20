@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250918044313_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250918051951_AddFailedAppointmentsToPerson")]
+    partial class AddFailedAppointmentsToPerson
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1782,6 +1782,9 @@ namespace Entity_Back.Migrations
                     b.Property<int>("EpsId")
                         .HasColumnType("int");
 
+                    b.Property<int>("FailedAppointments")
+                        .HasColumnType("int");
+
                     b.Property<string>("FullLastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1830,6 +1833,7 @@ namespace Entity_Back.Migrations
                             Document = "1084922863",
                             DocumentTypeId = 1,
                             EpsId = 1,
+                            FailedAppointments = 0,
                             FullLastName = "Noscue",
                             FullName = "Mauricio",
                             Gender = "Masculino",
@@ -1846,6 +1850,7 @@ namespace Entity_Back.Migrations
                             Document = "1084922863",
                             DocumentTypeId = 1,
                             EpsId = 1,
+                            FailedAppointments = 0,
                             FullLastName = "Noscue",
                             FullName = "María isabel",
                             Gender = "Femenino",
