@@ -42,7 +42,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                     IsDeleted = false,
                     EmailDoctor = "docto2r@gmail.com"
 
-                //}
+                }
             );
 
             builder.ToTable("Doctor", schema: "Hospital");

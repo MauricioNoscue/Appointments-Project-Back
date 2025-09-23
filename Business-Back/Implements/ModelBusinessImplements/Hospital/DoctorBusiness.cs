@@ -50,6 +50,23 @@ namespace Business_Back
                 throw new Exception($"Error al obtener todos los doctores: {ex.Message}", ex);
             }
         }
+        public async Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId)
+        {
+            try
+            {
+                if (doctorId <= 0)
+                {
+                    throw new ArgumentException("El doctorId debe ser mayor que cero.", nameof(doctorId));
+                }
+
+                return await _data.GetCitationsByDoctorId(doctorId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener las citas del doctor {doctorId}: {ex.Message}", ex);
+            }
+        }
+
 
         public override async Task<bool> Update(DoctorEditDto dto)
         {

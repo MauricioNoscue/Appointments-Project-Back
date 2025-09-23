@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFailedAppointmentsToPerson : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -724,7 +724,9 @@ namespace Entity_Back.Migrations
                     { 1, "Módulo de panel principal", "home", false, "Inicio", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2, "Módulo de seguridad (roles/usuarios/permisos)", "security", false, "Seguridad", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 3, "Módulo de citas (consultorios/horarios/tipos)", "calendar_month", false, "Citas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, "Catálogos y parámetros del sistema", "tune", false, "Parámetros", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 4, "Catálogos y parámetros del sistema", "tune", false, "Parámetros", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, "Catálogos y parámetros del sistema", "tune", false, "Paciente", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, "Catálogos y parámetros del sistema", "tune", false, "Doctor", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -858,7 +860,15 @@ namespace Entity_Back.Migrations
                     { 14, "Gestión de instituciones", "account_balance", false, 4, "Instituciones", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/institusions" },
                     { 15, "Gestión de tipos de cita", "event_note", false, 3, "Tipo de cita", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/typecitation" },
                     { 16, "Visualización de citas disponibles", "event_available", false, 3, "Citas disponibles", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/CitationAviable" },
-                    { 17, "Gestión de horarios", "schedule", false, 3, "Horarios", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/horarios" }
+                    { 17, "Gestión de horarios", "schedule", false, 3, "Horarios", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/admin/horarios" },
+                    { 18, "Gestión de ciudades", "location_city", false, 5, "Inicio paciente", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/paciente/dashboard" },
+                    { 19, "Gestión de departamentos", "domain", false, 5, "Mis personas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/paciente/relacion" },
+                    { 20, "Gestión de instituciones", "account_balance", false, 5, "Perfil", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/paciente/perfil" },
+                    { 21, "Gestión de ciudades", "location_city", false, 6, "Inicio Doctor", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/dashboard" },
+                    { 22, "Gestión de departamentos", "domain", false, 6, "Perfil..", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/perfil" },
+                    { 23, "Gestión de instituciones", "account_balance", false, 6, "Historial", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/historial" },
+                    { 24, "Gestión de departamentos", "domain", false, 6, "Citas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/pendientes" },
+                    { 25, "Gestión de departamentos", "domain", false, 5, "Agendar", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/paciente/agendar" }
                 });
 
             migrationBuilder.InsertData(
@@ -868,7 +878,8 @@ namespace Entity_Back.Migrations
                 values: new object[,]
                 {
                     { 1, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922813", 1, 1, 0, "Noscue", "Doctor ", "Femenino", "Contributivo", false, "3133156022", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -964,7 +975,39 @@ namespace Entity_Back.Migrations
                     { 65, 17, false, 1, null, 4 },
                     { 66, 17, false, 3, null, 4 },
                     { 67, 17, false, 4, null, 4 },
-                    { 68, 17, false, 5, null, 4 }
+                    { 68, 17, false, 5, null, 4 },
+                    { 69, 18, false, 1, null, 2 },
+                    { 70, 18, false, 3, null, 2 },
+                    { 71, 18, false, 4, null, 2 },
+                    { 72, 18, false, 5, null, 2 },
+                    { 73, 19, false, 1, null, 2 },
+                    { 74, 19, false, 3, null, 2 },
+                    { 75, 19, false, 4, null, 2 },
+                    { 76, 19, false, 5, null, 2 },
+                    { 77, 20, false, 1, null, 2 },
+                    { 78, 20, false, 3, null, 2 },
+                    { 79, 20, false, 4, null, 2 },
+                    { 80, 20, false, 5, null, 2 },
+                    { 81, 25, false, 1, null, 2 },
+                    { 82, 25, false, 3, null, 2 },
+                    { 83, 25, false, 4, null, 2 },
+                    { 84, 25, false, 5, null, 2 },
+                    { 85, 21, false, 1, null, 3 },
+                    { 86, 21, false, 3, null, 3 },
+                    { 87, 21, false, 4, null, 3 },
+                    { 88, 21, false, 5, null, 3 },
+                    { 89, 22, false, 1, null, 3 },
+                    { 90, 22, false, 3, null, 3 },
+                    { 91, 22, false, 4, null, 3 },
+                    { 92, 22, false, 5, null, 3 },
+                    { 93, 23, false, 1, null, 3 },
+                    { 94, 23, false, 3, null, 3 },
+                    { 95, 23, false, 4, null, 3 },
+                    { 96, 23, false, 5, null, 3 },
+                    { 97, 24, false, 1, null, 3 },
+                    { 98, 24, false, 3, null, 3 },
+                    { 99, 24, false, 4, null, 3 },
+                    { 100, 24, false, 5, null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -974,7 +1017,8 @@ namespace Entity_Back.Migrations
                 values: new object[,]
                 {
                     { 1, false, "no hay", "mauronoscue@gmail.com", false, "M1d!Citas2025", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 2, false, "no hay", "isaTovarp.18@gmail.com", false, "M2d!Citas2025", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
+                    { 2, false, "no hay", "andresmauricionoscue@gmail.com", false, "M2d!Citas2025", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 3, false, "no hay", "doctor@gmail.com", false, "M2d!Citas2025", null, null, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -993,8 +1037,9 @@ namespace Entity_Back.Migrations
                 columns: new[] { "Id", "IsDeleted", "RegistrationDate", "RolId", "UserId" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
-                    { 2, false, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 }
+                    { 1, false, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 1 },
+                    { 2, false, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 },
+                    { 3, false, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -1012,7 +1057,7 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Shedule",
                 columns: new[] { "Id", "ConsultingRoomId", "DoctorId", "IsDeleted", "NumberCitation", "RegistrationDate", "SheduleId", "TypeCitationId" },
-                values: new object[] { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
+                values: new object[] { 4, 3, 1, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250919143130_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250923152113_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,13 +181,14 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("Doctor", "Hospital");
 
@@ -199,9 +200,30 @@ namespace Entity_Back.Migrations
                             EmailDoctor = "doctor@gmail.com",
                             Image = "doctor1.jpg",
                             IsDeleted = false,
-                            PersonId = 3,
+                            PersonId = 1,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Specialty = "Medicina General"
+                            SpecialtyId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            Image = "doctor2.jpg",
+                            IsDeleted = false,
+                            PersonId = 2,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SpecialtyId = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = false,
+                            EmailDoctor = "docto2r@gmail.com",
+                            Image = "doctor3.jpg",
+                            IsDeleted = false,
+                            PersonId = 1,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SpecialtyId = 6
                         });
                 });
 
@@ -549,6 +571,195 @@ namespace Entity_Back.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("RelatedPerson");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.HospitalModel.Specialty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialty", "Hospital");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Atención médica general y preventiva",
+                            IsDeleted = false,
+                            Name = "Medicina General",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Especialidad médica para adultos",
+                            IsDeleted = false,
+                            Name = "Medicina Interna",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Especialidad médica para niños",
+                            IsDeleted = false,
+                            Name = "Pediatría",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Especialidad en salud de la mujer y embarazo",
+                            IsDeleted = false,
+                            Name = "Ginecología y Obstetricia",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Especialidad en enfermedades del corazón",
+                            IsDeleted = false,
+                            Name = "Cardiología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Especialidad en enfermedades de la piel",
+                            IsDeleted = false,
+                            Name = "Dermatología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Especialidad en enfermedades de los ojos",
+                            IsDeleted = false,
+                            Name = "Oftalmología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Especialidad en oído, nariz y garganta",
+                            IsDeleted = false,
+                            Name = "Otorrinolaringología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Especialidad en salud mental",
+                            IsDeleted = false,
+                            Name = "Psiquiatría",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "Especialidad en procedimientos quirúrgicos",
+                            IsDeleted = false,
+                            Name = "Cirugía General",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "Especialidad en lesiones óseas y musculares",
+                            IsDeleted = false,
+                            Name = "Traumatología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Description = "Especialidad en enfermedades del sistema nervioso",
+                            IsDeleted = false,
+                            Name = "Neurología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Description = "Especialidad en sistema urinario",
+                            IsDeleted = false,
+                            Name = "Urología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Description = "Especialidad en glándulas y hormonas",
+                            IsDeleted = false,
+                            Name = "Endocrinología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Description = "Especialidad en riñones",
+                            IsDeleted = false,
+                            Name = "Nefrología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Description = "Especialidad en sangre",
+                            IsDeleted = false,
+                            Name = "Hematología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Description = "Especialidad en cáncer",
+                            IsDeleted = false,
+                            Name = "Oncología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Description = "Especialidad en imágenes médicas",
+                            IsDeleted = false,
+                            Name = "Radiología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Description = "Especialidad en anestesia",
+                            IsDeleted = false,
+                            Name = "Anestesiología",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Description = "Atención médica familiar integral",
+                            IsDeleted = false,
+                            Name = "Medicina Familiar",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Entity_Back.Models.Infrastructure.Branch", b =>
@@ -1677,6 +1888,9 @@ namespace Entity_Back.Migrations
                     b.Property<int>("EpsId")
                         .HasColumnType("int");
 
+                    b.Property<int>("FailedAppointments")
+                        .HasColumnType("int");
+
                     b.Property<string>("FullLastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1725,6 +1939,7 @@ namespace Entity_Back.Migrations
                             Document = "1084922863",
                             DocumentTypeId = 1,
                             EpsId = 1,
+                            FailedAppointments = 0,
                             FullLastName = "Noscue",
                             FullName = "Mauricio",
                             Gender = "Masculino",
@@ -1741,6 +1956,7 @@ namespace Entity_Back.Migrations
                             Document = "1084922863",
                             DocumentTypeId = 1,
                             EpsId = 1,
+                            FailedAppointments = 0,
                             FullLastName = "Noscue",
                             FullName = "María isabel",
                             Gender = "Femenino",
@@ -1757,6 +1973,7 @@ namespace Entity_Back.Migrations
                             Document = "1084922813",
                             DocumentTypeId = 1,
                             EpsId = 1,
+                            FailedAppointments = 0,
                             FullLastName = "Noscue",
                             FullName = "Doctor ",
                             Gender = "Femenino",
@@ -2955,7 +3172,15 @@ namespace Entity_Back.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entity_Back.Models.HospitalModel.Specialty", "Specialty")
+                        .WithMany("Doctors")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Person");
+
+                    b.Navigation("Specialty");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.HospitalModel.RelatedPerson", b =>
@@ -3179,6 +3404,11 @@ namespace Entity_Back.Migrations
             modelBuilder.Entity("Entity_Back.Models.HospitalModel.Eps", b =>
                 {
                     b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.HospitalModel.Specialty", b =>
+                {
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.Infrastructure.Branch", b =>
