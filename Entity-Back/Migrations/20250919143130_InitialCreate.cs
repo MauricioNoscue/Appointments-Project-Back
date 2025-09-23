@@ -814,7 +814,8 @@ namespace Entity_Back.Migrations
                     { 21, "Gestión de ciudades", "location_city", false, 6, "Inicio Doctor", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/dashboard" },
                     { 22, "Gestión de departamentos", "domain", false, 6, "Perfil..", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/perfil" },
                     { 23, "Gestión de instituciones", "account_balance", false, 6, "Historial", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/historial" },
-                    { 24, "Gestión de departamentos", "domain", false, 6, "Citas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/pendientes" }
+                    { 24, "Gestión de departamentos", "domain", false, 6, "Citas", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/doctor/pendientes" },
+                    { 25, "Gestión de departamentos", "domain", false, 5, "Agendar", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "/paciente/agendar" }
                 });
 
             migrationBuilder.InsertData(
@@ -832,12 +833,7 @@ namespace Entity_Back.Migrations
                 schema: "Hospital",
                 table: "Doctor",
                 columns: new[] { "Id", "Active", "EmailDoctor", "Image", "IsDeleted", "PersonId", "RegistrationDate", "Specialty" },
-                values: new object[,]
-                {
-                    { 1, true, "doctor@gmail.com", "doctor1.jpg", false, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Medicina General" },
-                    { 2, true, null, "doctor2.jpg", false, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pediatría" },
-                    { 3, false, "docto2r@gmail.com", "doctor3.jpg", false, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dermatología" }
-                });
+                values: new object[] { 1, true, "doctor@gmail.com", "doctor1.jpg", false, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Medicina General" });
 
             migrationBuilder.InsertData(
                 schema: "ModelInfrastructure",
@@ -934,22 +930,26 @@ namespace Entity_Back.Migrations
                     { 78, 20, false, 3, null, 2 },
                     { 79, 20, false, 4, null, 2 },
                     { 80, 20, false, 5, null, 2 },
-                    { 81, 21, false, 1, null, 3 },
-                    { 82, 21, false, 3, null, 3 },
-                    { 83, 21, false, 4, null, 3 },
-                    { 84, 21, false, 5, null, 3 },
-                    { 85, 22, false, 1, null, 3 },
-                    { 86, 22, false, 3, null, 3 },
-                    { 87, 22, false, 4, null, 3 },
-                    { 88, 22, false, 5, null, 3 },
-                    { 89, 23, false, 1, null, 3 },
-                    { 90, 23, false, 3, null, 3 },
-                    { 91, 23, false, 4, null, 3 },
-                    { 92, 23, false, 5, null, 3 },
-                    { 93, 24, false, 1, null, 3 },
-                    { 94, 24, false, 3, null, 3 },
-                    { 95, 24, false, 4, null, 3 },
-                    { 96, 24, false, 5, null, 3 }
+                    { 81, 25, false, 1, null, 2 },
+                    { 82, 25, false, 3, null, 2 },
+                    { 83, 25, false, 4, null, 2 },
+                    { 84, 25, false, 5, null, 2 },
+                    { 85, 21, false, 1, null, 3 },
+                    { 86, 21, false, 3, null, 3 },
+                    { 87, 21, false, 4, null, 3 },
+                    { 88, 21, false, 5, null, 3 },
+                    { 89, 22, false, 1, null, 3 },
+                    { 90, 22, false, 3, null, 3 },
+                    { 91, 22, false, 4, null, 3 },
+                    { 92, 22, false, 5, null, 3 },
+                    { 93, 23, false, 1, null, 3 },
+                    { 94, 23, false, 3, null, 3 },
+                    { 95, 23, false, 4, null, 3 },
+                    { 96, 23, false, 5, null, 3 },
+                    { 97, 24, false, 1, null, 3 },
+                    { 98, 24, false, 3, null, 3 },
+                    { 99, 24, false, 4, null, 3 },
+                    { 100, 24, false, 5, null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -999,7 +999,7 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Shedule",
                 columns: new[] { "Id", "ConsultingRoomId", "DoctorId", "IsDeleted", "NumberCitation", "RegistrationDate", "SheduleId", "TypeCitationId" },
-                values: new object[] { 4, 3, 3, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
+                values: new object[] { 4, 3, 1, false, 8, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4 });
 
             migrationBuilder.InsertData(
                 schema: "Medical",

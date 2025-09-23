@@ -21,6 +21,7 @@ namespace Web_back.Controllers.ControllerModel
             _logger = logger;
             _service = service;
         }
+       
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]

@@ -50,5 +50,29 @@ namespace Business_Back
                 throw new Exception($"Error al obtener todos los doctores: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Obtiene todas las citas asignadas a un doctor específico
+        /// </summary>
+        /// <param name="doctorId">ID del doctor</param>
+        /// <returns>Lista de citas del doctor</returns>
+        public async Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId)
+        {
+            try
+            {
+                if (doctorId <= 0)
+                {
+                    throw new ArgumentException("El id del doctor debe ser mayor que cero.", nameof(doctorId));
+                }
+
+                var citations = await _data.GetCitationsByDoctorId(doctorId);
+                return citations;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception($"Error al obtener las citas del doctor {doctorId}: {ex.Message}", ex);
+            }
+        }
     }
 }

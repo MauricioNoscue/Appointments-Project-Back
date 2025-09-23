@@ -22,7 +22,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
 
             // Formularios por rol
             int[] role4Forms = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
-            int[] role2Forms = { 18, 19, 20 };
+            int[] role2Forms = { 18, 19, 20,25 };
             int[] role3Forms = { 21, 22, 23,24 };
 
 

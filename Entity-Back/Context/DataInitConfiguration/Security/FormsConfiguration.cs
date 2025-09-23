@@ -40,6 +40,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 new Form { Id = 18, Name = "Inicio paciente", Description = "Gestión de ciudades", Url = "/paciente/dashboard", ModuleId = 5, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 19, Name = "Mis personas", Description = "Gestión de departamentos", Url = "/paciente/relacion", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 20, Name = "Perfil", Description = "Gestión de instituciones", Url = "/paciente/perfil", ModuleId = 5, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 25, Name = "Agendar", Description = "Gestión de departamentos", Url = "/paciente/agendar", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
 
 
                 new Form { Id = 21, Name = "Inicio Doctor", Description = "Gestión de ciudades", Url = "/doctor/dashboard", ModuleId = 6, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },

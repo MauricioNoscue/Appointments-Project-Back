@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Numerics;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Entity_Back;
 using Entity_Back.Models.SecurityModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -34,7 +36,7 @@ namespace Business_Back.Services
         /// 
         //public string GenerateToken(string userId, string username, List<string> roles, List<string> permission)
 
-        public string GenerateToken(string userId, string username,List<RolUser> roles)
+        public string GenerateToken(string userId, string username, List<RolUser> roles, Doctor doctors)
         {
             // Obtiene la sección JwtSettings del archivo appsettings.json
 
@@ -56,7 +58,15 @@ namespace Business_Back.Services
             // Agrega los roles como claims individuales
             claims.AddRange(
              roles.Select(ru => new Claim(ClaimTypes.Role, ru.RolId.ToString()))
-         );
+            );
+
+
+            if (doctors != null)
+            {
+                claims.Add(new Claim("DoctorId", doctors.Id.ToString()));
+            }
+
+
 
             // permission.ForEach(permiso => claims.Add(new Claim("permission", permiso)));
             //permission.ForEach(permiso => claims.Add(new Claim(ClaimTypes.Permissioin, permission)));

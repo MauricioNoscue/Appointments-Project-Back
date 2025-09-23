@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data_Back.Implements.ModelDataImplement.Security;
+using Data_Back.Interface;
 using Data_Back.Interface.IDataModels.Security;
 using Data_Back.Interface.Refresh;
 using Entity_Back.Dto.Auth;
@@ -20,6 +21,7 @@ namespace Business_Back.Services
         private readonly JWTService _jwtService;               
         private readonly ILogger<AuthService> _logger;
         private readonly IRolUserData _roluser;
+        private readonly IDoctorData _dctorData;
 
         // TTL configurables
         private readonly TimeSpan _accessTtl = TimeSpan.FromMinutes(60);
@@ -29,13 +31,14 @@ namespace Business_Back.Services
             IUserData userData,
             IRefreshTokenData refreshTokenData,
             JWTService jwtService,
-            ILogger<AuthService> logger, IRolUserData roluser)
+            ILogger<AuthService> logger, IRolUserData roluser, IDoctorData dctorData)
         {
             _userData = userData;
             _refreshTokenData = refreshTokenData;
             _jwtService = jwtService;
             _logger = logger;
             _roluser = roluser;
+            _dctorData = dctorData;
         }
 
         // ============================================
@@ -63,8 +66,10 @@ namespace Business_Back.Services
 
                 var roles = await _roluser.GetAllByUserIdAsync(user.Id);
 
+                var doctor = await _dctorData.GetDoctorByUserIdAsync(user.Id);
+
                 // Generar access token (JWT)
-                var accessToken = _jwtService.GenerateToken(user.Id.ToString(), user.Email, roles);
+                var accessToken = _jwtService.GenerateToken(user.Id.ToString(), user.Email, roles,doctor);
                 var accessExp = DateTime.UtcNow.Add(_accessTtl);
 
                 // Crear refresh en Data
@@ -108,8 +113,10 @@ namespace Business_Back.Services
 
 
                 var roles = await _roluser.GetAllByUserIdAsync(user.Id);
+                var doctor = await _dctorData.GetDoctorByUserIdAsync(user.Id);
+
                 // Emitir nuevo access
-                var newAccess = _jwtService.GenerateToken(user.Id.ToString(), user.Email, roles);
+                var newAccess = _jwtService.GenerateToken(user.Id.ToString(), user.Email, roles, doctor);
                 var accessExp = DateTime.UtcNow.Add(_accessTtl);
 
                 return new AuthResultDto

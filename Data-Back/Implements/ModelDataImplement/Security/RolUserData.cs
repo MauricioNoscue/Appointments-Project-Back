@@ -25,7 +25,7 @@ namespace Data_Back.Implements.ModelDataImplement.Security
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }
-
+        
         public async Task SaveChangesAsyncc()
         {
             await _context.SaveChangesAsync();
@@ -45,7 +45,6 @@ namespace Data_Back.Implements.ModelDataImplement.Security
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<List<RolUser>> GetRolesAndPermissionsByUserIdAsync(int userId)
         {
             return await _context.RolUser
@@ -58,7 +57,6 @@ namespace Data_Back.Implements.ModelDataImplement.Security
                         .ThenInclude(rfp => rfp.Form)
                 .ToListAsync();
         }
-
 
         public override async Task<IEnumerable<RolUser>> GetAll()
         {

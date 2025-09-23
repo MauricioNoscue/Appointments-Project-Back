@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250918125924_InitialCreate")]
+    [Migration("20250919143130_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -199,30 +199,9 @@ namespace Entity_Back.Migrations
                             EmailDoctor = "doctor@gmail.com",
                             Image = "doctor1.jpg",
                             IsDeleted = false,
-                            PersonId = 1,
+                            PersonId = 3,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Specialty = "Medicina General"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            Image = "doctor2.jpg",
-                            IsDeleted = false,
-                            PersonId = 2,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Specialty = "Pediatría"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            EmailDoctor = "docto2r@gmail.com",
-                            Image = "doctor3.jpg",
-                            IsDeleted = false,
-                            PersonId = 1,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Specialty = "Dermatología"
                         });
                 });
 
@@ -1458,6 +1437,17 @@ namespace Entity_Back.Migrations
                         },
                         new
                         {
+                            Id = 25,
+                            Description = "Gestión de departamentos",
+                            Icon = "domain",
+                            IsDeleted = false,
+                            ModuleId = 5,
+                            Name = "Agendar",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Url = "/paciente/agendar"
+                        },
+                        new
+                        {
                             Id = 21,
                             Description = "Gestión de ciudades",
                             Icon = "location_city",
@@ -2454,39 +2444,39 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 81,
-                            FormId = 21,
+                            FormId = 25,
                             IsDeleted = false,
                             PermissionId = 1,
-                            RolId = 3
+                            RolId = 2
                         },
                         new
                         {
                             Id = 82,
-                            FormId = 21,
+                            FormId = 25,
                             IsDeleted = false,
                             PermissionId = 3,
-                            RolId = 3
+                            RolId = 2
                         },
                         new
                         {
                             Id = 83,
-                            FormId = 21,
+                            FormId = 25,
                             IsDeleted = false,
                             PermissionId = 4,
-                            RolId = 3
+                            RolId = 2
                         },
                         new
                         {
                             Id = 84,
-                            FormId = 21,
+                            FormId = 25,
                             IsDeleted = false,
                             PermissionId = 5,
-                            RolId = 3
+                            RolId = 2
                         },
                         new
                         {
                             Id = 85,
-                            FormId = 22,
+                            FormId = 21,
                             IsDeleted = false,
                             PermissionId = 1,
                             RolId = 3
@@ -2494,7 +2484,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 86,
-                            FormId = 22,
+                            FormId = 21,
                             IsDeleted = false,
                             PermissionId = 3,
                             RolId = 3
@@ -2502,7 +2492,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 87,
-                            FormId = 22,
+                            FormId = 21,
                             IsDeleted = false,
                             PermissionId = 4,
                             RolId = 3
@@ -2510,7 +2500,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 88,
-                            FormId = 22,
+                            FormId = 21,
                             IsDeleted = false,
                             PermissionId = 5,
                             RolId = 3
@@ -2518,7 +2508,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 89,
-                            FormId = 23,
+                            FormId = 22,
                             IsDeleted = false,
                             PermissionId = 1,
                             RolId = 3
@@ -2526,7 +2516,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 90,
-                            FormId = 23,
+                            FormId = 22,
                             IsDeleted = false,
                             PermissionId = 3,
                             RolId = 3
@@ -2534,7 +2524,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 91,
-                            FormId = 23,
+                            FormId = 22,
                             IsDeleted = false,
                             PermissionId = 4,
                             RolId = 3
@@ -2542,7 +2532,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 92,
-                            FormId = 23,
+                            FormId = 22,
                             IsDeleted = false,
                             PermissionId = 5,
                             RolId = 3
@@ -2550,7 +2540,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 93,
-                            FormId = 24,
+                            FormId = 23,
                             IsDeleted = false,
                             PermissionId = 1,
                             RolId = 3
@@ -2558,7 +2548,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 94,
-                            FormId = 24,
+                            FormId = 23,
                             IsDeleted = false,
                             PermissionId = 3,
                             RolId = 3
@@ -2566,7 +2556,7 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 95,
-                            FormId = 24,
+                            FormId = 23,
                             IsDeleted = false,
                             PermissionId = 4,
                             RolId = 3
@@ -2574,6 +2564,38 @@ namespace Entity_Back.Migrations
                         new
                         {
                             Id = 96,
+                            FormId = 23,
+                            IsDeleted = false,
+                            PermissionId = 5,
+                            RolId = 3
+                        },
+                        new
+                        {
+                            Id = 97,
+                            FormId = 24,
+                            IsDeleted = false,
+                            PermissionId = 1,
+                            RolId = 3
+                        },
+                        new
+                        {
+                            Id = 98,
+                            FormId = 24,
+                            IsDeleted = false,
+                            PermissionId = 3,
+                            RolId = 3
+                        },
+                        new
+                        {
+                            Id = 99,
+                            FormId = 24,
+                            IsDeleted = false,
+                            PermissionId = 4,
+                            RolId = 3
+                        },
+                        new
+                        {
+                            Id = 100,
                             FormId = 24,
                             IsDeleted = false,
                             PermissionId = 5,
@@ -2818,7 +2840,7 @@ namespace Entity_Back.Migrations
                         {
                             Id = 4,
                             ConsultingRoomId = 3,
-                            DoctorId = 3,
+                            DoctorId = 1,
                             IsDeleted = false,
                             NumberCitation = 8,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),

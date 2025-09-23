@@ -15,7 +15,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Medical
                 {
                     Id = 4,
                     TypeCitationId = 4, // Laboratorio
-                    DoctorId = 3,       // Dr. Inactivo (por ejemplo)
+                    DoctorId = 1,       // Dr. Inactivo (por ejemplo)
                     ConsultingRoomId = 3, // Laboratorio Clínico
                     NumberCitation = 8,
                     SheduleId = null,
