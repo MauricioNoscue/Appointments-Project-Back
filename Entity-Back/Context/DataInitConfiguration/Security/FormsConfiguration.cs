@@ -35,7 +35,19 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 new Form { Id = 11, Name = "Sucursal", Description = "Gestión de sucursales", Url = "/admin/branch", ModuleId = 4, Icon = "store", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 12, Name = "Ciudad", Description = "Gestión de ciudades", Url = "/admin/city", ModuleId = 4, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 13, Name = "Departamento", Description = "Gestión de departamentos", Url = "/admin/departament", ModuleId = 4, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 14, Name = "Instituciones", Description = "Gestión de instituciones", Url = "/admin/institusions", ModuleId = 4, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) }
+                new Form { Id = 14, Name = "Instituciones", Description = "Gestión de instituciones", Url = "/admin/institusions", ModuleId = 4, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
+
+                new Form { Id = 18, Name = "Inicio paciente", Description = "Gestión de ciudades", Url = "/paciente/dashboard", ModuleId = 5, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 19, Name = "Mis personas", Description = "Gestión de departamentos", Url = "/paciente/relacion", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 20, Name = "Perfil", Description = "Gestión de instituciones", Url = "/paciente/perfil", ModuleId = 5, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 25, Name = "Agendar", Description = "Gestión de departamentos", Url = "/paciente/agendar", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
+
+
+                new Form { Id = 21, Name = "Inicio Doctor", Description = "Gestión de ciudades", Url = "/doctor/dashboard", ModuleId = 6, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 22, Name = "Perfil..", Description = "Gestión de departamentos", Url = "/doctor/perfil", ModuleId = 6, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 23, Name = "Historial", Description = "Gestión de instituciones", Url = "/doctor/historial", ModuleId = 6, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 24, Name = "Citas", Description = "Gestión de departamentos", Url = "/doctor/pendientes", ModuleId = 6, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) }
+
             );
 
             builder.ToTable("Form", schema: "ModelSecurity");

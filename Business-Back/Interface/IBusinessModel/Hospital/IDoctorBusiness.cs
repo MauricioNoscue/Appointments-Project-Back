@@ -7,5 +7,7 @@ namespace Business_Back
     {
         Task<IEnumerable<DoctorListDto>> GetAllDoctorWithPerson();
         Task<DoctorListDto?> GetDoctorWithPersonById(int id);
+        // Método para obtener citas asignadas a un doctor
+        Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId);
     }
 }

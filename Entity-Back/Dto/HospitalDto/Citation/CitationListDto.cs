@@ -12,6 +12,7 @@ namespace Entity_Back
         public string NameDoctor { get; set; }
         public string ConsultingRoomName { get; set; }
         public int RoomNumber { get; set; }
+        public string PatientName { get; set; } = string.Empty;
 
 
 

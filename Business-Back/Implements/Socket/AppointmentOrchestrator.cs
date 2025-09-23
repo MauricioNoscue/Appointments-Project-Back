@@ -14,6 +14,10 @@ using Entity_Back;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
+using Utilities_Back.Message.Email;
+using Entity_Back.Models.SecurityModels;
+using Data_Back.Interface.IDataModels.Security;
 
 namespace Business_Back.Implements.Socket
 {
@@ -23,6 +27,8 @@ namespace Business_Back.Implements.Socket
         private readonly ICitationsData _citaData;              // (ES): Acceso a datos de citas (si lo necesitas)
         private readonly ApplicationDbContext _db;              // (ES): Para transacción e inserción
         private readonly IAppointmentNotifier _notifier;        // (ES): Notificación desacoplada
+        private readonly IConfiguration _configuration;
+        private readonly IUserData _userData;
 
         private static readonly TimeSpan HoldTtl = TimeSpan.FromSeconds(120); // (ES): TTL configurable
 
@@ -30,12 +36,19 @@ namespace Business_Back.Implements.Socket
             ISlotLockStore locks,
             ICitationsData citaData,
             ApplicationDbContext db,
-            IAppointmentNotifier notifier)
+            IAppointmentNotifier notifier,
+            IConfiguration configuration  ,
+            IUserData userData
+
+            )
         {
             _locks = locks ?? throw new ArgumentNullException(nameof(locks));
             _citaData = citaData ?? throw new ArgumentNullException(nameof(citaData));
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+            _configuration = configuration;
+            _userData = userData;
+
         }
 
         /// <inheritdoc />
@@ -100,7 +113,37 @@ namespace Business_Back.Implements.Socket
                         RegistrationDate = DateTime.UtcNow
                     };
 
+
+
+
+
+                    var user = await _userData.GetById(userId);
+
+                    var asunto = "¡Bienvenido a nuestro sistema!";
+                    var cuerpo = $@"
+                                   <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+                                        <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+                                            <h2 style=""color: #4CAF50;"">¡Bienvenido, {user.Email}!</h2>
+                                          <p style=""font-size: 16px; color: #333;"">
+                                              Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
+                                         </p>
+                                          <p style=""font-size: 14px; color: #666;"">
+                                               Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
+                                          </p>
+                                          <div style=""margin-top: 30px; text-align: center;"">
+                                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
+                                          </div>
+                                           <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+                                        <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                                               Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
+                                           </p>
+                                     </div>
+                                 </div>
+                   ";
+
+
                     _db.Set<Citation>().Add(entity);
+                    await CorreoMensaje.EnviarAsync(_configuration, user.Email, asunto, cuerpo);
                     await _db.SaveChangesAsync(ct);
 
                     // (ES): Opcional: liberar hold (ya está BOOKED)

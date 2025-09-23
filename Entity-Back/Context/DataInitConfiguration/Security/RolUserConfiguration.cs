@@ -18,7 +18,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                  new RolUser
                  {
                      Id = 1,
-                     RolId = 1,
+                     RolId = 4,
                      UserId = 1,
                      RegistrationDate = new DateTime(2024, 7, 16)
                  },
@@ -27,6 +27,12 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                      Id = 2,
                      RolId = 2,
                      UserId = 2,
+                     RegistrationDate = new DateTime(2024, 7, 16)
+                 }, new RolUser
+                 {
+                     Id = 3,
+                     RolId = 3,
+                     UserId = 3,
                      RegistrationDate = new DateTime(2024, 7, 16)
                  }
 

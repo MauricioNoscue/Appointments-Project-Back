@@ -19,39 +19,7 @@ namespace Data_Back.Implements
             _context = context;
         }
 
-        public async Task<Doctor?> GetDoctorWithPersonById(int id)
-        {
-            try
-            {
-                return await _context.Doctors
-                            .Include(d => d.Person)
-                            .Where(d => d.PersonId == id && !d.IsDeleted)
-                            .FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                throw new Exception($"Error al obtener el doctor por PersonId {id}: {ex.Message}", ex);
-            }
-        }
-        
-        public async Task<IEnumerable<Doctor>> GetAllDoctorWithPerson()
-        {
-            try
-            {
-                return await _context.Doctors
-                            .Include(d => d.Person)
-                            .Where(d => !d.IsDeleted)
-                            .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                throw new Exception($"Error al obtener los doctores por SpecialtyId: {ex.Message}", ex);
-            }
-        }
-
-        async Task<DoctorListDto?> IDoctorData.GetDoctorWithPersonById(int id)
+        public async Task<DoctorListDto?> GetDoctorWithPersonById(int id)
         {
             try
             {
@@ -82,7 +50,7 @@ namespace Data_Back.Implements
             }
         }
 
-        async Task<IEnumerable<DoctorListDto>> IDoctorData.GetAllDoctorWithPerson()
+        public async Task<IEnumerable<DoctorListDto>> GetAllDoctorWithPerson()
         {
             try
             {
@@ -110,5 +78,67 @@ namespace Data_Back.Implements
                 throw new Exception($"Error al obtener todos los doctores: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Obtiene todas las citas asignadas a un doctor específico siguiendo la relación:
+        /// Citation -> ScheduleHour -> Shedule -> Doctor
+        /// Incluye información del paciente (User -> Person)
+        /// </summary>
+        /// <param name="doctorId">ID del doctor</param>
+        /// <returns>Lista de citas del doctor</returns>
+        public async Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId)
+        {
+            try
+            {
+                var citations = await _context.Citation
+                    .Include(c => c.User)
+                        .ThenInclude(u => u.Person)
+                    .Include(c => c.ScheduleHour)
+                        .ThenInclude(sh => sh.Shedule)
+                            .ThenInclude(s => s.Doctor)
+                                .ThenInclude(d => d.Person)
+                    .Include(c => c.ScheduleHour)
+                        .ThenInclude(sh => sh.Shedule)
+                            .ThenInclude(s => s.ConsultingRoom)
+                    .Where(c => c.ScheduleHour.Shedule.DoctorId == doctorId && !c.IsDeleted)
+                    .Select(c => new CitationListDto
+                    {
+                        Id = c.Id,
+                        State = c.State,
+                        Note = c.Note,
+                        AppointmentDate = c.AppointmentDate,
+                        TimeBlock = c.TimeBlock,
+                        ScheduleHourId = c.ScheduleHourId,
+                        NameDoctor = c.ScheduleHour.Shedule.Doctor.Person.FullName + " " + c.ScheduleHour.Shedule.Doctor.Person.FullLastName,
+                        ConsultingRoomName = c.ScheduleHour.Shedule.ConsultingRoom.Name,
+                        RoomNumber = c.ScheduleHour.Shedule.ConsultingRoom.RoomNumber,
+                        PatientName = c.User.Person.FullName + " " + c.User.Person.FullLastName,
+                        RegistrationDate = c.RegistrationDate
+                    })
+                    .ToListAsync();
+
+                return citations;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener las citas del doctor {doctorId}: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<Doctor?> GetDoctorByUserIdAsync(int userId)
+        {
+            try
+            {
+                return await _context.Doctors
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(d => d.Person.User.Id == userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener el Doctor asociado al UserId {userId}");
+                throw;
+            }
+        }
+
     }
 }

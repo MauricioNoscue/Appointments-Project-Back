@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Numerics;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Entity_Back;
+using Entity_Back.Models.SecurityModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -33,9 +36,10 @@ namespace Business_Back.Services
         /// 
         //public string GenerateToken(string userId, string username, List<string> roles, List<string> permission)
 
-        public string GenerateToken(string userId, string username)
+        public string GenerateToken(string userId, string username, List<RolUser> roles, Doctor doctors)
         {
             // Obtiene la sección JwtSettings del archivo appsettings.json
+
             var settings = _config.GetSection("JwtSettings");
 
             // Crea la clave simétrica usando la clave secreta configurada
@@ -47,12 +51,24 @@ namespace Business_Back.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId), // Identificador del sujeto (usuario)
                 new Claim(JwtRegisteredClaimNames.Email, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Identificador único del token
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Identificador único del token
+
             };
 
             // Agrega los roles como claims individuales
-           // roles.ForEach(rol => claims.Add(new Claim(ClaimTypes.Role, rol)));
-           // permission.ForEach(permiso => claims.Add(new Claim("permission", permiso)));
+            claims.AddRange(
+             roles.Select(ru => new Claim(ClaimTypes.Role, ru.RolId.ToString()))
+            );
+
+
+            if (doctors != null)
+            {
+                claims.Add(new Claim("DoctorId", doctors.Id.ToString()));
+            }
+
+
+
+            // permission.ForEach(permiso => claims.Add(new Claim("permission", permiso)));
             //permission.ForEach(permiso => claims.Add(new Claim(ClaimTypes.Permissioin, permission)));
             // Crea el token especificando emisor, audiencia, claims, tiempo de expiración y credenciales
             var token = new JwtSecurityToken(

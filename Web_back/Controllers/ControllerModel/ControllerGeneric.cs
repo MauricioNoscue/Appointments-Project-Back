@@ -1,5 +1,6 @@
 ﻿using Business_Back.Interface.BaseModelBusiness;
 using Entity_Back.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities_Back.Exceptions;
 
@@ -20,7 +21,7 @@ namespace Web_back.Controllers.ControllerModel
             _logger = logger;
             _service = service;
         }
-
+       
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
