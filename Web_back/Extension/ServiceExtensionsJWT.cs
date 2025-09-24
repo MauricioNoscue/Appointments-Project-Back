@@ -32,7 +32,10 @@ namespace Web_back.Extension
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(jwtSettings["Key"]!)
-                    )
+                    ),
+                    NameClaimType = JwtRegisteredClaimNames.Sub,
+                    // (opcional) mapea roles
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                 };
 
                 // Necesario para soportar token en query string (SignalR)

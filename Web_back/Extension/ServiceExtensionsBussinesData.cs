@@ -47,6 +47,7 @@ using Data_Back.Implements.ModelDataImplement.Hospital;
 using Data_Back.Interface.IDataModels.Hospital;
 using Entity_Back.Dto.HospitalDto.RelatedPerson;
 using Entity_Back.Models.HospitalModel;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Web_back.Extension
 {
@@ -186,6 +187,8 @@ namespace Web_back.Extension
                 sp.GetRequiredService<IRelatedPersonBusiness>());
 
             services.AddScoped<CitationCoreService>();
+            services.AddSingleton<IUserIdProvider, SubUserIdProvider>();
+
 
 
 

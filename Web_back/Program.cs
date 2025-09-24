@@ -48,7 +48,7 @@ builder.Services.AddScoped<IAppointmentNotifier, SignalRAppointmentNotifier>();
 
 builder.Services.AddSingleton<IUserIdProvider, SubUserIdProvider>();
 
-
+builder.Services.AddSignalR();
 
 // JWT auht2.0
 builder.Services.AddJwtAndGoogleAuthentication(builder.Configuration);
@@ -81,7 +81,7 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
