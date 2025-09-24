@@ -6,7 +6,7 @@
             "launchUrl": "swagger",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ConnectionStrings__DefaultConnection": "Server=localhost,1433;Database=hospital;User Id=sa;Password=Mssql#2025;TrustServerCertificate=true;"
+                "ConnectionStrings__DefaultConnection": "Server=DESKTOP-16FJ5BP\\SQLEXPRESS;Database=proyectoCtT;Integrated Security=True;TrustServerCertificate=true;"
             },
             "dotnetRunMessages": true,
             "applicationUrl": "http://localhost:5149"
@@ -17,7 +17,7 @@
             "launchUrl": "swagger",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ConnectionStrings__DefaultConnection": "Server=localhost,1433;Database=hospital;User Id=sa;Password=Mssql#2025;TrustServerCertificate=true;"
+                "ConnectionStrings__DefaultConnection": "Server=DESKTOP-16FJ5BP\\SQLEXPRESS;Database=proyectoCtT;Integrated Security=True;TrustServerCertificate=true;"
             },
             "dotnetRunMessages": true,
             "applicationUrl": "https://localhost:7186;http://localhost:5149"
@@ -52,4 +52,3 @@
             "sslPort": 44366
         }
     }
-}

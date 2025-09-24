@@ -106,7 +106,7 @@ namespace Business_Back.Implements.Socket
                         UserId = userId,
                         AppointmentDate = slot.Date,
                         TimeBlock = slot.TimeBlock,
-                        State = "Booked",
+                        State = "Programada",
                         Note = string.Empty,
                         ScheduleHourId = slot.ScheduleHourId,
                         IsDeleted = false,

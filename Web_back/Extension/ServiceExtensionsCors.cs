@@ -4,16 +4,19 @@
     {
         public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            var OrigenesPermitidos = configuration.GetSection("OrigenesPermitidos").Get<string[]>();
-
+            var origenesPermitidos = configuration.GetSection("OrigenesPermitidos").Get<string[]>();
 
             services.AddCors(opciones =>
             {
-                opciones.AddDefaultPolicy(politica =>
+                opciones.AddPolicy("AllowFrontend", politica =>
                 {
-                    politica.WithOrigins(OrigenesPermitidos).AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                    politica.WithOrigins(origenesPermitidos)  // 👈 Usa los que vienen de config
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();             
                 });
             });
+
             return services;
         }
     }
