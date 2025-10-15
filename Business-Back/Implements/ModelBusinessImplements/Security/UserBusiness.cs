@@ -9,6 +9,7 @@ using Business_Back.Interface.IBusinessModel.Security;
 using Data_Back.Implements.ModelDataImplement.Security;
 using Data_Back.Interface.IDataModels.Security;
 using Entity_Back.Dto.SecurityDto.PersonDto;
+using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
@@ -25,12 +26,15 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
     {
         private readonly IUserData _data;
         private readonly IPersonBusiness _dataPerson;
+        private readonly IRolUserBusiness _dataRolUser;
+        
 
-        public UserBusiness(IConfiguration configuration, IUserData data, ILogger<UserBusiness> logger, IPersonBusiness dataPerson)
+        public UserBusiness(IConfiguration configuration, IUserData data, ILogger<UserBusiness> logger, IPersonBusiness dataPerson, IRolUserBusiness dataRolUser)
             : base(configuration, data, logger)
         {
             _data = data;
             _dataPerson = dataPerson;
+            _dataRolUser = dataRolUser;
         }
 
         public async Task<UserDetailDto> GetUserDetailAsync(int id)
@@ -80,7 +84,13 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 
                 PersonListDto? person = await _dataPerson.GetById(Dto.PersonId);
 
+                RolUserCreatedDto Paciente = new RolUserCreatedDto
+                {
+                    RolId = 2,
+                    UserId = entiry.Id,
+                };
 
+                var userRol = await _dataRolUser.Save(Paciente);
 
                 var asunto = "¡Bienvenido a nuestro sistema!";
                 var cuerpo = $@"
@@ -233,20 +243,50 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             {
                 var token = await _data.RequestPasswordResetAsync(email);
 
-                // Ejemplo .NET (mejor usando config para no hardcodear)
-                var baseUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:4200";
-                // -> en appsettings.json: "Frontend": { "BaseUrl": "http://localhost:4200" }
+                var baseUrl = _configuration["Frontend:BaseUrl"] ?? "http://localhost:8081";
 
                 var resetLink = $"{baseUrl}/auth/reset-password" +
                                 $"?token={Uri.EscapeDataString(token)}" +
                                 $"&email={Uri.EscapeDataString(email)}";
 
-                var subject = "Recuperación de contraseña";
+                var subject = "🔒 Recuperación de contraseña";
+
                 var body = $@"
-                    <p>Hola {email},</p>
-                    <p>Has solicitado recuperar tu contraseña. Haz clic en el siguiente enlace para restablecerla:</p>
-                    <p><a href='{resetLink}'>Restablecer Contraseña</a></p>
-                    <p>Este enlace expirará en 1 hora.</p>";
+                <div style=""font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;"">
+                  <div style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 20px;"">
+    
+                    <h2 style=""color: #2c3e50; text-align: center;"">Recuperación de contraseña</h2>
+    
+                    <p style=""font-size: 15px; color: #333;"">
+                      Hola <b>{email}</b>,
+                    </p>
+    
+                    <p style=""font-size: 15px; color: #333;"">
+                      Hemos recibido una solicitud para restablecer tu contraseña.  
+                      Para continuar, haz clic en el siguiente botón:
+                    </p>
+
+                    <div style=""text-align: center; margin: 30px 0;"">
+                      <a href='{resetLink}' style=""background-color: #007bff; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-size: 16px;"">
+                        🔑 Restablecer Contraseña
+                      </a>
+                    </div>
+
+                    <p style=""font-size: 14px; color: #555;"">
+                      ⚠️ Este enlace será válido solo por <b>1 hora</b>.  
+                      Si no solicitaste este cambio, puedes ignorar este mensaje y tu cuenta seguirá segura.
+                    </p>
+
+                    <hr style=""margin: 25px 0; border: none; border-top: 1px solid #eee;"">
+
+                    <p style=""font-size: 13px; color: #999; text-align: center;"">
+                      © {DateTime.UtcNow.Year} Tu Sistema de Carnetización Digital.  
+                      Este correo fue enviado automáticamente, por favor no respondas.
+                    </p>
+
+                  </div>
+                </div>";
+
 
                 await CorreoMensaje.EnviarAsync(_configuration, email, subject, body);
 

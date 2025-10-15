@@ -48,6 +48,7 @@ using Data_Back.Interface.IDataModels.Hospital;
 using Entity_Back.Dto.HospitalDto.RelatedPerson;
 using Entity_Back.Models.HospitalModel;
 using Microsoft.AspNetCore.SignalR;
+using Business_Back.Interface.IBusinessModel.Notification;
 
 namespace Web_back.Extension
 {
@@ -204,6 +205,7 @@ namespace Web_back.Extension
             services.AddScoped<CitationCoreService>();
             services.AddSingleton<IUserIdProvider, SubUserIdProvider>();
 
+            IServiceCollection serviceCollection = services.AddScoped<INotificationBusiness, NotificationBusiness>();
 
 
 

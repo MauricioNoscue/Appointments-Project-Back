@@ -17,7 +17,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Medical
                     TypeCitationId = 4, // Laboratorio
                     DoctorId = 1,       // Dr. Inactivo (por ejemplo)
                     ConsultingRoomId = 3, // Laboratorio Clínico
-                    NumberCitation = 8,
+                    NumberCitation = 24,
                     SheduleId = null,
                     RegistrationDate = staticDate,
                     IsDeleted = false

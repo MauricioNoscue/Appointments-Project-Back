@@ -35,6 +35,15 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                      UserId = 3,
                      RegistrationDate = new DateTime(2024, 7, 16)
                  }
+                 , new RolUser
+                 {
+                     Id = 4,
+                     RolId = 2,
+                     UserId = 4,
+                     RegistrationDate = new DateTime(2024, 7, 16)
+                 }
+
+
 
                );
             builder.ToTable("RolUser", schema: "ModelSecurity");

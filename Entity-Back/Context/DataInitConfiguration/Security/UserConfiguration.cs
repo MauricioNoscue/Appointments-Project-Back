@@ -51,6 +51,18 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                    CodePassword = "no hay",
                    RestrictionPoint = 3
                }
+               , new User
+               {
+
+                   Id = 4,
+                   Email = "User@gmail.com",
+                   Password = "M2d!Citas2025",
+                   Active = false,
+                   PersonId = 4,
+                   RegistrationDate = new DateTime(2024, 7, 16),
+                   CodePassword = "no hay",
+                   RestrictionPoint = 3
+               }
                );
 
 

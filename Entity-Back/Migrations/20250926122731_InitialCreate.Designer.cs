@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250924023354_InitialCreate")]
+    [Migration("20250926122731_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -200,30 +200,9 @@ namespace Entity_Back.Migrations
                             EmailDoctor = "doctor@gmail.com",
                             Image = "doctor1.jpg",
                             IsDeleted = false,
-                            PersonId = 1,
+                            PersonId = 3,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             SpecialtyId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            Image = "doctor2.jpg",
-                            IsDeleted = false,
-                            PersonId = 2,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SpecialtyId = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            EmailDoctor = "docto2r@gmail.com",
-                            Image = "doctor3.jpg",
-                            IsDeleted = false,
-                            PersonId = 1,
-                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SpecialtyId = 6
                         });
                 });
 
@@ -1981,6 +1960,23 @@ namespace Entity_Back.Migrations
                             IsDeleted = false,
                             PhoneNumber = "3133156022",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = false,
+                            DateBorn = new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Document = "1084922213",
+                            DocumentTypeId = 1,
+                            EpsId = 1,
+                            FailedAppointments = 0,
+                            FullLastName = "Cerqera",
+                            FullName = "Patricio ",
+                            Gender = "Femenino",
+                            HealthRegime = "Contributivo",
+                            IsDeleted = false,
+                            PhoneNumber = "3153156022",
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -2872,6 +2868,14 @@ namespace Entity_Back.Migrations
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RolId = 3,
                             UserId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RolId = 2,
+                            UserId = 4
                         });
                 });
 
@@ -2957,6 +2961,18 @@ namespace Entity_Back.Migrations
                             PersonId = 3,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionPoint = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Active = false,
+                            CodePassword = "no hay",
+                            Email = "User@gmail.com",
+                            IsDeleted = false,
+                            Password = "M2d!Citas2025",
+                            PersonId = 4,
+                            RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RestrictionPoint = 3
                         });
                 });
 
@@ -3004,7 +3020,7 @@ namespace Entity_Back.Migrations
                             Id = 1,
                             BreakEndTime = new TimeSpan(0, 14, 0, 0, 0),
                             BreakStartTime = new TimeSpan(0, 12, 0, 0, 0),
-                            EndTime = new TimeSpan(0, 16, 0, 0, 0),
+                            EndTime = new TimeSpan(0, 23, 0, 0, 0),
                             IsDeleted = false,
                             ProgramateDate = new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3059,7 +3075,7 @@ namespace Entity_Back.Migrations
                             ConsultingRoomId = 3,
                             DoctorId = 1,
                             IsDeleted = false,
-                            NumberCitation = 8,
+                            NumberCitation = 24,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TypeCitationId = 4
                         });

@@ -18,27 +18,30 @@ using Microsoft.Extensions.Configuration;
 using Utilities_Back.Message.Email;
 using Entity_Back.Models.SecurityModels;
 using Data_Back.Interface.IDataModels.Security;
+using Business_Back.Interface.IBusinessModel.Notification;
+using Entity_Back.Models.Notification;
+using Entity_Back.Dto.Notification;
 
 namespace Business_Back.Implements.Socket
 {
     public sealed class AppointmentOrchestrator : IAppointmentOrchestrator
     {
-        private readonly ISlotLockStore _locks;                 // (ES): Maneja holds en Redis
-        private readonly ICitationsData _citaData;              // (ES): Acceso a datos de citas (si lo necesitas)
-        private readonly ApplicationDbContext _db;              // (ES): Para transacción e inserción
-        private readonly IAppointmentNotifier _notifier;        // (ES): Notificación desacoplada
+        private readonly ISlotLockStore _locks;                 
+        private readonly ICitationsData _citaData;              
+        private readonly ApplicationDbContext _db;             
+        private readonly IAppointmentNotifier _notifier;       
         private readonly IConfiguration _configuration;
         private readonly IUserData _userData;
+        private readonly INotificationBusiness _notificationBusiness;
 
-        private static readonly TimeSpan HoldTtl = TimeSpan.FromSeconds(120); // (ES): TTL configurable
-
+        private static readonly TimeSpan HoldTtl = TimeSpan.FromSeconds(120); 
         public AppointmentOrchestrator(
             ISlotLockStore locks,
             ICitationsData citaData,
             ApplicationDbContext db,
             IAppointmentNotifier notifier,
             IConfiguration configuration  ,
-            IUserData userData
+            IUserData userData, INotificationBusiness notificationBusiness
 
             )
         {
@@ -48,6 +51,7 @@ namespace Business_Back.Implements.Socket
             _notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
             _configuration = configuration;
             _userData = userData;
+            _notificationBusiness = notificationBusiness;
 
         }
 
@@ -113,38 +117,76 @@ namespace Business_Back.Implements.Socket
                         RegistrationDate = DateTime.UtcNow
                     };
 
-
-
-
-
                     var user = await _userData.GetById(userId);
 
-                    var asunto = "¡Bienvenido a nuestro sistema!";
+                    var asunto = "Confirmación de tu cita médica";
+
                     var cuerpo = $@"
-                                   <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-                                        <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
-                                            <h2 style=""color: #4CAF50;"">¡Bienvenido, {user.Email}!</h2>
-                                          <p style=""font-size: 16px; color: #333;"">
-                                              Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
-                                         </p>
-                                          <p style=""font-size: 14px; color: #666;"">
-                                               Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
-                                          </p>
-                                          <div style=""margin-top: 30px; text-align: center;"">
-                                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
-                                          </div>
-                                           <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
-                                        <p style=""font-size: 12px; color: #aaa; text-align: center;"">
-                                               Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
-                                           </p>
-                                     </div>
-                                 </div>
-                   ";
+                        <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+                          <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+    
+                            <h2 style=""color: #4CAF50; text-align:center;"">¡Tu cita ha sido programada!</h2>
+    
+                            <p style=""font-size: 16px; color: #333;"">
+                              Hola <strong>{user.Email}</strong>, te confirmamos que tu cita se ha agendado exitosamente con los siguientes detalles:
+                            </p>
+
+                            <table style=""width:100%; border-collapse: collapse; margin-top: 20px;"">
+                              <tr>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Fecha:</strong></td>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">{slot.Date:dddd, dd MMMM yyyy}</td>
+                              </tr>
+                              <tr>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Hora:</strong></td>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">{slot.TimeBlock}</td>
+                              </tr>
+                              <tr>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Estado:</strong></td>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">Programada</td>
+                              </tr>
+                              <tr>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Lugar:</strong></td>
+                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">Clínica Central - Sala de Consultas</td>
+                              </tr>
+                            </table>
+
+                            <p style=""font-size: 14px; color: #666; margin-top: 20px;"">
+                              Te recomendamos llegar 10 minutos antes de tu cita. Si no puedes asistir, por favor reprograma con anticipación desde la plataforma.
+                            </p>
+
+                            <div style=""margin-top: 30px; text-align: center;"">
+                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">
+                                Ver mis citas
+                              </a>
+                            </div>
+
+                            <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+
+                            <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                              Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
+                            </p>
+                          </div>
+                        </div>
+                        ";
 
 
                     _db.Set<Citation>().Add(entity);
+
+                
                     await CorreoMensaje.EnviarAsync(_configuration, user.Email, asunto, cuerpo);
                     await _db.SaveChangesAsync(ct);
+
+                    NotificationCreateDto noti = new NotificationCreateDto
+                    {
+                        CitationId = entity.Id,
+                        Message = "Tienes una cita agendada",
+                        StateNotification = true,
+                        TypeNotification = "Programada"
+                    };
+
+
+                    await _notificationBusiness.Save(noti);
+
 
                     // (ES): Opcional: liberar hold (ya está BOOKED)
                     await _locks.TryReleaseAsync(slot, userId.ToString(), ct);

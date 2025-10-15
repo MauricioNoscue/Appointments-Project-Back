@@ -10,7 +10,7 @@
             {
                 opciones.AddPolicy("AllowFrontend", politica =>
                 {
-                    politica.WithOrigins(origenesPermitidos)  // 👈 Usa los que vienen de config
+                    politica.WithOrigins(origenesPermitidos)  
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();             

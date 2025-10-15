@@ -1,5 +1,6 @@
 ﻿using Business_Back.Implements.BaseModelBusiness;
 using Business_Back.Implements.ModelBusinessImplements.Infrastructure;
+using Business_Back.Interface.IBusinessModel.Notification;
 using Data_Back.Interface.IDataModels.Infrastructure;
 using Data_Back.Interface.IDataModels.Notifation;
 using Entity_Back.Dto.Notification;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Business_Back.Implements.ModelBusinessImplements.Notification1
 {
-    public class NotificationBusiness : BaseModelBusinessIm<Notification,NotificationCreateDto, NotificationEditDto, NotificationListDto>
+    public class NotificationBusiness : BaseModelBusinessIm<Notification,NotificationCreateDto, NotificationEditDto, NotificationListDto>, INotificationBusiness
     {
         private readonly INotificationData _data;
         public NotificationBusiness(IConfiguration configuration, INotificationData data, ILogger<NotificationBusiness> logger)

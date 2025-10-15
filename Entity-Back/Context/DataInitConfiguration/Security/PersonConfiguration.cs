@@ -83,6 +83,22 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                        HealthRegime = HealthRegime.Contributivo,
                        RegistrationDate = new DateTime(2024, 7, 16)
                    }
+                   ,
+                   new Person
+                   {
+                       Id = 4,
+                       FullName = "Patricio ",
+                       FullLastName = "Cerqera",
+                       DocumentTypeId = 1,
+                       Document = "1084922213",
+                       DateBorn = new DateTime(2006, 6, 13),
+                       PhoneNumber = "3153156022",
+                       EpsId = 1,
+                       Gender = Gender.Femenino,
+                       HealthRegime = HealthRegime.Contributivo,
+                       RegistrationDate = new DateTime(2024, 7, 16)
+                   }
+
 
 
 
