@@ -7,7 +7,7 @@ services:
       - "8080:5001"
     environment:
       DatabaseProvider: "sqlserver"
-      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=TuPass123!;TrustServerCertificate=true;Encrypt=false"
+      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=NuevaPass123!;TrustServerCertificate=true;Encrypt=false"
       ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=proyectoCtT;Username=postgres;Password=postgres"
       ConnectionStrings__MySql: "Server=mysql;Port=3306;Database=proyectoCtT;User=root;Password=Root123!"
       ConnectionStrings__Redis: "redis:6379"   # 👈 ahora apunta al servicio redis
@@ -27,7 +27,7 @@ services:
     volumes:
       - ./:/src
     environment:
-      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=TuPass123!;TrustServerCertificate=true;Encrypt=false"
+      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=proyectoCtT;User Id=sa;Password=NuevaPass123!;TrustServerCertificate=true;Encrypt=false"
       ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=proyectoCtT;Username=postgres;Password=postgres"
       ConnectionStrings__MySql: "Server=mysql;Port=3306;Database=proyectoCtT;User=root;Password=Root123!"
       ConnectionStrings__Redis: "redis:6379"

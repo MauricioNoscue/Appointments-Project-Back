@@ -212,6 +212,10 @@ namespace Web_back.Extension
             services.AddScoped<JWTService>();
 
             services.AddScoped<AuthService>();
+
+            // Dashboard
+            services.AddScoped<Business_Back.Interface.IBusinessModel.Dashboard.IDashboardBusiness, Business_Back.Implements.ModelBusinessImplements.Dashboard.DashboardBusiness>();
+
             return services;
         }
     }
