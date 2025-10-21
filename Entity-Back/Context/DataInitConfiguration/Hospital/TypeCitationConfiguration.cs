@@ -31,9 +31,9 @@ namespace Entity_Back.Context.DataInitConfiguration.Hospital
                 new TypeCitation
                 {
                     Id = 3,
-                    Name = "Laboratorio Clínico",
+                    Name = "Pediatría",
                     Description = "Citas para toma de muestras y análisis clínicos.",
-                    Icon = "laboratorio.png",
+                    Icon = "pediatria.png",
                     IsDeleted = false,
                     RegistrationDate = staticDate
                 }

@@ -198,7 +198,6 @@ namespace Web_back.Extension
             // RelatedPerson: Business
             services.AddScoped<IRelatedPersonBusiness, RelatedPersonBussiness>();
 
-            // IMPORTANTe: el controller pide el genérico, así que lo resolvemos con el específico
             services.AddScoped<IBaseModelBusiness<RelatedPersonCreatedDto, RelatedPersonEditDto, RelatedPersonListDto>>(sp =>
                 sp.GetRequiredService<IRelatedPersonBusiness>());
 

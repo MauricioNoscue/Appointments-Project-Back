@@ -19,10 +19,7 @@ namespace Web_back.Controllers.Implements
         }
 
         [HttpGet("core")]
-        public async Task<ActionResult<List<TimeBlockEstado>>> GetAvailableBlocks(
-    [FromQuery] int typeCitationId,
-    [FromQuery] DateTime date,
-    [FromQuery] bool incluirOcupados = false) // Nuevo parámetro
+        public async Task<ActionResult<List<TimeBlockEstado>>> GetAvailableBlocks( [FromQuery] int typeCitationId, [FromQuery] DateTime date, [FromQuery] bool incluirOcupados = false) 
         {
             try
             {

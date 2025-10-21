@@ -20,8 +20,8 @@ namespace Business_Back.Implements.Socket
 
         private sealed class LockPayload
         {
-            public string OwnerUserId { get; set; } = default!; // (ES): Dueño actual del lock
-            public DateTime LockedUntil { get; set; }           // (ES): Expiración absoluta (UTC)
+            public string OwnerUserId { get; set; } = default!;
+            public DateTime LockedUntil { get; set; }         
         }
 
         public async Task<(bool acquired, DateTime? lockedUntil, string? owner)>
