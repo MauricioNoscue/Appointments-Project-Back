@@ -49,6 +49,7 @@ using Entity_Back.Dto.HospitalDto.RelatedPerson;
 using Entity_Back.Models.HospitalModel;
 using Microsoft.AspNetCore.SignalR;
 using Business_Back.Interface.IBusinessModel.Notification;
+using Business_Back.Interface.IBusinessModel;
 
 namespace Web_back.Extension
 {
@@ -186,7 +187,7 @@ namespace Web_back.Extension
             services.AddScoped<IDoctorBusiness, DoctorBusiness>();
             services.AddScoped<IDoctorData, DoctorData>();
             //Notificaciones
-            services.AddScoped<IBaseModelData<Notification>, NotificationData>();
+            services.AddScoped<IBaseModelData<Notifications>, NotificationData>();
             services.AddScoped<INotificationData, NotificationData>();
             services.AddScoped<IBaseModelBusiness<NotificationCreateDto, NotificationEditDto, NotificationListDto>, NotificationBusiness>();
 
@@ -201,7 +202,7 @@ namespace Web_back.Extension
             services.AddScoped<IBaseModelBusiness<RelatedPersonCreatedDto, RelatedPersonEditDto, RelatedPersonListDto>>(sp =>
                 sp.GetRequiredService<IRelatedPersonBusiness>());
 
-            services.AddScoped<CitationCoreService>();
+            services.AddScoped<ICitationCoreService, CitationCoreService>();
             services.AddSingleton<IUserIdProvider, SubUserIdProvider>();
 
             IServiceCollection serviceCollection = services.AddScoped<INotificationBusiness, NotificationBusiness>();

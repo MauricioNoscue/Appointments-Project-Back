@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity_Back.Enum;
 using Entity_Back.Models.HospitalModel;
+using Entity_Back.Models.Notification;
 
 namespace Entity_Back.Models.SecurityModels
 {
@@ -20,7 +21,6 @@ namespace Entity_Back.Models.SecurityModels
         public string PhoneNumber { get; set; }
         public Gender Gender { get; set; } 
         public bool Active { get; set; }
-        public bool IsDeleted { get; set; }
         public HealthRegime HealthRegime { get; set; }
         public User User { get; set; }
         public int EpsId { get; set; }

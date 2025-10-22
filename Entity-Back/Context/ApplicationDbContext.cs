@@ -135,7 +135,7 @@ namespace Entity_Back.Context
 
         //Notification
 
-        public DbSet<Notification> Notification { get; set; }
+        public DbSet<Notifications> Notification { get; set; }
 
 
 

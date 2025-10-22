@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Enum
 {
-    public enum Notificacion
+    public enum StatusNotification
     {
-        NoLeida = 0,
-        Leida = 1
+        Pending = 1,
+        Sent = 2,  
+        Failed = 3, 
+        Read = 4 
+
     }
 }

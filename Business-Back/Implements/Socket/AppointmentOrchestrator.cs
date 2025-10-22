@@ -21,6 +21,9 @@ using Data_Back.Interface.IDataModels.Security;
 using Business_Back.Interface.IBusinessModel.Notification;
 using Entity_Back.Models.Notification;
 using Entity_Back.Dto.Notification;
+using Utilities_Back.Helper;
+using Entity_Back.Dto.Notification.SendEmail;
+using Entity_Back.Enum;
 
 namespace Business_Back.Implements.Socket
 {
@@ -54,7 +57,7 @@ namespace Business_Back.Implements.Socket
             _notificationBusiness = notificationBusiness;
 
         }
-
+            
         /// <inheritdoc />
         public async Task<SlotLockResponse> TryLockAsync(SlotLockRequest req, string userId, CancellationToken ct)
         {
@@ -121,53 +124,13 @@ namespace Business_Back.Implements.Socket
 
                     var asunto = "Confirmación de tu cita médica";
 
-                    var cuerpo = $@"
-                        <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-                          <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
-    
-                            <h2 style=""color: #4CAF50; text-align:center;"">¡Tu cita ha sido programada!</h2>
-    
-                            <p style=""font-size: 16px; color: #333;"">
-                              Hola <strong>{user.Email}</strong>, te confirmamos que tu cita se ha agendado exitosamente con los siguientes detalles:
-                            </p>
-
-                            <table style=""width:100%; border-collapse: collapse; margin-top: 20px;"">
-                              <tr>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Fecha:</strong></td>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">{slot.Date:dddd, dd MMMM yyyy}</td>
-                              </tr>
-                              <tr>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Hora:</strong></td>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">{slot.TimeBlock}</td>
-                              </tr>
-                              <tr>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Estado:</strong></td>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">Programada</td>
-                              </tr>
-                              <tr>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;""><strong>Lugar:</strong></td>
-                                <td style=""padding: 10px; border-bottom: 1px solid #eee;"">Clínica Central - Sala de Consultas</td>
-                              </tr>
-                            </table>
-
-                            <p style=""font-size: 14px; color: #666; margin-top: 20px;"">
-                              Te recomendamos llegar 10 minutos antes de tu cita. Si no puedes asistir, por favor reprograma con anticipación desde la plataforma.
-                            </p>
-
-                            <div style=""margin-top: 30px; text-align: center;"">
-                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">
-                                Ver mis citas
-                              </a>
-                            </div>
-
-                            <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
-
-                            <p style=""font-size: 12px; color: #aaa; text-align: center;"">
-                              Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
-                            </p>
-                          </div>
-                        </div>
-                        ";
+                    var cuerpo = SendCitation.SendCitaionTemaplate(dto: new SendCitationDto
+                    {
+                       Email = user.Email,
+                        Date = slot.Date,
+                        TimeBlock = slot.TimeBlock,
+                        UrlRedirect= "localhost:4200"
+                    });
 
 
                     _db.Set<Citation>().Add(entity);
@@ -178,10 +141,11 @@ namespace Business_Back.Implements.Socket
 
                     NotificationCreateDto noti = new NotificationCreateDto
                     {
-                        CitationId = entity.Id,
+                        Title= "Tienes una cita agendada",
+                        UserId = userId,
                         Message = "Tienes una cita agendada",
-                        StateNotification = true,
-                        TypeNotification = "Programada"
+                        StateNotification = StatusNotification.Sent,
+                        TypeNotification = TypeNotification.Info
                     };
 
 

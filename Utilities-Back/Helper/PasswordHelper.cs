@@ -27,7 +27,19 @@ namespace Utilities_Back.Helper
         /// <returns>true si coinciden, false en caso contrario.</returns>
         public static bool VerifyPassword(string plainPassword, string hashedPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
+            if (IsBcryptHash(hashedPassword))
+            {
+                // Si el hash es válido (es BCrypt), usar la verificación segura
+                return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
+            }
+
+            // Si no es un hash, se asume texto plano → comparar directamente
+            return plainPassword == hashedPassword;
+        }
+
+        private static bool IsBcryptHash(string hash)
+        {
+            return !string.IsNullOrWhiteSpace(hash) && (hash.StartsWith("$2a$") || hash.StartsWith("$2b$")||  hash.StartsWith("$2y$")) && hash.Length == 60;
         }
     }
 }

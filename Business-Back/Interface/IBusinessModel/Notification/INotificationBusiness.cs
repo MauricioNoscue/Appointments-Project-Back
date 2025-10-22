@@ -11,6 +11,8 @@ namespace Business_Back.Interface.IBusinessModel.Notification
 {
     public interface INotificationBusiness : IBaseModelBusiness<NotificationCreateDto, NotificationEditDto, NotificationListDto>
     {
+
+        Task<bool> UpdateStatusNotification(int id);
     }
 }
 

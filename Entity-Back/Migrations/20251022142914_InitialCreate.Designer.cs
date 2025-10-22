@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251015014825_InitialCreate")]
+    [Migration("20251022142914_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1225,16 +1225,13 @@ namespace Entity_Back.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entity_Back.Models.Notification.Notification", b =>
+            modelBuilder.Entity("Entity_Back.Models.Notification.Notifications", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CitationId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1243,18 +1240,33 @@ namespace Entity_Back.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RedirectUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("StateNotification")
-                        .HasColumnType("bit");
+                    b.Property<int>("StateNotification")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TypeNotification")
+                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TypeNotification")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("citationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CitationId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("citationId");
 
                     b.ToTable("Notification");
                 });
@@ -3134,9 +3146,9 @@ namespace Entity_Back.Migrations
                         {
                             Id = 3,
                             Description = "Citas para toma de muestras y análisis clínicos.",
-                            Icon = "laboratorio.png",
+                            Icon = "pediatria.png",
                             IsDeleted = false,
-                            Name = "Laboratorio Clínico",
+                            Name = "Pediatría",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -3251,13 +3263,19 @@ namespace Entity_Back.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Entity_Back.Models.Notification.Notification", b =>
+            modelBuilder.Entity("Entity_Back.Models.Notification.Notifications", b =>
                 {
-                    b.HasOne("Entity_Back.Citation", "citation")
-                        .WithMany("Notification")
-                        .HasForeignKey("CitationId")
+                    b.HasOne("Entity_Back.Models.SecurityModels.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Entity_Back.Citation", "citation")
+                        .WithMany()
+                        .HasForeignKey("citationId");
+
+                    b.Navigation("User");
 
                     b.Navigation("citation");
                 });
@@ -3397,11 +3415,6 @@ namespace Entity_Back.Migrations
                     b.Navigation("TypeCitation");
                 });
 
-            modelBuilder.Entity("Entity_Back.Citation", b =>
-                {
-                    b.Navigation("Notification");
-                });
-
             modelBuilder.Entity("Entity_Back.ConsultingRoom", b =>
                 {
                     b.Navigation("Shedules");
@@ -3477,6 +3490,8 @@ namespace Entity_Back.Migrations
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.User", b =>
                 {
                     b.Navigation("Citation");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("RolUser");
                 });

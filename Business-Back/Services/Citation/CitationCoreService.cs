@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Business_Back.Interface.IBusinessModel;
 using Entity_Back;
 using Entity_Back.Dto.HospitalDto.Citation;
 using Mapster;
 
 namespace Business_Back.Services.Citation
 {
-    public class CitationCoreService
+    public class CitationCoreService : ICitationCoreService
     {
         private readonly IScheduleHourBusiness _scheduleHourBusiness;
         private readonly ISheduleBusiness _sheduleBusiness;
