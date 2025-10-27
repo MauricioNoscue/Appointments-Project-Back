@@ -5,7 +5,7 @@ services:
     container_name: appointments-project-back-dev
     build:
       context: ../..
-      dockerfile: Dockerfile
+      dockerfile: ../../Web_back/Dockerfile
     restart: always
     env_file:
       - ./.env
