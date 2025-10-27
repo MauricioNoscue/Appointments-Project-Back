@@ -9,7 +9,7 @@ using Entity_Back.Models.SecurityModels;
 
 namespace Entity_Back.Models.Notification
 {
-    // entidad nueva para las notificaciones 
+    // entidad nueva para las notificaciones para los usuarios
     public class Notifications : BaseModel
     {
         public string Title { get; set; }
