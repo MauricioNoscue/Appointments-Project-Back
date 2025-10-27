@@ -1,5 +1,5 @@
 /// <summary>
-/// Jenkinsfile principal para despliegue automatizado del proyecto carnetizacion-digital-api.
+/// Jenkinsfile principal para despliegue automatizado del proyecto appointments-project-back.
 /// Este pipeline detecta el entorno desde el archivo .env raíz,
 /// compila el proyecto .NET 8 y ejecuta el docker-compose correspondiente dentro de la carpeta devops/{entorno}.
 /// Antes del despliegue, elimina cualquier contenedor previo con el mismo nombre para evitar conflictos.
@@ -73,7 +73,7 @@ pipeline {
                     chmod -R 777 $DOTNET_CLI_HOME
                     
                     # Restaurar dependencias del proyecto principal
-                    dotnet restore Web/Web.csproj
+                    dotnet restore Web_back/Web_back.csproj
                 '''
             }
         }
@@ -87,8 +87,8 @@ pipeline {
                 docker { image 'mcr.microsoft.com/dotnet/sdk:8.0' }
             }
             steps {
-                echo 'Compilando la solución carnetizacion-digital-api...'
-                sh 'dotnet build Web/Web.csproj --configuration Release'
+                echo 'Compilando la solución appointments-project-back...'
+                sh 'dotnet build  Web_back/Web_back.csproj --configuration Release'
             }
         }
 
@@ -99,12 +99,12 @@ pipeline {
         /// </summary>
         stage('Desplegar API') {
             steps {
-                echo "Desplegando carnetizacion-digital-api para entorno: ${env.ENVIRONMENT}"
+                echo "Desplegando appointments-project-back para entorno: ${env.ENVIRONMENT}"
                 
                 sh """
                     # Eliminar contenedores previos del entorno si existen
                     echo "Limpiando contenedores antiguos para ${env.ENVIRONMENT}..."
-                    docker ps -a --filter "name=carnetizacion-digital-api-${env.ENVIRONMENT}" -q | xargs -r docker rm -f || true
+                    docker ps -a --filter "name=appointments-project-back-${env.ENVIRONMENT}" -q | xargs -r docker rm -f || true
 
                     # Ejecutar docker-compose correspondiente al entorno detectado
                     docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
