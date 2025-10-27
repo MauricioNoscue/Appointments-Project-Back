@@ -8,8 +8,8 @@ using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
 
 namespace Entity_Back.Models.Notification
-{
-    // entidad nueva para las notificaciones para los usuarios
+{ 
+    // entidad nueva para las notificaciones para los usuarios registrados en la plataforma
     public class Notifications : BaseModel
     {
         public string Title { get; set; }
