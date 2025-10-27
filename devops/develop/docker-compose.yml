@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   Appointments-Project-Back-dev:
-    container_name: Appointments-Project-Back-dev
+    container_name: appointments-project-back-dev
     build:
       context: ../..
       dockerfile: Dockerfile
@@ -14,7 +14,7 @@ services:
     networks:
       - network_prod
     labels:
-      - com.Appointments.environment=dev
+      - com.appointments.environment=dev
 
 networks:
   network_prod:
