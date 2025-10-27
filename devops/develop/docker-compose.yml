@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  Appointments-Project-Back-dev:
+    container_name: Appointments-Project-Back-dev
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "5103:8080"
+    networks:
+      - network_prod
+    labels:
+      - com.Appointments.environment=dev
+
+networks:
+  network_prod:
+    external: true
