@@ -1,27 +1,62 @@
 version: '3.8'
 
 services:
+  # Servicio de Backend
   appointments-project-back-prod:
     container_name: appointments-project-back-prod
     build:
-      context: ../..
+      context: ../..  # Ajusta esta ruta si es necesario
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
-      - ./.env
+      - ./.env  # El .env del backend que corregimos arriba
     ports:
       - "5106:8080"
+    networks:
+      - network_prod
     
-    labels:
-      - com.appointments.environment=prod
+    # LA MAGIA ESTÁ AQUÍ
+    # Esto le dice al backend que espere a que el 'healthcheck'
+    # del servicio 'sql-prod' sea exitoso antes de arrancar.
+    depends_on:
+      sql-prod:
+        condition: service_healthy # <-- Esto soluciona el error 'Name or service not known'
+    
     command: >
       sh -c "
+        echo 'Esperando a que la BD esté lista...';
+        # Ya no necesitamos el 'sleep', 'depends_on' se encarga.
         echo 'Ejecutando migraciones de Entity Framework...';
         dotnet ef database update --project ./Web_back/Web.csproj --startup-project ./Web_back/Web_back.csproj;
         echo 'Migraciones completadas. Iniciando la API...';
         dotnet ./Web_back/bin/Release/net8.0/Web_back.dll
       "
 
+  # Servicio de Base de Datos
+  sql-prod:
+    container_name: appointments-sql-prod
+    build:
+      context: . # Asumo que este es el directorio del Dockerfile de la BD
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env.prod # El .env.prod de la BD que corregimos arriba
+    ports:
+      - "1436:1433" # Ojo: mapeas a 1436 en tu host
+    networks:
+      - network_prod
+    
+    # Este 'healthcheck' es el que espera 'depends_on'
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$${SA_PASSWORD}\" -Q \"SELECT 1\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - com.appointments.group=appointments
+      - com.appointments.environment=prod
+
+# Definimos la red que ambos usarán
 networks:
   network_prod:
-    external: true
+    driver: bridge
