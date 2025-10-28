@@ -18,8 +18,21 @@ namespace Business_Back
         public Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate)
             => _data.GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourId, appointmentDate);
 
-        public Task<List<CitationListDto>> GetAllForListAsync()
-            => _data.GetAllForListAsync(); // este método ya lo hicimos en Data
+        public async Task<List<CitationListDto>> GetAllForListAsync(int UserId)
+        {
+            try
+            {
+                var Citations = await _data.GetAllForListAsync(UserId);
+                return Citations.Adapt<List<CitationListDto>>();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error en GetAllForListAsync");
+                throw;
+            }
+        }
+
 
         public override async Task<bool> Update(CitationEditDto dto)
         {

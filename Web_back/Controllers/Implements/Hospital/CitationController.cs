@@ -19,10 +19,10 @@ namespace Web_back.Controllers.Implements.Hospital
             _biz = biz;
         }
 
-        [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<CitationListDto>>> GetList()
+        [HttpGet("list/{UserId:int}")]
+        public async Task<ActionResult<IEnumerable<CitationListDto>>> GetList(int UserId)
         {
-            var data = await _biz.GetAllForListAsync();
+            var data = await _biz.GetAllForListAsync(UserId);
             return Ok(data);
         }
     }

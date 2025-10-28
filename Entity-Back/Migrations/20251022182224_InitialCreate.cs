@@ -200,10 +200,10 @@ namespace Entity_Back.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     HealthRegime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EpsId = table.Column<int>(type: "int", nullable: false),
                     FailedAppointments = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -640,10 +640,13 @@ namespace Entity_Back.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CitationId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StateNotification = table.Column<bool>(type: "bit", nullable: false),
-                    TypeNotification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StateNotification = table.Column<int>(type: "int", nullable: false),
+                    TypeNotification = table.Column<int>(type: "int", nullable: false),
+                    citationId = table.Column<int>(type: "int", nullable: true),
+                    RedirectUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -651,10 +654,16 @@ namespace Entity_Back.Migrations
                 {
                     table.PrimaryKey("PK_Notification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_Citation_CitationId",
-                        column: x => x.CitationId,
+                        name: "FK_Notification_Citation_citationId",
+                        column: x => x.citationId,
                         principalSchema: "Medical",
                         principalTable: "Citation",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Notification_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -790,7 +799,7 @@ namespace Entity_Back.Migrations
                 {
                     { 1, "Evaluación médica básica con revisión general del paciente.", "general.png", false, "Consulta General", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2, "Atención en salud bucal, limpieza, diagnósticos y tratamientos.", "odontologia.png", false, "Odontología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "Citas para toma de muestras y análisis clínicos.", "laboratorio.png", false, "Laboratorio Clínico", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "Citas para toma de muestras y análisis clínicos.", "pediatria.png", false, "Pediatría", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 4, "Citas para toma de muestras y análisis clínicos.", "CExterna.png", false, "Consulta Externa", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
@@ -1166,9 +1175,14 @@ namespace Entity_Back.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_CitationId",
+                name: "IX_Notification_citationId",
                 table: "Notification",
-                column: "CitationId");
+                column: "citationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_UserId",
+                table: "Notification",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permission_Name",

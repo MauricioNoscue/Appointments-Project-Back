@@ -35,7 +35,7 @@ namespace Web_back.Hub
 
         public async Task<SlotUnlockResponse> UnlockSlot(SlotUnlockRequest req)
         {
-            var userId = Context.UserIdentifier;   // ✅
+            var userId = Context.UserIdentifier;   
             if (string.IsNullOrEmpty(userId))
                 throw new HubException("No user id in token");
 
@@ -44,7 +44,7 @@ namespace Web_back.Hub
 
         public async Task<object> ConfirmSlot(SlotKey slot)
         {
-            var userIdStr = Context.UserIdentifier;   // ✅
+            var userIdStr = Context.UserIdentifier;
             if (string.IsNullOrEmpty(userIdStr))
                 throw new HubException("No user id in token");
 

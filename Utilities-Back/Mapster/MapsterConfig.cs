@@ -274,16 +274,15 @@ namespace Utilities_Back.Mapster
 
             //Notification
             // Notification (Create -> Entity, ya lo tienes)
-            TypeAdapterConfig<NotificationCreateDto, Notification>
-                .NewConfig()
-                .Map(d => d.StateNotification, s => s.StateNotification ?? false);
+            TypeAdapterConfig<NotificationCreateDto, Notifications>
+                .NewConfig();
 
             // Notification (Entity -> List, ya lo tienes)
-            TypeAdapterConfig<Notification, NotificationListDto>.NewConfig()
-                .Map(d => d.TypeCitationName, s => s.citation.ScheduleHour.Shedule.TypeCitation.Name);
+            TypeAdapterConfig<Notifications, NotificationListDto>.NewConfig();
+                //.Map(d => d.TypeCitationName, s => s.citation.ScheduleHour.Shedule.TypeCitation.Name);
 
             // ⬇️  DESCOMENTAR / AÑADIR  ⬇️
-            TypeAdapterConfig<NotificationEditDto, Notification>
+            TypeAdapterConfig<NotificationEditDto, Notifications>
                 .NewConfig()
                 .IgnoreNullValues(true); // solo ignora null; false SÍ se aplica
 

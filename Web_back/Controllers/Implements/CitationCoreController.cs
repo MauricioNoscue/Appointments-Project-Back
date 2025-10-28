@@ -1,4 +1,5 @@
 ﻿
+using Business_Back.Interface.IBusinessModel;
 using Business_Back.Services.Citation;
 using Entity_Back;
 using Entity_Back.Dto.HospitalDto.Citation;
@@ -12,17 +13,14 @@ namespace Web_back.Controllers.Implements
     [Produces("application/json")]
     public class CitationCoreController : ControllerBase
     {
-        private readonly CitationCoreService _service;
-        public CitationCoreController(CitationCoreService service)
+        private readonly ICitationCoreService _service;
+        public CitationCoreController(ICitationCoreService service)
         {
             _service = service;
         }
 
         [HttpGet("core")]
-        public async Task<ActionResult<List<TimeBlockEstado>>> GetAvailableBlocks(
-    [FromQuery] int typeCitationId,
-    [FromQuery] DateTime date,
-    [FromQuery] bool incluirOcupados = false) // Nuevo parámetro
+        public async Task<ActionResult<List<TimeBlockEstado>>> GetAvailableBlocks( [FromQuery] int typeCitationId, [FromQuery] DateTime date, [FromQuery] bool incluirOcupados = false) 
         {
             try
             {

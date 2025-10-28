@@ -11,7 +11,7 @@ namespace Web_back.Hub
 {
     [ApiController]
     [Route("api/appointment-locks")]
-    [Authorize] // obliga a usar JWT
+    [Authorize] 
     public sealed class AppointmentLocksController : ControllerBase
     {
         private readonly IAppointmentOrchestrator _app;

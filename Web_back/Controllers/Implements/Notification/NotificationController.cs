@@ -1,4 +1,5 @@
 ﻿using Business_Back.Interface.BaseModelBusiness;
+using Business_Back.Interface.IBusinessModel.Notification;
 using Entity_Back.Context;
 using Entity_Back.Dto.Notification;
 using Entity_Back.Models.Notification;
@@ -9,46 +10,42 @@ using Web_back.Controllers.ControllerModel;
 namespace Web_back.Controllers.Implements.notification
 {
     [ApiController]
-    [Route("api/[controller]")] // → api/notification/...
-    public class NotificationController
-        : ControllerGeneric<NotificationCreateDto, NotificationEditDto, NotificationListDto>
+    [Route("api/[controller]")]
+    public class NotificationController: ControllerGeneric<NotificationCreateDto, NotificationEditDto, NotificationListDto>
     {
+
+        private readonly INotificationBusiness _notificationBusiness;
         public NotificationController(
             IBaseModelBusiness<NotificationCreateDto, NotificationEditDto, NotificationListDto> service,
-            ILogger<NotificationController> logger
-        ) : base(service, logger) { }
-
-   
-        [HttpPatch("{id:int}/state")]
-        public async Task<IActionResult> UpdateState(
-            int id,
-            [FromBody] NotificationStateDto dto,
-            [FromServices] ApplicationDbContext context)
+            ILogger<NotificationController> logger, INotificationBusiness notificationBusiness
+        ) : base(service, logger)
         {
-            // Stub con la PK
-            var stub = new Notification { Id = id };
 
-            // Adjuntar sin cargar toda la entidad
-            context.Attach(stub);
+            _notificationBusiness = notificationBusiness;
 
-            // Cambiar solo la propiedad requerida
-            stub.StateNotification = dto.StateNotification;
-
-            // Marcar SOLO StateNotification como modificada
-            context.Entry(stub).Property(x => x.StateNotification).IsModified = true;
-
-            // (No llames context.Update(stub); eso marca TODO)
-
-            var rows = await context.SaveChangesAsync();
-            if (rows == 0) return NotFound();
-
-            return NoContent();
         }
-    }
 
-    // Puedes dejar este DTO al final del archivo
-    public class NotificationStateDto
-    {
-        public bool StateNotification { get; set; }
+
+        [HttpPatch("{id:int}/mark-read")]
+        public async Task<IActionResult> UpdateState(int id)
+        {
+            try
+            {
+                bool response = await _notificationBusiness.UpdateStatusNotification(id);
+
+                if (!response)
+                {
+                    return NotFound(new { message = $"No se encontró la notificación con ID {id}." });
+                }
+                return Ok(new { message = "Estado de la notificación actualizado correctamente." });
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in {nameof(UpdateState)}: {ex.Message}");
+                return StatusCode(500, new { message = ex.Message });
+
+            }
+        }
     }
 }

@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Enum
 {
-    public enum HealthRegime
+    public enum TypeNotification
     {
-        Contributivo = 1,
-        Subsidiado = 2,
-        Excepcion = 3
+        System = 1,
+
+        Reminder = 2,
+
+        Warning = 3,
+
+        Info = 4
+
     }
 }
-    

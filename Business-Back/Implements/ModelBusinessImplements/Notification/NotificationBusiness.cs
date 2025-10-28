@@ -15,13 +15,34 @@ using System.Threading.Tasks;
 
 namespace Business_Back.Implements.ModelBusinessImplements.Notification1
 {
-    public class NotificationBusiness : BaseModelBusinessIm<Notification,NotificationCreateDto, NotificationEditDto, NotificationListDto>, INotificationBusiness
+    public class NotificationBusiness : BaseModelBusinessIm<Notifications,NotificationCreateDto, NotificationEditDto, NotificationListDto>, INotificationBusiness
     {
         private readonly INotificationData _data;
         public NotificationBusiness(IConfiguration configuration, INotificationData data, ILogger<NotificationBusiness> logger)
            : base(configuration, data, logger)
         {
             _data = data;
+        }
+
+        public async Task<bool> UpdateStatusNotification(int id)
+        {
+            try
+            {
+                bool status = await _data.UpdateStatusNotification(id);
+
+
+                if(!status)
+                {
+                    _logger.LogWarning($"No se pudo actualizar el estado de la notificación con ID {id}.");
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in {nameof(UpdateStatusNotification)}: {ex.Message}");
+                throw;
+            }
         }
     }
 }

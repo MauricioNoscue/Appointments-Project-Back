@@ -23,7 +23,7 @@ namespace Data_Back.Implements.ModelDataImplement.Hospital
             _ctx = context;
         }
 
-        // === OVERRIDES para lecturas "frescas" y con Include ===
+  
 
         public override async Task<RelatedPerson?> GetById(int id)
         {
@@ -77,7 +77,7 @@ namespace Data_Back.Implements.ModelDataImplement.Hospital
             return await _ctx.Set<RelatedPerson>()
                 .AsNoTracking()
                 .Include(x => x.DocumentType)
-                .Where(x => x.PersonId == personId /* && !x.IsDeleted */)
+                .Where(x => x.PersonId == personId)
                 .ToListAsync();
         }
 
@@ -86,7 +86,7 @@ namespace Data_Back.Implements.ModelDataImplement.Hospital
             var q = _ctx.Set<RelatedPerson>()
                 .Where(x => x.PersonId == personId
                          && x.DocumentTypeId == documentTypeId
-                         && x.Document == document /* && !x.IsDeleted */);
+                         && x.Document == document);
 
             if (excludeId.HasValue)
                 q = q.Where(x => x.Id != excludeId.Value);

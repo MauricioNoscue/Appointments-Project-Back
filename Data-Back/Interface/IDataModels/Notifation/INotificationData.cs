@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace Data_Back.Interface.IDataModels.Notifation
 {
-    public interface INotificationData : IBaseModelData<Notification>
+    public interface INotificationData : IBaseModelData<Notifications>
     {
+        Task<bool> UpdateStatusNotification(int id);
     }
 }

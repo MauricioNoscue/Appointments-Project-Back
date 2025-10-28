@@ -16,10 +16,6 @@ namespace Web_back.Extension
                 factory.Configure(options, configuration);
             });
 
-
-
-
-
             return services;
         }
     }

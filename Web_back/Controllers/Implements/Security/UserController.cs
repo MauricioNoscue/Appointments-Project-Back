@@ -27,8 +27,6 @@ namespace Web_back.Controllers.Implements.Security
             return Ok(result);
         }
 
-
-  
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
