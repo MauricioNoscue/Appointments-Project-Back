@@ -3,11 +3,11 @@ using Web_back.Factory.Interface;
 
 namespace Web_back.Factory.Implements.Database
 {
-    public class SqlServerDbContextFactory : IDbContextFactory
+     public class SqlServerFactory : IDbContextFactory
     {
-        public void Configure(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration)
+        public void Configure(DbContextOptionsBuilder optionsBuilder, string connectionString)
         {
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }

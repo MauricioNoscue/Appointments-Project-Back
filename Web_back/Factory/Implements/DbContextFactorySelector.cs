@@ -9,8 +9,8 @@ namespace Web_back.Factory.Implements
         {
             return provider?.ToLower() switch
             {
-                "sqlserver" => new SqlServerDbContextFactory(),
-                "postgres" => new PostgresDbContextFactory(),
+                "sqlserver" => new SqlServerFactory(),
+                "postgres" => new PostgresFactory(),
                 "mysql" => new MySqlDbContextFactory(),
 
                 _ => throw new NotSupportedException($"Proveedor '{provider}' no soportado"),

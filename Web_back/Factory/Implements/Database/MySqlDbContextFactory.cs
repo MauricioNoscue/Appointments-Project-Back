@@ -5,10 +5,9 @@ namespace Web_back.Factory.Implements.Database
 {
     public class MySqlDbContextFactory : IDbContextFactory
     {
-        public void Configure(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration)
+        public void Configure(DbContextOptionsBuilder optionsBuilder, string connectionString)
         {
-            var connectionString = configuration.GetConnectionString("MySql");
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            throw new NotImplementedException();
         }
     }
 }
