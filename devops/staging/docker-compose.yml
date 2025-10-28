@@ -14,7 +14,13 @@ services:
     
     labels:
       - com.appointments.environment=staging
-
+  command: >
+      sh -c "
+        echo 'Ejecutando migraciones de Entity Framework...';
+        dotnet ef database update --project ./Web_back/Web.csproj --startup-project ./Web_back/Web_back.csproj;
+        echo 'Migraciones completadas. Iniciando la API...';
+        dotnet ./Web_back/bin/Release/net8.0/Web_back.dll
+      "
 networks:
   network_qa:
     external: true
