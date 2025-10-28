@@ -4,6 +4,7 @@ namespace Web_back.Factory.Interface
 {
     public interface IDbContextFactory
     {
-        void Configure(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration);
+        // void Configure(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration);
+        void Configure(object options, string connectionString);
     }
 }

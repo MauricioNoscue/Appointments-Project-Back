@@ -19,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProjectServices();
 
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Configuraci�n de base de datos
 builder.Services.AddDatabaseConfiguration(configuration);
 
@@ -39,7 +41,6 @@ builder.Services.AddStackExchangeRedisCache(opt =>
 {
     opt.Configuration = builder.Configuration.GetConnectionString("Redis"); // p. ej. "localhost:6379"
 });
-builder.Configuration.AddEnvironmentVariables();
 
 
 // (ES): DI
