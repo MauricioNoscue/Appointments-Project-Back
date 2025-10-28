@@ -18,9 +18,11 @@ builder.Services.AddSwaggerGen();
 // servicios y data
 builder.Services.AddProjectServices();
 
-
-builder.Configuration.AddEnvironmentVariables();
-
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 // Configuraci�n de base de datos
 builder.Services.AddDatabaseConfiguration(configuration);
 

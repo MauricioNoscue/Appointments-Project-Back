@@ -11,7 +11,8 @@ services:
       - ./.env
     ports:
       - "5105:8080"
-    
+    networks:
+      - network_staging 
     labels:
       - com.appointments.environment=staging
     command: >
