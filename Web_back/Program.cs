@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProjectServices();
 
 
-// Configuración de base de datos
+// Configuraciï¿½n de base de datos
 builder.Services.AddDatabaseConfiguration(configuration);
 
 
@@ -39,6 +39,8 @@ builder.Services.AddStackExchangeRedisCache(opt =>
 {
     opt.Configuration = builder.Configuration.GetConnectionString("Redis"); // p. ej. "localhost:6379"
 });
+builder.Configuration.AddEnvironmentVariables();
+
 
 // (ES): DI
 builder.Services.AddScoped<ISlotLockStore, RedisSlotLockStore>();
@@ -68,7 +70,7 @@ var app = builder.Build();
 
 
 
-//// Archivos estáticos
+//// Archivos estï¿½ticos
 //app.UseStaticFiles();
 
 //// Swagger
