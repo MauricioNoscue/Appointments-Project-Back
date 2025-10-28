@@ -8,7 +8,7 @@ services:
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
-      - ./.env
+      - ./.env.staging
     ports:
       - "5105:8080"
     networks:
@@ -22,6 +22,7 @@ services:
         echo 'Migraciones completadas. Iniciando la API...';
         dotnet ./Web_back/bin/Release/net8.0/Web_back.dll
       "
+
 networks:
   network_staging:
     external: true
