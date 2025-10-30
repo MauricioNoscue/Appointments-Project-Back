@@ -6,6 +6,7 @@ using Business_Back.Implements.Socket;
 using Business_Back.Interface.Socket;
 using Web_back.Hub;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
@@ -92,4 +93,18 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<AppointmentHub>("/hubs/appointments");
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<Entity_Back.Context.ApplicationDbContext>();
+
+    try
+    {
+        dbContext.Database.Migrate();
+        Console.WriteLine("✅ Base de datos creada o actualizada correctamente.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error al inicializar la base de datos: {ex.Message}");
+    }
+}
 app.Run();
