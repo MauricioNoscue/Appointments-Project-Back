@@ -5,7 +5,7 @@ services:
    appointments-api-develop:
     container_name:  appointments-api-develop
     build:
-      context: ../..
+      context: ../../
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
