@@ -1,11 +1,11 @@
-pipeline {
+ pipeline {
     agent any
 
     environment {
         DOTNET_CLI_HOME = '/var/jenkins_home/.dotnet'
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
         DOTNET_NOLOGO = '1'
-        PROJECT_PATH = 'appointments-project-back/Web_back/Web_back.csproj'
+        PROJECT_PATH = 'Web_back/Web_back.csproj'
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 echo "📥 Clonando repositorio desde GitHub..."
                 checkout scm
-                sh 'ls -R appointments-project-back/DevOps || true'
+                sh 'ls -R devops || true'
             }
         }
 
@@ -27,23 +27,25 @@ pipeline {
         stage('Detectar entorno') {
             steps {
                 script {
-                    switch (env.BRANCH_NAME) {
-                        case 'main': env.ENVIRONMENT = 'prod'; break
-                        case 'staging': env.ENVIRONMENT = 'staging'; break
-                        case 'qa': env.ENVIRONMENT = 'qa'; break
-                        default: env.ENVIRONMENT = 'develop'; break
+                    // Detectar la rama actual de forma robusta
+                    def branch = env.BRANCH_NAME ?: env.GIT_BRANCH?.replaceFirst(/^origin\//, '') ?: 'develop'
+
+                    // Asignar entorno según la rama
+                    switch (branch) {
+                        case 'main':    env.ENVIRONMENT = 'prod';     break
+                        case 'staging': env.ENVIRONMENT = 'staging';  break
+                        case 'qa':      env.ENVIRONMENT = 'qa';       break
+                        default:        env.ENVIRONMENT = 'develop';  break
                     }
 
-                    env.ENV_DIR = "appointments-project-back/devops/${env.ENVIRONMENT}"
-
+                    // Definir rutas
+                    env.ENV_DIR = "devops/${env.ENVIRONMENT}"
                     env.COMPOSE_FILE = "${env.ENV_DIR}/docker-compose.yml"
                     env.ENV_FILE = "${env.ENV_DIR}/.env"
-
-                    // 📂 Ruta de docker-compose de bases de datos compartidas
-                    env.DB_COMPOSE_FILE = "appointments-project-back/docker-compose.yml"
+                    env.DB_COMPOSE_FILE = "docker-compose.yml"
 
                     echo """
-                    ✅ Rama detectada: ${env.BRANCH_NAME}
+                    ✅ Rama detectada: ${branch}
                     🌎 Entorno asignado: ${env.ENVIRONMENT}
                     📄 Compose file (API): ${env.COMPOSE_FILE}
                     📁 Env file (API): ${env.ENV_FILE}
@@ -65,13 +67,13 @@ pipeline {
                 script {
                     docker.image('mcr.microsoft.com/dotnet/sdk:9.0')
                         .inside('-v /var/run/docker.sock:/var/run/docker.sock -u root:root') {
-                        sh '''
-                            echo "🔧 Restaurando dependencias .NET..."
-                            dotnet restore Web_back/Web_back.csproj
-                            dotnet build Web_back/Web_back.csproj --configuration Release
-                            dotnet publish Web_back/Web_back.csproj -c Release -o ./publish
-                        '''
-                    }
+                            sh '''
+                                echo "🔧 Restaurando dependencias .NET..."
+                                dotnet restore ${PROJECT_PATH}
+                                dotnet build ${PROJECT_PATH} --configuration Release
+                                dotnet publish ${PROJECT_PATH} -c Release -o ./publish
+                            '''
+                        }
                 }
             }
         }
@@ -81,12 +83,10 @@ pipeline {
         // =======================================================
         stage('Construir imagen Docker') {
             steps {
-                dir('Appointments-Project-Back') {
-                    sh """
-                        echo "🐳 Construyendo imagen Docker para Appointments-Project-Back (${env.ENVIRONMENT})"
-                        docker build -t appointmets-api-${env.ENVIRONMENT}:latest -f Web_back/Dockerfile .
-                    """
-                }
+                sh """
+                    echo "🐳 Construyendo imagen Docker para Appointments-Project-Back (${env.ENVIRONMENT})"
+                    docker build -t appointments-api-${env.ENVIRONMENT}:latest -f Web_back/Dockerfile .
+                """
             }
         }
 
@@ -112,16 +112,17 @@ pipeline {
         // =======================================================
         stage('Desplegar citas API') {
             steps {
-                dir('.') {
-                    sh """
-                        echo "🚀 Desplegando entorno: ${env.ENVIRONMENT}"
-                        docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
-                    """
-                }
+                sh """
+                    echo "🚀 Desplegando entorno: ${env.ENVIRONMENT}"
+                    docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
+                """
             }
         }
     }
 
+    // =======================================================
+    // 🔚 POST - RESULTADOS
+    // =======================================================
     post {
         success {
             echo "🎉 Despliegue completado correctamente para ${env.ENVIRONMENT}"
