@@ -59,7 +59,7 @@ namespace Web_back.Extension
         {
 
 
-
+//comen
             services.AddScoped<IBaseModelData<Rol>, RolData>();
             services.AddScoped<IRolData, RolData>();
             services.AddScoped<IBaseModelBusiness<RolCreatedDto, RolEditDto, RolListDto>, RolBusiness>();

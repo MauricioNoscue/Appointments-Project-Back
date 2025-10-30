@@ -10,7 +10,7 @@ namespace Web_back.Extension
         /// </summary>
         public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            // 🔹 Obtener el proveedor de base de datos definido en appsettings.json
+            // 🔹 Obtener el proveedor de base de datos definido en appsettings.jso
             var dbProvider = configuration["DatabaseProvider"];
 
             // 🔹 Obtener la cadena de conexión: primero desde variables de entorno (Docker), luego desde appsettings.json
