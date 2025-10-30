@@ -42,7 +42,8 @@
                     env.ENV_DIR = "devops/${env.ENVIRONMENT}"
                     env.COMPOSE_FILE = "${env.ENV_DIR}/docker-compose.yml"
                     env.ENV_FILE = "${env.ENV_DIR}/.env"
-                    env.DB_COMPOSE_FILE = "docker-compose.yml"
+                    env.DB_COMPOSE_FILE = "appointments-db/docker-compose.yml"
+
 
 
 

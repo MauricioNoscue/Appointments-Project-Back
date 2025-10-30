@@ -1,0 +1,104 @@
+version: "3.9"
+
+services:
+  # =====================================================
+  # 🧠 API principal
+  # =====================================================
+  appointments-project-back-dev:
+    container_name: appointments-project-back-dev
+    build:
+      context: ../../
+      dockerfile: ../../Web_back/Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "5103:8080"
+    labels:
+      - com.appointments.environment=dev
+    networks:
+      - appointments_network
+
+  # =====================================================
+  # 🗄️ SQL Server - DEVELOP
+  # =====================================================
+  appointments-sqlserver-develop:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: appointments-sqlserver-develop
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Admin123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1438:1433"
+    volumes:
+      - sqldata_develop:/var/opt/mssql
+    networks:
+      - appointments_network
+
+  # 🗄️ SQL Server - QA
+  appointments-sqlserver-qa:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: appointments-sqlserver-qa
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Admin123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1436:1433"
+    volumes:
+      - sqldata_qa:/var/opt/mssql
+    networks:
+      - appointments_network
+
+  # 🗄️ SQL Server - STAGING
+  appointments-sqlserver-staging:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: appointments-sqlserver-staging
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Admin123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1437:1433"
+    volumes:
+      - sqldata_staging:/var/opt/mssql
+    networks:
+      - appointments_network
+
+  # 🗄️ SQL Server - PROD
+  appointments-sqlserver-prod:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: appointments-sqlserver-prod
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Admin123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1435:1433"
+    volumes:
+      - sqldata_prod:/var/opt/mssql
+    networks:
+      - appointments_network
+
+# =====================================================
+# 💾 Volúmenes persistentes
+# =====================================================
+volumes:
+  sqldata_develop:
+  sqldata_qa:
+  sqldata_staging:
+  sqldata_prod:
+
+# =====================================================
+# 🌐 Red externa compartida
+# =====================================================
+networks:
+  appointments_network:
+    name: appointments_network
+    driver: bridge
+    external: true
