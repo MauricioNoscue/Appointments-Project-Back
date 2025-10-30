@@ -17,20 +17,21 @@ services:
       - com.appointments.environment=staging
     entrypoint: >
       bash -c "
-        echo '🕒 Waiting for SQL Server to be ready...';
-        until dotnet sqlcmd --version >/dev/null 2>&1 || (echo '⏳ SQL still starting...' && sleep 5 && nc -z appointments-sql-staging 1433); do
-          sleep 3;
+        echo '🕒 Esperando a que SQL Server esté listo...';
+        for i in {1..30}; do
+          /opt/mssql-tools/bin/sqlcmd -S appointments-sql-staging,1433 -U sa -P \"$SA_PASSWORD\" -Q 'SELECT 1' > /dev/null 2>&1 && break;
+          echo '⏳ SQL aún no responde, reintentando...';
+          sleep 5;
         done;
 
-        echo '🏗️ Running EF Core migrations...';
+        echo '🏗️ Aplicando migraciones de Entity Framework...';
         dotnet tool install --global dotnet-ef --version 8.0.0;
-        export PATH=\"$PATH:/root/.dotnet/tools\";
+        export PATH=\"/root/.dotnet/tools:$PATH\";
         dotnet ef database update --project Entity/Entity.csproj --startup-project Web_back/Web_back.csproj;
 
-        echo '✅ Migrations done! Launching API...';
+        echo '✅ Migraciones completadas. Iniciando la API...';
         dotnet Web_back/Web_back.dll
       "
-
 networks:
   network_staging:
     external: true
