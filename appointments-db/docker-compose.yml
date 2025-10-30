@@ -67,4 +67,4 @@ networks:
   appointments_network:
     name: appointments_network
     driver: bridge
-    external: false
+    external: true
