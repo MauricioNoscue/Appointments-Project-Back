@@ -5,103 +5,131 @@ pipeline {
         DOTNET_CLI_HOME = '/var/jenkins_home/.dotnet'
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
         DOTNET_NOLOGO = '1'
+        PROJECT_PATH = 'appointments-project-back/Web_back/Web_back.csproj'
     }
 
     stages {
 
-        stage('Leer entorno desde .env raíz') {
+        // =======================================================
+        // 1️⃣ CHECKOUT
+        // =======================================================
+        stage('Checkout código fuente') {
+            steps {
+                echo "📥 Clonando repositorio desde GitHub..."
+                checkout scm
+                sh 'ls -R appointments-project-back/DevOps || true'
+            }
+        }
+
+        // =======================================================
+        // 2️⃣ DETECTAR ENTORNO SEGÚN LA RAMA
+        // =======================================================
+        stage('Detectar entorno') {
             steps {
                 script {
-                    def envValue = sh(script: "grep '^ENVIRONMENT=' .env | cut -d '=' -f2", returnStdout: true).trim()
-                    if (envValue == '') {
-                        error "No se encontró ENVIRONMENT en el archivo .env raíz"
+                    switch (env.BRANCH_NAME) {
+                        case 'main': env.ENVIRONMENT = 'prod'; break
+                        case 'staging': env.ENVIRONMENT = 'staging'; break
+                        case 'qa': env.ENVIRONMENT = 'qa'; break
+                        default: env.ENVIRONMENT = 'develop'; break
                     }
 
-                    env.ENVIRONMENT = envValue
-                    env.ENV_DIR = "devops/${env.ENVIRONMENT}"
+                    env.ENV_DIR = "appointments-project-back/DevOps/${env.ENVIRONMENT}"
                     env.COMPOSE_FILE = "${env.ENV_DIR}/docker-compose.yml"
                     env.ENV_FILE = "${env.ENV_DIR}/.env"
 
-                    echo "Entorno detectado: ${env.ENVIRONMENT}"
-                    echo "Archivo compose: ${env.COMPOSE_FILE}"
-                    echo "Archivo de entorno: ${env.ENV_FILE}"
+                    // 📂 Ruta de docker-compose de bases de datos compartidas
+                    env.DB_COMPOSE_FILE = "appointments-project-back/docker-compose.yml"
+
+                    echo """
+                    ✅ Rama detectada: ${env.BRANCH_NAME}
+                    🌎 Entorno asignado: ${env.ENVIRONMENT}
+                    📄 Compose file (API): ${env.COMPOSE_FILE}
+                    📁 Env file (API): ${env.ENV_FILE}
+                    🗄️ Compose file (DB): ${env.DB_COMPOSE_FILE}
+                    """
+
+                    if (!fileExists(env.COMPOSE_FILE)) {
+                        error "❌ No se encontró ${env.COMPOSE_FILE}"
+                    }
                 }
             }
         }
 
-        stage('Restaurar dependencias') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/dotnet/sdk:8.0'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+        // =======================================================
+        // 3️⃣ COMPILAR Y PUBLICAR .NET
+        // =======================================================
+        stage('Compilar .NET dentro de contenedor SDK') {
+            steps {
+                script {
+                    docker.image('mcr.microsoft.com/dotnet/sdk:9.0')
+                        .inside('-v /var/run/docker.sock:/var/run/docker.sock -u root:root') {
+                        sh '''
+                            echo "🔧 Restaurando dependencias .NET..."
+                            dotnet restore Web_back/Web_back.csproj
+                            dotnet build Web_back/Web_back.csproj --configuration Release
+                            dotnet publish Web_back/Web_back.csproj -c Release -o ./publish
+                        '''
+                    }
                 }
             }
+        }
+
+        // =======================================================
+        // 4️⃣ CONSTRUIR IMAGEN DOCKER
+        // =======================================================
+        stage('Construir imagen Docker') {
             steps {
-                sh '''
-                    mkdir -p $DOTNET_CLI_HOME
-                    chmod -R 777 $DOTNET_CLI_HOME
-                    dotnet restore Web_back/Web_back.csproj
-                '''
+                dir('Appointments-Project-Back') {
+                    sh """
+                        echo "🐳 Construyendo imagen Docker para Appointments-Project-Back (${env.ENVIRONMENT})"
+                        docker build -t appointmets-api-${env.ENVIRONMENT}:latest -f Web_back/Dockerfile .
+                    """
+                }
             }
         }
 
-        stage('Compilar proyecto') {
-            agent {
-                docker { image 'mcr.microsoft.com/dotnet/sdk:8.0' }
-            }
+        // =======================================================
+        // 5️⃣ PREPARAR RED Y BASES DE DATOS
+        // =======================================================
+        stage('Preparar red y base de datos') {
             steps {
-                echo 'Compilando la solución appointments-project-back...'
-                sh 'dotnet build Web_back/Web_back.csproj --configuration Release'
+                script {
+                    sh """
+                        echo "🌐 Creando red externa compartida (si no existe)..."
+                        docker network create appointments_network || true
+
+                        echo "🗄️ Levantando stack de bases de datos..."
+                        docker compose -f ${env.DB_COMPOSE_FILE} up -d
+                    """
+                }
             }
         }
 
-        stage('Desplegar API') {
+        // =======================================================
+        // 6️⃣ DESPLEGAR API CON DOCKER COMPOSE
+        // =======================================================
+        stage('Desplegar citas API') {
             steps {
-                echo "Desplegando appointments-project-back para entorno: ${env.ENVIRONMENT}"
-                sh """
-                    echo "Limpiando contenedores antiguos..."
-                    docker ps -a --filter "name=appointments-project-back-${env.ENVIRONMENT}" -q | xargs -r docker rm -f || true
-
-                    docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
-                """
+                dir('.') {
+                    sh """
+                        echo "🚀 Desplegando entorno: ${env.ENVIRONMENT}"
+                        docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
+                    """
+                }
             }
         }
-
-        // 👇 NUEVA ETAPA DENTRO DE 'stages'
-        stage('Ejecutar migraciones EF') {
-            steps {
-                echo "🏗️ Aplicando migraciones EF en appointments-project-back-${env.ENVIRONMENT}..."
-
-                sh """
-                    echo "🕒 Esperando a que SQL Server responda..."
-                    for i in {1..30}; do
-                        docker exec appointments-project-back-${env.ENVIRONMENT} bash -c '
-                            /opt/mssql-tools18/bin/sqlcmd -S ${SQLSERVER_HOST},${SQLSERVER_PORT} \
-                            -U ${SQLSERVER_USER} -P "${SQLSERVER_PASSWORD}" -Q "SELECT 1"
-                        ' > /dev/null 2>&1 && break
-                        echo "⏳ SQL aún no responde, reintentando..."
-                        sleep 5
-                    done
-
-                    docker exec appointments-project-back-${env.ENVIRONMENT} bash -c '
-                        export ASPNETCORE_ENVIRONMENT=${ENVIRONMENT} &&
-                        dotnet tool install --global dotnet-ef --version 8.0.0 &&
-                        export PATH="$PATH:/root/.dotnet/tools" &&
-                        dotnet ef database update \
-                            --project Entity-Back/Entity-Back.csproj \
-                            --startup-project Web_back/Web_back.csproj
-                    '
-                """
-            }
-        }
-    } // 👈 este cierra stages correctamente
+    }
 
     post {
         success {
-            echo "✅ Despliegue completado correctamente para ${env.ENVIRONMENT}"
+            echo "🎉 Despliegue completado correctamente para ${env.ENVIRONMENT}"
         }
         failure {
-            echo "❌ Error durante el despliegue en ${env.ENVIRONMENT}"
+            echo "💥 Error durante el despliegue en ${env.ENVIRONMENT}"
+        }
+        always {
+            echo "🧹 Limpieza final del pipeline completada."
         }
     }
 }

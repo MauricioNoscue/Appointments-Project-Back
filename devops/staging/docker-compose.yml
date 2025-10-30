@@ -1,39 +1,22 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  appointments-project-back-staging:
-    container_name: appointments-project-back-staging
+  # 🌐 API principal - DEVELOP
+   appointments-api-develop:
+    container_name:  appointments-api-develop
     build:
       context: ../..
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
-      - ./.env
+      - .env
     ports:
-      - "5105:8080"
-    networks:              # ✅ esta se queda
-      - network_staging
+      - "5100:8080"
+    networks:
+      -  appointments_network
     labels:
-      - com.appointments.environment=staging
-    entrypoint: >
-      bash -c "
-        echo '🕒 Esperando a que SQL Server esté listo...';
-        for i in {1..30}; do
-          /opt/mssql-tools18/bin/sqlcmd -S $SQLSERVER_HOST,$SQLSERVER_PORT -U $SQLSERVER_USER -P \"$SQLSERVER_PASSWORD\" -Q 'SELECT 1' > /dev/null 2>&1 && break;
-          echo '⏳ SQL aún no responde, reintentando...';
-          sleep 5;
-        done;
+      - com. appointments.environment=develop
 
-        echo '🏗️ Aplicando migraciones de Entity Framework...';
-        dotnet tool install --global dotnet-ef --version 8.0.0;
-        export PATH=\"$PATH:/root/.dotnet/tools\";
-        dotnet ef database update --project Entity-Back/Entity-Back.csproj --startup-project Web_back/Web_back.csproj;
-
-        echo '✅ Migraciones completadas. Iniciando la API...';
-        dotnet Web_back/Web_back.dll
-      "
-
-# ✅ definición global de redes (solo una vez)
 networks:
-  network_staging:
+   appointments_network:
     external: true
