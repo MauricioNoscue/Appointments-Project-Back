@@ -15,20 +15,20 @@ services:
       - network_staging 
     labels:
       - com.appointments.environment=staging
-    command: >
-      sh -c "
-        echo '🕒 Esperando a que SQL Server esté listo...';
-        for i in {1..30}; do
-          /opt/mssql-tools/bin/sqlcmd -S appointments-sql-staging -U sa -P \"$SA_PASSWORD\" -Q 'SELECT 1' && break;
-          echo '⏳ SQL aún no responde, reintentando...';
+    entrypoint: >
+      bash -c "
+        echo '🕒 Waiting for SQL Server to be ready...';
+        until dotnet sqlcmd --version >/dev/null 2>&1 || (echo '⏳ SQL still starting...' && sleep 5 && nc -z appointments-sql-staging 1433); do
           sleep 3;
         done;
 
-        echo '🏗️ Aplicando migraciones de Entity Framework...';
-        dotnet ef database update --project ./Entity/Entity.csproj --startup-project ./Web_back/Web_back.csproj;
+        echo '🏗️ Running EF Core migrations...';
+        dotnet tool install --global dotnet-ef --version 8.0.0;
+        export PATH=\"$PATH:/root/.dotnet/tools\";
+        dotnet ef database update --project Entity/Entity.csproj --startup-project Web_back/Web_back.csproj;
 
-        echo '✅ Migraciones completadas. Iniciando la API...';
-        dotnet ./Web_back/bin/Release/net8.0/Web_back.dll
+        echo '✅ Migrations done! Launching API...';
+        dotnet Web_back/Web_back.dll
       "
 
 networks:
