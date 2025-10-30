@@ -112,6 +112,34 @@ pipeline {
             }
         }
     }
+            /// <summary>
+        /// Etapa 5: Aplicar migraciones EF.
+        /// Ejecuta las migraciones dentro del contenedor del backend
+        /// una vez que el entorno ya está levantado y las variables .env están activas.
+        /// </summary>
+        stage('Ejecutar migraciones EF') {
+            steps {
+                echo "🏗️ Aplicando migraciones EF en appointments-project-back-${env.ENVIRONMENT}..."
+
+                sh """
+                    # Esperar a que el SQL Server esté listo
+                    echo "🕒 Esperando a que SQL Server responda..."
+                    for i in {1..30}; do
+                        docker exec appointments-project-back-${env.ENVIRONMENT} bash -c ' /opt/mssql-tools18/bin/sqlcmd -S ${SQLSERVER_HOST},${SQLSERVER_PORT} -U ${SQLSERVER_USER} -P "${SQLSERVER_PASSWORD}" -Q "SELECT 1" ' > /dev/null 2>&1 && break
+                        echo "⏳ SQL aún no responde, reintentando..."
+                        sleep 5
+                    done
+
+                    # Ejecutar las migraciones EF con las variables del .env cargadas
+                    docker exec appointments-project-back-${env.ENVIRONMENT} bash -c '
+                        export ASPNETCORE_ENVIRONMENT=${ENVIRONMENT} &&
+                        dotnet tool install --global dotnet-ef --version 8.0.0 &&
+                        export PATH="$PATH:/root/.dotnet/tools" &&
+                        dotnet ef database update --project Entity-Back/Entity-Back.csproj --startup-project Web_back/Web_back.csproj
+                    '
+                """
+            }
+        }
 
     /// <summary>
     /// Bloque final del pipeline. 
