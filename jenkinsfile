@@ -105,6 +105,9 @@
 
                         echo "🗄️ Levantando stack de bases de datos..."
                         docker compose -f ${env.DB_COMPOSE_FILE} up -d
+
+                        echo "⏳ Esperando que SQL Server inicie correctamente..."
+                        sleep 25
                     """
                 }
             }
