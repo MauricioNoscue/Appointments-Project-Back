@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  # 🌐 API principal - DEVELOP
-   appointments-api-develop:
-    container_name:  appointments-api-develop
+  # 🌐 API principal - staging
+   appointments-api-staging:
+    container_name:  appointments-api-staging
     build:
       context: ../../
       dockerfile: Web_back/Dockerfile
@@ -15,7 +15,7 @@ services:
     networks:
       -  appointments_network
     labels:
-      - com. appointments.environment=develop
+      - com. appointments.environment=staging
 
 networks:
    appointments_network:
