@@ -33,8 +33,7 @@ RUN dotnet build "./Web_back.csproj" -c $BUILD_CONFIGURATION -o /app/build
 # 🧠 Aquí instalamos EF y aplicamos migraciones directamente
 RUN dotnet tool install --global dotnet-ef --version 8.0.0 \
     && export PATH="$PATH:/root/.dotnet/tools" \
-    && dotnet ef database update --project ../Entity-Back/Entity-Back.csproj --startup-project ./Web_back.csproj
-
+    && dotnet-ef database update --project ../Entity-Back/Entity-Back.csproj --startup-project ./Web_back.csproj
 
 # =========================================================
 # 📦 PUBLISH IM
