@@ -1,8 +1,27 @@
-
 version: "3.9"
 
 services:
+  # =====================================================
+  # 🧠 API principal
+  # =====================================================
+  appointments-project-back-dev:
+    container_name: appointments-project-back-dev
+    build:
+      context: ../..
+      dockerfile: Web_back/Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "5103:8080"
+    labels:
+      - com.appointments.environment=dev
+    networks:
+      - appointments_network
+
+  # =====================================================
   # 🗄️ SQL Server - DEVELOP
+  # =====================================================
   appointments-sqlserver-develop:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: appointments-sqlserver-develop
@@ -66,14 +85,20 @@ services:
     networks:
       - appointments_network
 
+# =====================================================
+# 💾 Volúmenes persistentes
+# =====================================================
 volumes:
   sqldata_develop:
   sqldata_qa:
   sqldata_staging:
   sqldata_prod:
 
+# =====================================================
+# 🌐 Red externa compartida
+# =====================================================
 networks:
   appointments_network:
     name: appointments_network
     driver: bridge
-    external: false
+    external: true
