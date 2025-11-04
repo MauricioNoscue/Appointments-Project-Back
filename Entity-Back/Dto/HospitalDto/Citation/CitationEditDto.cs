@@ -14,6 +14,9 @@ namespace Entity_Back
 
         [StringLength(1000, ErrorMessage = "La nota no puede superar los 300 caracteres")]
         public string? Note { get; set; } = string.Empty;
+
+        public int? RelatedPersonId { get; set; }
+
     }
 
 }

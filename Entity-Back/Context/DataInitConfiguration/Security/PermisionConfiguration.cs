@@ -21,35 +21,35 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 new Permission
                 {
                     Id = 1,
-                    Name = "View",
+                    Name = "Mostrar",
                     Description = "Permite ver un registro",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 },
                 new Permission
                 {
                     Id = 2,
-                    Name = "ViewAll",
+                    Name = "VerTodo",
                     Description = "Permite ver todos los registros (solo Admin)",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 },
                 new Permission
                 {
                     Id = 3,
-                    Name = "Create",
+                    Name = "Crear",
                     Description = "Permite crear registros",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 },
                 new Permission
                 {
                     Id = 4,
-                    Name = "Edit",
+                    Name = "Editar",
                     Description = "Permite editar registros",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 },
                 new Permission
                 {
                     Id = 5,
-                    Name = "Delete",
+                    Name = "Eliminar",
                     Description = "Permite eliminar registros",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 }

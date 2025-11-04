@@ -16,6 +16,7 @@ namespace Entity_Back
         public  User User { get; set; }
        
         public  ScheduleHour ScheduleHour { get; set; }
+        public int? RelatedPersonId { get; set; }
     }
 
 }

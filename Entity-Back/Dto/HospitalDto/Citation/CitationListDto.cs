@@ -15,6 +15,7 @@ namespace Entity_Back
         public int RoomNumber { get; set; }
         public string PatientName { get; set; } = string.Empty;
 
+        public int? RelatedPersonId { get; set; }
 
 
     }

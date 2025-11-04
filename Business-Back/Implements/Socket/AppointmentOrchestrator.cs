@@ -94,7 +94,7 @@ namespace Business_Back.Implements.Socket
         }
 
         /// <inheritdoc />
-        public async Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, CancellationToken ct)
+        public async Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, CancellationToken ct, int? relatedPerson)
         {
             // (ES): Garantiza que el lock aún pertenece al usuario
             (bool owned, DateTime? _, string? owner) = await _locks.CheckAsync(slot, userId.ToString(), ct);

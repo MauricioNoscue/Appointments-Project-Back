@@ -21,14 +21,14 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 new Form { Id = 5, Name = "Usuario", Description = "Gestión de usuarios", Url = "/admin/security/user", ModuleId = 2, Icon = "person", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 6, Name = "Permisos", Description = "Gestión de permisos", Url = "/admin/security/permission", ModuleId = 2, Icon = "vpn_key", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 7, Name = "Módulos", Description = "Gestión de módulos", Url = "/admin/security/module", ModuleId = 2, Icon = "view_module", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 8, Name = "Gestión de usuarios y roles", Description = "Gestión de usuarios y roles", Url = "/admin/security/gestion", ModuleId = 2, Icon = "supervisor_account", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 9, Name = "Gestión de formularios", Description = "Gestión de permisos en formularios", Url = "/admin/security/gestionFormularios", ModuleId = 2, Icon = "rule", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 8, Name = "Gestión de usuarios y roles", Description = "Gestión de usuarios y roles", Url = "/admin/security/gestionFormularios", ModuleId = 2, Icon = "supervisor_account", RegistrationDate = new DateTime(2024, 7, 16) },
+                
 
                 // ===== Citas =====
-                new Form { Id = 2, Name = "Doctor", Description = "Gestión de doctores", Url = "/admin/doctor", ModuleId = 3, Icon = "medical_services", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 10, Name = "Consultorio", Description = "Gestión de consultorios", Url = "/admin/consultorio", ModuleId = 3, Icon = "local_hospital", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 15, Name = "Tipo de cita", Description = "Gestión de tipos de cita", Url = "/admin/typecitation", ModuleId = 3, Icon = "event_note", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 16, Name = "Citas disponibles", Description = "Visualización de citas disponibles", Url = "/admin/CitationAviable", ModuleId = 3, Icon = "event_available", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 2, Name = "Doctores", Description = "Gestión de doctores", Url = "/admin/doctor", ModuleId = 3, Icon = "medical_services", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 10, Name = "Consultorios", Description = "Gestión de consultorios", Url = "/admin/consultorio", ModuleId = 3, Icon = "local_hospital", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 15, Name = "Tipos de cita", Description = "Gestión de tipos de cita", Url = "/admin/typecitation", ModuleId = 3, Icon = "event_note", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 16, Name = "Solicitudes", Description = "Visualización de citas disponibles", Url = "/admin/solicitudes", ModuleId = 3, Icon = "event_available", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 17, Name = "Horarios", Description = "Gestión de horarios", Url = "/admin/horarios", ModuleId = 3, Icon = "schedule", RegistrationDate = new DateTime(2024, 7, 16) },
 
                 // ===== Parámetros =====
@@ -37,14 +37,14 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 new Form { Id = 13, Name = "Departamento", Description = "Gestión de departamentos", Url = "/admin/departament", ModuleId = 4, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 14, Name = "Instituciones", Description = "Gestión de instituciones", Url = "/admin/institusions", ModuleId = 4, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
 
-                new Form { Id = 18, Name = "Inicio paciente", Description = "Gestión de ciudades", Url = "/paciente/dashboard", ModuleId = 5, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 18, Name = "Mi espacio", Description = "Gestión de ciudades", Url = "/paciente/dashboard", ModuleId = 5, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 19, Name = "Mis personas", Description = "Gestión de departamentos", Url = "/paciente/relacion", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 20, Name = "Perfil", Description = "Gestión de instituciones", Url = "/paciente/perfil", ModuleId = 5, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 25, Name = "Agendar", Description = "Gestión de departamentos", Url = "/paciente/agendar", ModuleId = 5, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
 
 
-                new Form { Id = 21, Name = "Inicio Doctor", Description = "Gestión de ciudades", Url = "/doctor/dashboard", ModuleId = 6, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
-                new Form { Id = 22, Name = "Perfil..", Description = "Gestión de departamentos", Url = "/doctor/perfil", ModuleId = 6, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 21, Name = "Doctor", Description = "Gestión de ciudades", Url = "/doctor/dashboard", ModuleId = 6, Icon = "location_city", RegistrationDate = new DateTime(2024, 7, 16) },
+                new Form { Id = 22, Name = "Perfil profesional", Description = "Gestión de departamentos", Url = "/doctor/perfil", ModuleId = 6, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 23, Name = "Historial", Description = "Gestión de instituciones", Url = "/doctor/historial", ModuleId = 6, Icon = "account_balance", RegistrationDate = new DateTime(2024, 7, 16) },
                 new Form { Id = 24, Name = "Citas", Description = "Gestión de departamentos", Url = "/doctor/pendientes", ModuleId = 6, Icon = "domain", RegistrationDate = new DateTime(2024, 7, 16) }
 

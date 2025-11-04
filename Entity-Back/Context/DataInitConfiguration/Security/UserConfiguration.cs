@@ -21,7 +21,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                {
                    Id = 1,
                    Email = "mauronoscue@gmail.com",
-                   Password = "M1d!Citas2025",
+                   Password = "$2a$12$7r5efoSjg.sH1lG0aPAKyuOJSOmfbqy440K2iGW4c9mO8TXe5SM3S",
                    Active = false,
                    PersonId = 1,
                    RegistrationDate = new DateTime(2024, 7, 16),
@@ -33,7 +33,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
 
                    Id = 2,
                    Email = "andresmauricionoscue@gmail.com",
-                   Password = "M2d!Citas2025",
+                   Password = "$2a$12$7r5efoSjg.sH1lG0aPAKyuOJSOmfbqy440K2iGW4c9mO8TXe5SM3S",
                    Active = false,
                    PersonId = 2,
                    RegistrationDate = new DateTime(2024, 7, 16),
@@ -44,7 +44,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
 
                    Id = 3,
                    Email = "doctor@gmail.com",
-                   Password = "M2d!Citas2025",
+                   Password = "$2a$12$7r5efoSjg.sH1lG0aPAKyuOJSOmfbqy440K2iGW4c9mO8TXe5SM3S",
                    Active = false,
                    PersonId = 3,
                    RegistrationDate = new DateTime(2024, 7, 16),
@@ -56,7 +56,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
 
                    Id = 4,
                    Email = "User@gmail.com",
-                   Password = "M2d!Citas2025",
+                   Password = "$2a$12$7r5efoSjg.sH1lG0aPAKyuOJSOmfbqy440K2iGW4c9mO8TXe5SM3S",
                    Active = false,
                    PersonId = 4,
                    RegistrationDate = new DateTime(2024, 7, 16),
