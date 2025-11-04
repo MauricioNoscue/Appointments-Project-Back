@@ -20,5 +20,7 @@ namespace Entity_Back.Dto.SecurityDto.PersonDto
         public int FailedAppointments { get; set; }
         public string Gender { get; set; }
         public string HealthRegime { get; set; }
+        public string? Address { get; set; }
+
     }
 }

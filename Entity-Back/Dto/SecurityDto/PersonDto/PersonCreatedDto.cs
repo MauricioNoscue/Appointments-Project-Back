@@ -45,6 +45,9 @@ namespace Entity_Back.Dto.SecurityDto.PersonDto
         [Required(ErrorMessage = "El régimen de salud es obligatorio")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "El régimen de salud debe tener entre 3 y 30 caracteres")]
         public string HealthRegime { get; set; }
+
+        public string? Address { get; set; }
+
     }
 
 }
