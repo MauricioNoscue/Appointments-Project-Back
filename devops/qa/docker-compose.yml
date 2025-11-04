@@ -1,20 +1,22 @@
-version: '3.8'
+version: '3.9'
 
 services:
   appointments-project-back-qa:
     container_name: appointments-project-back-qa
     build:
-      context: ../..
+      context: ../../
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
-      - ./.env
+      - .env
     ports:
       - "5103:8080"
+    networks:
+      -  appointments_network
     
     labels:
       - com.appointments.environment=qa
 
 networks:
-  network_qa:
+  appointments_network:
     external: true
