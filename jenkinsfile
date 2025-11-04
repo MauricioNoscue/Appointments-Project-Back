@@ -32,7 +32,7 @@
 
                     // Asignar entorno según la rama
                     switch (branch) {
-                        case 'main':    env.ENVIRONMENT = 'prod';     break
+                        case 'master':    env.ENVIRONMENT = 'prod';     break
                         case 'staging': env.ENVIRONMENT = 'staging';  break
                         case 'qa':      env.ENVIRONMENT = 'qa';       break
                         default:        env.ENVIRONMENT = 'develop';  break
