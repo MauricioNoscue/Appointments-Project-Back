@@ -1,20 +1,22 @@
-version: '3.8'
+version: '3.9'
 
 services:
   appointments-project-back-prod:
     container_name: appointments-project-back-prod
     build:
-      context: ../..
+      context: ../../
       dockerfile: Web_back/Dockerfile
     restart: always
     env_file:
-      - ./.env
+      - .env
     ports:
-      - "5103:8080"
+      - "5106:8080"
+    networks:
+      -  appointments_network
     
     labels:
       - com.appointments.environment=prod
 
 networks:
-  network_prod:
+   appointments_network:
     external: true
