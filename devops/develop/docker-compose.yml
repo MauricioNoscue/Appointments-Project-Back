@@ -2,8 +2,8 @@ version: "3.9"
 
 services:
   # 🌐 API principal - dev
-   appointments-api-dev:
-    container_name:  appointments-api-dev
+  appointments-api-dev:
+    container_name: appointments-api-dev
     build:
       context: ../../
       dockerfile: Web_back/Dockerfile
@@ -13,10 +13,22 @@ services:
     ports:
       - "5200:8080"
     networks:
-      -  appointments_network
+      - appointments_network
+    depends_on:
+      - appointments-redis-dev
     labels:
-      - com. appointments.environment=dev
+      - com.appointments.environment=dev
+
+  # 🧠 Redis (para cache y SignalR)
+  appointments-redis-dev:
+    image: redis:7.2
+    container_name: appointments-redis-dev
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - appointments_network
 
 networks:
-   appointments_network:
+  appointments_network:
     external: true

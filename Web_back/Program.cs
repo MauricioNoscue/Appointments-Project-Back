@@ -40,10 +40,23 @@ MapsterConfig.RegisterMappings();
 builder.Services.AddSignalR();
 
 // (ES): Cache distribuida (Redis). Para dev puedes usar MemoryDistributedCache.
-builder.Services.AddStackExchangeRedisCache(opt =>
+// (ES): Cache distribuida con Redis (usa MemoryCache como respaldo si falla)
+builder.Services.AddStackExchangeRedisCache(options =>
 {
-    opt.Configuration = builder.Configuration.GetConnectionString("Redis"); // p. ej. "localhost:6379"
+    var redisConnection = builder.Configuration.GetConnectionString("Redis");
+
+    // Si no hay conexión definida, usa memoria local para no romper la app
+    if (string.IsNullOrWhiteSpace(redisConnection))
+    {
+        Console.WriteLine("⚠️ No se encontró cadena de conexión Redis. Usando MemoryCache temporalmente.");
+        builder.Services.AddDistributedMemoryCache(); // respaldo
+        return;
+    }
+
+    options.Configuration = redisConnection;
+    Console.WriteLine($"✅ Redis configurado correctamente: {redisConnection}");
 });
+
 
 
 // (ES): DI
