@@ -36,6 +36,8 @@ namespace Business_Back.Implements.Socket
         private readonly IConfiguration _configuration;
         private readonly IUserData _userData;
         private readonly INotificationBusiness _notificationBusiness;
+        private readonly INotificationSender _notificationSender;
+
 
         private static readonly TimeSpan HoldTtl = TimeSpan.FromSeconds(120); 
         public AppointmentOrchestrator(
@@ -44,7 +46,7 @@ namespace Business_Back.Implements.Socket
             ApplicationDbContext db,
             IAppointmentNotifier notifier,
             IConfiguration configuration  ,
-            IUserData userData, INotificationBusiness notificationBusiness
+            IUserData userData, INotificationBusiness notificationBusiness, INotificationSender notificationSender
 
             )
         {
@@ -55,6 +57,7 @@ namespace Business_Back.Implements.Socket
             _configuration = configuration;
             _userData = userData;
             _notificationBusiness = notificationBusiness;
+            _notificationSender = notificationSender;
 
         }
             
@@ -149,7 +152,8 @@ namespace Business_Back.Implements.Socket
                     };
 
 
-                    await _notificationBusiness.Save(noti);
+                    var savedNotif = await _notificationBusiness.Save(noti);
+                    await _notificationSender.SendToUser(userId, savedNotif);
 
 
                     // (ES): Opcional: liberar hold (ya está BOOKED)
