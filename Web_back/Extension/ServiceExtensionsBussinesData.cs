@@ -50,6 +50,8 @@ using Entity_Back.Models.HospitalModel;
 using Microsoft.AspNetCore.SignalR;
 using Business_Back.Interface.IBusinessModel.Notification;
 using Business_Back.Interface.IBusinessModel;
+using Business_Back.Interface.Socket;
+using Web_back.Services;
 
 namespace Web_back.Extension
 {
@@ -215,6 +217,10 @@ namespace Web_back.Extension
 
             // Dashboard
             services.AddScoped<Business_Back.Interface.IBusinessModel.Dashboard.IDashboardBusiness, Business_Back.Implements.ModelBusinessImplements.Dashboard.DashboardBusiness>();
+
+
+            services.AddScoped<INotificationSender, SignalRNotificationSender>();
+
 
             return services;
         }

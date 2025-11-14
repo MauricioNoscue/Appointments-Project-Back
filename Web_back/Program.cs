@@ -105,19 +105,21 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<AppointmentHub>("/hubs/appointments");
+app.MapHub<NotificationHub>("/hubs/notifications");
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<Entity_Back.Context.ApplicationDbContext>();
 
-    try
-    {
-        dbContext.Database.Migrate();
-        Console.WriteLine("✅ Base de datos creada o actualizada correctamente.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ Error al inicializar la base de datos: {ex.Message}");
-    }
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<Entity_Back.Context.ApplicationDbContext>();
+
+//    try
+//    {
+//        dbContext.Database.Migrate();
+//        Console.WriteLine("✅ Base de datos creada o actualizada correctamente.");
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"❌ Error al inicializar la base de datos: {ex.Message}");
+//    }
+//}
 app.Run();
