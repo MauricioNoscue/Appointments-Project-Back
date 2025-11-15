@@ -3,6 +3,7 @@ using Entity_Back.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities_Back.Exceptions;
+using Utilities_Back.Helper;
 
 namespace Web_back.Controllers.ControllerModel
 {
@@ -196,6 +197,36 @@ namespace Web_back.Controllers.ControllerModel
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [Authorize]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            try
+            {
+                // Comentario: obtener el UID desde el token JWT
+                int userId = User.GetUserId();
+
+                // Comentario: llamar a la capa Business para obtener los datos
+                var result = await _service.GetAllUser(userId);
+
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Internal error in GetAllUser.");
+                return StatusCode(500, new { message = "Internal server error." });
+            }
+        }
+
 
 
     }

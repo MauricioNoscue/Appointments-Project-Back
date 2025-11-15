@@ -67,5 +67,9 @@ namespace Data_Back.Implements.BaseModelData
      Expression<Func<T, object>> fieldSelector,
      object? value);
 
+
+
+        public abstract Task<IEnumerable<T>> GetAllUser(int userId);
+
     }
 }

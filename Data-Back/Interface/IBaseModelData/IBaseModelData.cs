@@ -23,5 +23,11 @@ namespace Data_Back.Interface.IBaseModelData
         Task<bool> ExistsByAsync(
      Expression<Func<T, object>> fieldSelector,
      object? value);
+
+
+
+
+        Task<IEnumerable<T>> GetAllUser(int userId);
+
     }
 }

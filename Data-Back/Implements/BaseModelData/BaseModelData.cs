@@ -226,6 +226,23 @@ namespace Data_Back.Implements.BaseModelData
         }
 
 
+        public override async Task<IEnumerable<T>> GetAllUser(int userId)
+        {
+            try
+            {
+                var ltsModel = await _context.Set<T>()
+                .Where(e => !e.IsDeleted && EF.Property<int>(e, "UserId") == userId)
+                .ToListAsync();
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(T).Name} para el usuario con ID: {userId}");
+                throw;
+            }
+        }
+
+
 
     }
 }

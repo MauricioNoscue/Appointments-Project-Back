@@ -13,6 +13,9 @@ namespace Business_Back.Implements.BaseModelBusiness
         public abstract Task<bool> Delete(int id);
         public abstract Task<bool> DeleteLogical(int id);
         public abstract Task<IEnumerable<Dl>> GetAll();
+
+        public abstract  Task<IEnumerable<Dl>> GetAllUser(int userId);
+     
         public abstract Task<Dl?> GetById(int id);
         public abstract Task<Dl> Save(Dc Dto);
         public abstract Task<bool> Update(De dto);

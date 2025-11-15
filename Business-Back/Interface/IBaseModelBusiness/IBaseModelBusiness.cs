@@ -14,6 +14,9 @@ namespace Business_Back.Interface.BaseModelBusiness
         Task<bool> Update(De dto);
         Task<bool> Delete(int id);
         Task<bool> DeleteLogical(int id);
+        Task<IEnumerable<Dl>> GetAllUser(int userId);
+
+
 
 
     }
