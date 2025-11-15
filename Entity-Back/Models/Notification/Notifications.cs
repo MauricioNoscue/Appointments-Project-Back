@@ -18,7 +18,7 @@ namespace Entity_Back.Models.Notification
         public StatusNotification StateNotification { get; set; }
         public TypeNotification TypeNotification { get; set; }
         public Citation? citation { get; set; }
-        public User User { get; set; } = new User();
+        public User User { get; set; } 
         public string? RedirectUrl { get; set; }
 
     }
