@@ -189,7 +189,22 @@ namespace Business_Back.Implements.BaseModelBusiness
                 throw new ValidationException("Name", "El nombre ya está registrado.");
         }
 
+        public override async Task<IEnumerable<Dl>> GetAllUser(int userId)
+        {
+            try
+            {
+                // Comentario: obtener entidades desde la capa Data
+                var allEntities = await _data.GetAllUser(userId);
 
+                // Comentario: mapear a DTO usando Mapster
+                return allEntities.Adapt<IEnumerable<Dl>>();
+            }
+            catch (BusinessException ex)
+            {
+                _logger.LogError(ex, "Error al obtener los registros.");
+                throw new BusinessException("Ocurrió un error inesperado al consultar los datos.", ex);
+            }
+        }
 
     }
 }

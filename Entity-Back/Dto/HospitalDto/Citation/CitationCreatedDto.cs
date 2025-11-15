@@ -28,6 +28,9 @@ namespace Entity_Back
         [Required(ErrorMessage = "El estado es obligatorio")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "El estado debe tener entre 3 y 20 caracteres")]
         public string State { get; set; }
+
+        public int? ReltedPersonId { get; set; }
+
     }
 
 }

@@ -12,6 +12,7 @@ namespace Entity_Back
         public string State { get; set; }
         public string Note { get; set; }
         public int ScheduleHourId { get; set; }
+        public int? ReltedPersonId { get; set; }
 
         public  User User { get; set; }
        
