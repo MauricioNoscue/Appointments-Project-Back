@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class innitDada : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -203,6 +203,7 @@ namespace Entity_Back.Migrations
                     HealthRegime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EpsId = table.Column<int>(type: "int", nullable: false),
                     FailedAppointments = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -612,6 +613,7 @@ namespace Entity_Back.Migrations
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScheduleHourId = table.Column<int>(type: "int", nullable: false),
+                    ReltedPersonId = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -883,13 +885,13 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "Person",
-                columns: new[] { "Id", "Active", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FailedAppointments", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
+                columns: new[] { "Id", "Active", "Address", "DateBorn", "Document", "DocumentTypeId", "EpsId", "FailedAppointments", "FullLastName", "FullName", "Gender", "HealthRegime", "IsDeleted", "PhoneNumber", "RegistrationDate" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922813", 1, 1, 0, "Noscue", "Doctor ", "Femenino", "Contributivo", false, "3133156022", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, false, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922213", 1, 1, 0, "Cerqera", "Patricio ", "Femenino", "Contributivo", false, "3153156022", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, false, null, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "Mauricio", "Masculino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, false, null, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922863", 1, 1, 0, "Noscue", "María isabel", "Femenino", "Contributivo", false, "3133156032", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, false, null, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922813", 1, 1, 0, "Noscue", "Doctor ", "Femenino", "Contributivo", false, "3133156022", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, false, null, new DateTime(2006, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "1084922213", 1, 1, 0, "Cerqera", "Patricio ", "Femenino", "Contributivo", false, "3153156022", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -1021,10 +1023,10 @@ namespace Entity_Back.Migrations
                 columns: new[] { "Id", "Active", "CodePassword", "Email", "IsDeleted", "Password", "PasswordResetToken", "PasswordResetTokenExpiration", "PersonId", "RegistrationDate", "RestrictionPoint" },
                 values: new object[,]
                 {
-                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "M1d!Citas2025", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 2, false, "no hay", "andresmauricionoscue@gmail.com", false, "M2d!Citas2025", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 3, false, "no hay", "doctor@gmail.com", false, "M2d!Citas2025", null, null, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 4, false, "no hay", "User@gmail.com", false, "M2d!Citas2025", null, null, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
+                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 2, false, "no hay", "andresmauricionoscue@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 3, false, "no hay", "doctor@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { 4, false, "no hay", "User@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -1075,8 +1077,8 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "Citation",
-                columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ScheduleHourId", "State", "TimeBlock", "UserId" },
-                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 });
+                columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ReltedPersonId", "ScheduleHourId", "State", "TimeBlock", "UserId" },
+                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branch_InstitutionId",

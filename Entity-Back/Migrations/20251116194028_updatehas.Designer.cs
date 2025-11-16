@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251104143017_newAttributePerson")]
-    partial class newAttributePerson
+    [Migration("20251116194028_updatehas")]
+    partial class updatehas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace Entity_Back.Migrations
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("ReltedPersonId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ScheduleHourId")
                         .HasColumnType("int");
@@ -2948,7 +2951,7 @@ namespace Entity_Back.Migrations
                             CodePassword = "no hay",
                             Email = "mauronoscue@gmail.com",
                             IsDeleted = false,
-                            Password = "M1d!Citas2025",
+                            Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 1,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionPoint = 3
@@ -2960,7 +2963,7 @@ namespace Entity_Back.Migrations
                             CodePassword = "no hay",
                             Email = "andresmauricionoscue@gmail.com",
                             IsDeleted = false,
-                            Password = "M2d!Citas2025",
+                            Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 2,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionPoint = 3
@@ -2972,7 +2975,7 @@ namespace Entity_Back.Migrations
                             CodePassword = "no hay",
                             Email = "doctor@gmail.com",
                             IsDeleted = false,
-                            Password = "M2d!Citas2025",
+                            Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 3,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionPoint = 3
@@ -2984,7 +2987,7 @@ namespace Entity_Back.Migrations
                             CodePassword = "no hay",
                             Email = "User@gmail.com",
                             IsDeleted = false,
-                            Password = "M2d!Citas2025",
+                            Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 4,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionPoint = 3
