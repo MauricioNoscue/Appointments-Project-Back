@@ -64,12 +64,12 @@ pipeline {
                 script {
                     docker.image('mcr.microsoft.com/dotnet/sdk:9.0')
                         .inside('-v /var/run/docker.sock:/var/run/docker.sock -u root:root') {
-                            sh '''
-                                echo "🔧 Restaurando dependencias .NET..."
+                            sh """
+                                echo '🔧 Restaurando dependencias .NET...'
                                 dotnet restore ${PROJECT_PATH}
                                 dotnet build ${PROJECT_PATH} --configuration Release
                                 dotnet publish ${PROJECT_PATH} -c Release -o ./publish
-                            '''
+                            """
                         }
                 }
             }
@@ -81,26 +81,26 @@ pipeline {
         stage('Construir imagen Docker') {
             steps {
                 sh """
-                    echo "🐳 Construyendo imagen Docker para Appointments-Project-Back (${env.ENVIRONMENT})"
+                    echo '🐳 Construyendo imagen Docker para Appointments-Project-Back (${env.ENVIRONMENT})'
                     docker build -t appointments-api-${env.ENVIRONMENT}:latest -f Web_back/Dockerfile .
                 """
             }
         }
 
         // =======================================================
-        // 5️⃣ PREPARAR RED Y BASES DE DATOS (LOCAL)
+        // 5️⃣ PREPARAR RED Y BASE DE DATOS LOCAL
         // =======================================================
         stage('Preparar red y base de datos') {
             steps {
                 script {
                     sh """
-                        echo "🌐 Creando red externa compartida (si no existe)..."
+                        echo '🌐 Creando red externa compartida (si no existe)...'
                         docker network create appointments_network || true
 
-                        echo "🗄️ Levantando stack de bases de datos local..."
+                        echo '🗄️ Levantando stack de bases de datos local...'
                         docker compose -f ${env.DB_COMPOSE_FILE} up -d
 
-                        echo "⏳ Esperando que SQL Server inicie correctamente..."
+                        echo '⏳ Esperando que SQL Server inicie correctamente...'
                         sleep 25
                     """
                 }
@@ -108,19 +108,19 @@ pipeline {
         }
 
         // =======================================================
-        // 6️⃣ DESPLEGAR API EN LOCAL
+        // 6️⃣ DESPLEGAR API LOCAL
         // =======================================================
         stage('Desplegar citas API LOCAL') {
             steps {
                 sh """
-                    echo "🚀 Desplegando entorno local: ${env.ENVIRONMENT}"
+                    echo '🚀 Desplegando entorno local: ${env.ENVIRONMENT}'
                     docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
                 """
             }
         }
 
-       // =======================================================
-        // 7️⃣ 🔥 DEPLOY EN AWS (solo develop)
+        // =======================================================
+        // 7️⃣ DEPLOY EN AWS SOLO PARA DEVELOP
         // =======================================================
         stage('Desplegar API en AWS') {
             when {
@@ -128,8 +128,8 @@ pipeline {
             }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
-                        echo "🚀 Iniciando despliegue remoto en AWS..."
+                    sh """
+                        echo '🚀 Iniciando despliegue remoto en AWS...'
 
                         ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@44.222.98.145 "
                             set -e
@@ -141,12 +141,12 @@ pipeline {
                             git reset --hard
                             git pull
 
-                            echo '🐳 Reconstruyendo y levantando contenedores...'
-                            docker-compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
+                            echo '🐳 Reconstruyendo y levantando contenedores (Compose v2)...'
+                            docker compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
 
                             echo '✔️ Deploy completado en AWS!'
                         "
-                    '''
+                    """
                 }
             }
         }
