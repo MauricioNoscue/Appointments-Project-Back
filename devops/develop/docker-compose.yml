@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-  # 🌐 API principal - dev
   appointments-api-dev:
     container_name: appointments-api-dev
     build:
@@ -16,10 +15,7 @@ services:
       - appointments_network
     depends_on:
       - appointments-redis-dev
-    labels:
-      - com.appointments.environment=dev
 
-  # 🧠 Redis (para cache y SignalR)
   appointments-redis-dev:
     image: redis:7.2
     container_name: appointments-redis-dev

@@ -1,4 +1,4 @@
- pipeline {
+pipeline {
     agent any
 
     environment {
@@ -27,10 +27,8 @@
         stage('Detectar entorno') {
             steps {
                 script {
-                    // Detectar la rama actual de forma robusta
                     def branch = env.BRANCH_NAME ?: env.GIT_BRANCH?.replaceFirst(/^origin\//, '') ?: 'develop'
 
-                    // Asignar entorno según la rama
                     switch (branch) {
                         case 'main':    env.ENVIRONMENT = 'prod';     break
                         case 'staging': env.ENVIRONMENT = 'staging';  break
@@ -38,14 +36,10 @@
                         default:        env.ENVIRONMENT = 'develop';  break
                     }
 
-                    // Definir rutas
                     env.ENV_DIR = "devops/${env.ENVIRONMENT}"
                     env.COMPOSE_FILE = "${env.ENV_DIR}/docker-compose.yml"
                     env.ENV_FILE = "${env.ENV_DIR}/.env"
                     env.DB_COMPOSE_FILE = "appointments-db/docker-compose.yml"
-
-
-
 
                     echo """
                     ✅ Rama detectada: ${branch}
@@ -94,7 +88,7 @@
         }
 
         // =======================================================
-        // 5️⃣ PREPARAR RED Y BASES DE DATOS
+        // 5️⃣ PREPARAR RED Y BASES DE DATOS (LOCAL)
         // =======================================================
         stage('Preparar red y base de datos') {
             steps {
@@ -103,7 +97,7 @@
                         echo "🌐 Creando red externa compartida (si no existe)..."
                         docker network create appointments_network || true
 
-                        echo "🗄️ Levantando stack de bases de datos..."
+                        echo "🗄️ Levantando stack de bases de datos local..."
                         docker compose -f ${env.DB_COMPOSE_FILE} up -d
 
                         echo "⏳ Esperando que SQL Server inicie correctamente..."
@@ -114,21 +108,50 @@
         }
 
         // =======================================================
-        // 6️⃣ DESPLEGAR API CON DOCKER COMPOSE
+        // 6️⃣ DESPLEGAR API EN LOCAL
         // =======================================================
-        stage('Desplegar citas API') {
+        stage('Desplegar citas API LOCAL') {
             steps {
                 sh """
-                    echo "🚀 Desplegando entorno: ${env.ENVIRONMENT}"
+                    echo "🚀 Desplegando entorno local: ${env.ENVIRONMENT}"
                     docker compose -f ${env.COMPOSE_FILE} --env-file ${env.ENV_FILE} up -d --build
                 """
             }
         }
+
+        // =======================================================
+        // 7️⃣ 🔥 DEPLOY EN AWS (solo develop)
+        // =======================================================
+        stage('Desplegar API en AWS') {
+            when {
+                expression { env.ENVIRONMENT == 'develop' }
+            }
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        echo "🚀 Iniciando despliegue remoto en AWS..."
+
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@44.222.98.145 "
+                            set -e
+
+                            echo '📁 Navegando al proyecto...'
+                            cd /home/ubuntu/appointments-back || exit 1
+
+                            echo '📦 Actualizando código...'
+                            git reset --hard
+                            git pull
+
+                            echo '🐳 Reconstruyendo y levantando contenedores...'
+                            docker compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
+
+                            echo '✔️ Deploy completado en AWS!'
+                        "
+                    '''
+                }
+            }
+        }
     }
 
-    // =======================================================
-    // 🔚 POST - RESULTADOS
-    // =======================================================
     post {
         success {
             echo "🎉 Despliegue completado correctamente para ${env.ENVIRONMENT}"

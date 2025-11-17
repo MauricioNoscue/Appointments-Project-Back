@@ -27,7 +27,7 @@ builder.Configuration
 // Configuraci�n de base de datos
 builder.Services.AddDatabaseConfiguration(configuration);
 
-
+    
 //Cors
 builder.Services.AddCorsConfiguration(configuration);
 // AutoMapper
