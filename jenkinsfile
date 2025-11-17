@@ -119,7 +119,7 @@ pipeline {
             }
         }
 
-        // =======================================================
+       // =======================================================
         // 7️⃣ 🔥 DEPLOY EN AWS (solo develop)
         // =======================================================
         stage('Desplegar API en AWS') {
@@ -142,7 +142,7 @@ pipeline {
                             git pull
 
                             echo '🐳 Reconstruyendo y levantando contenedores...'
-                            docker compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
+                            docker-compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
 
                             echo '✔️ Deploy completado en AWS!'
                         "
