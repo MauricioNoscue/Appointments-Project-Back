@@ -26,6 +26,6 @@ namespace Business_Back.Interface.Socket
         /// Confirms the booking for a locked slot.
         /// </summary>
         /// <remarks>(ES): Valida ownership, inserta la Citation transaccionalmente y emite evento.</remarks>
-        Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, CancellationToken ct);
+        Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, int? relatedPersonId, CancellationToken ct);
     }
 }

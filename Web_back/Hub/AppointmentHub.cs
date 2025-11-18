@@ -42,16 +42,19 @@ namespace Web_back.Hub
             return await _app.TryUnlockAsync(req, userId, CancellationToken.None);
         }
 
-        public async Task<object> ConfirmSlot(SlotKey slot)
+        public async Task<object> ConfirmSlot(SlotKey slot, int? relatedPersonId)
         {
             var userIdStr = Context.UserIdentifier;
             if (string.IsNullOrEmpty(userIdStr))
                 throw new HubException("No user id in token");
 
             var userId = int.Parse(userIdStr);
-            var (ok, id, reason) = await _app.ConfirmAsync(slot, userId, CancellationToken.None);
+
+            var (ok, id, reason) = await _app.ConfirmAsync(slot, userId, relatedPersonId, CancellationToken.None);
+
             return new { success = ok, citationId = id, reason };
         }
+
 
         private static string GroupName(int scheduleHourId, DateTime date)
             => $"schedule:{scheduleHourId}:{date:yyyyMMdd}";

@@ -97,7 +97,7 @@ namespace Business_Back.Implements.Socket
         }
 
         /// <inheritdoc />
-        public async Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, CancellationToken ct)
+        public async Task<(bool success, int? citationId, string? reason)> ConfirmAsync(SlotKey slot, int userId, int? relatedPersonId, CancellationToken ct)
         {
             // (ES): Garantiza que el lock aún pertenece al usuario
             (bool owned, DateTime? _, string? owner) = await _locks.CheckAsync(slot, userId.ToString(), ct);
@@ -120,7 +120,8 @@ namespace Business_Back.Implements.Socket
                         Note = string.Empty,
                         ScheduleHourId = slot.ScheduleHourId,
                         IsDeleted = false,
-                        RegistrationDate = DateTime.UtcNow
+                        RegistrationDate = DateTime.UtcNow,
+                        ReltedPersonId = relatedPersonId
                     };
 
                     var user = await _userData.GetById(userId);
