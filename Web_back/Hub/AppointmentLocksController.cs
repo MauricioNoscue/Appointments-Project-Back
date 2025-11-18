@@ -39,13 +39,13 @@ namespace Web_back.Hub
             return await _app.TryUnlockAsync(req, userId, ct);
         }
 
-        [HttpPost("confirm")]
-        public async Task<ActionResult> Confirm([FromBody] SlotKey slot, CancellationToken ct)
-        {
-            var userId = int.Parse(GetUserId());
-            var (ok, id, reason) = await _app.ConfirmAsync(slot, userId, ct);
-            if (!ok) return Conflict(new { message = reason });
-            return Ok(new { citationId = id });
-        }
+        //[HttpPost("confirm")]
+        //public async Task<ActionResult> Confirm([FromBody] SlotKey slot, CancellationToken ct)
+        //{
+        //    var userId = int.Parse(GetUserId());
+        //    var (ok, id, reason) = await _app.ConfirmAsync(slot, userId, ct);
+        //    if (!ok) return Conflict(new { message = reason });
+        //    return Ok(new { citationId = id });
+        //}
     }
 }
