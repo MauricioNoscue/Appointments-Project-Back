@@ -84,5 +84,23 @@ namespace Data_Back.Implements.ModelDataImplement.Notification1
                 throw;
             }
         }
+
+        public override async Task<IEnumerable<Notifications>> GetAllUser(int userId)
+        {
+            try
+            {
+                var ltsModel = await _context.Set<Notifications>()
+                    .Include(n => n.citation)
+                    .Where(n => n.UserId == userId)
+                    //.Where(n => !n.IsDeleted)
+                    .ToListAsync();
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(Notifications).Name} para el usuario con ID: {userId}");
+                throw;
+            }
+        }
     }
 }

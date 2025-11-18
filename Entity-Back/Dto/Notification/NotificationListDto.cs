@@ -15,7 +15,12 @@ namespace Entity_Back.Dto.Notification
         public string Message { get; set; }
         public StatusNotification StateNotification { get; set; }
         public TypeNotification TypeNotification { get; set; }
-        public Citation citation { get; set; }
+        //public Citation citation { get; set; }
+        public TimeSpan? TimeBlock { get; set; }
+        public string State { get; set; }
+        public DateTime AppointmentDate { get; set; }
+        public int? ReltedPersonId { get; set; }
+
         public string? RedirectUrl { get; set; }
         public int UserId { get; set; }
 
