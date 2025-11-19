@@ -119,37 +119,37 @@ pipeline {
             }
         }
 
-        // =======================================================
-        // 7️⃣ DEPLOY EN AWS SOLO PARA DEVELOP
-        // =======================================================
-            // stage('Desplegar API en AWS') {
-            //     when {
-            //         expression { env.ENVIRONMENT == 'develop' }
-            //     }
-            //     steps {
-            //         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'SSH_KEY')]) {
-            //             sh """
-            //                 echo '🚀 Iniciando despliegue remoto en AWS...'
+        =======================================================
+        7️⃣ DEPLOY EN AWS SOLO PARA DEVELOP
+        =======================================================
+            stage('Desplegar API en AWS') {
+                when {
+                    expression { env.ENVIRONMENT == 'develop' }
+                }
+                steps {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'SSH_KEY')]) {
+                        sh """
+                            echo '🚀 Iniciando despliegue remoto en AWS...'
 
-            //                 ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@44.222.98.145 "
-            //                     set -e
+                            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@44.222.98.145 "
+                                set -e
 
-            //                     echo '📁 Navegando al proyecto...'
-            //                     cd /home/ubuntu/appointments-back || exit 1
+                                echo '📁 Navegando al proyecto...'
+                                cd /home/ubuntu/appointments-back || exit 1
 
-            //                     echo '📦 Actualizando código...'
-            //                     git reset --hard
-            //                     git pull
+                                echo '📦 Actualizando código...'
+                                git reset --hard
+                                git pull
 
-            //                     echo '🐳 Reconstruyendo y levantando contenedores (Compose v2)...'
-            //                     docker compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
+                                echo '🐳 Reconstruyendo y levantando contenedores (Compose v2)...'
+                                docker compose -f devops/develop/docker-compose.yml --env-file devops/develop/.env up -d --build --force-recreate --remove-orphans
 
-            //                     echo '✔️ Deploy completado en AWS!'
-            //                 "
-            //             """
-            //         }
-            //     }
-            // }
+                                echo '✔️ Deploy completado en AWS!'
+                            "
+                        """
+                    }
+                }
+            }
     }
 
     post {

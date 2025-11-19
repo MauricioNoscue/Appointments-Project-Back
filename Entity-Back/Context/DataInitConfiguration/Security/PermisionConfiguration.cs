@@ -22,7 +22,7 @@ namespace Entity_Back.Context.DataInitConfiguration.Security
                 {
                     Id = 1,
                     Name = "View",
-                    Description = "Permite ver un registro",
+                    Description = "Permite ver un registro normal",
                     RegistrationDate = new DateTime(2024, 7, 16)
                 },
                 new Permission
