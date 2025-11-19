@@ -119,9 +119,9 @@ pipeline {
             }
         }
 
-        =======================================================
-        7️⃣ DEPLOY EN AWS SOLO PARA DEVELOP
-        =======================================================
+        // =======================================================
+        // 7️⃣ DEPLOY EN AWS SOLO PARA DEVELOP
+        // =======================================================
             stage('Desplegar API en AWS') {
                 when {
                     expression { env.ENVIRONMENT == 'develop' }
