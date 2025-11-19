@@ -131,7 +131,7 @@ pipeline {
                         sh """
                             echo '🚀 Iniciando despliegue remoto en AWS...'
 
-                            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@44.222.98.145 "
+                            ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" ubuntu@34.204.206.35 "
                                 set -e
 
                                 echo '📁 Navegando al proyecto...'
