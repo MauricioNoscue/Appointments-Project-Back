@@ -16,6 +16,8 @@ namespace Entity_Back
         public string? Note { get; set; } = string.Empty;
 
         public int? ReltedPersonId { get; set; }
+        public int UserId { get; set; }
+
 
     }
 

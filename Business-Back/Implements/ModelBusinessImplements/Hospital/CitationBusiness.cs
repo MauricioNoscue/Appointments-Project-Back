@@ -1,6 +1,9 @@
 using Business_Back.Implements.BaseModelBusiness;
 using Data_Back;
 using Entity_Back;
+using Entity_Back.Dto.Notification;
+using Entity_Back.Enum;
+using Entity_Back.Models.SecurityModels;
 using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -36,16 +39,35 @@ namespace Business_Back
 
         public override async Task<bool> Update(CitationEditDto dto)
         {
-            if (dto == null) throw new ValidationException(nameof(dto), "Datos inválidos");
+            try
+            {
+                if (dto == null) throw new ValidationException(nameof(dto), "Datos inválidos");
 
-            var entity = await _data.GetById(dto.Id);
-            if (entity is null) throw new EntityNotFoundException($"Citation {dto.Id} no existe");
+                var entity = await _data.GetById(dto.Id);
+                if (entity is null) throw new EntityNotFoundException($"Citation {dto.Id} no existe");
 
-            // Merge solo de los campos presentes (gracias a IgnoreNullValues)
-            dto.Adapt(entity);
+                // Merge solo de los campos presentes (gracias a IgnoreNullValues)
+                var dtoresponse = dto.Adapt(entity);
 
-            // Ahora entity mantiene ScheduleHourId/UserId/AppointmentDate/TimeBlock, etc.
-            return await _data.Update(entity);
+                // Ahora entity mantiene ScheduleHourId/UserId/AppointmentDate/TimeBlock, etc.
+                 await _data.Update(entity);
+
+                NotificationCreateDto noti = new NotificationCreateDto
+                {
+                    Title = "Tienes una cita agendada",
+                    UserId = dto.UserId,
+                    Message = "Tienes una cita agendada",
+                    StateNotification = StatusNotification.Sent,
+                    TypeNotification = TypeNotification.Info
+                };
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error actualizando lass cita");
+            }
         }
     }
 
