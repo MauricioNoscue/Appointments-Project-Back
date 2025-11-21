@@ -15,7 +15,7 @@ namespace Business_Back.Services.Citation
         private readonly IScheduleHourBusiness _scheduleHourBusiness;
         private readonly ISheduleBusiness _sheduleBusiness;
         private readonly ICitationsBusiness _citationBusiness;
-        public CitationCoreService(IScheduleHourBusiness scheduleHourBusiness, ISheduleBusiness sheduleBusiness,ICitationsBusiness citationBusiness)
+        public CitationCoreService(IScheduleHourBusiness scheduleHourBusiness, ISheduleBusiness sheduleBusiness, ICitationsBusiness citationBusiness)
         {
             _scheduleHourBusiness = scheduleHourBusiness;
             _sheduleBusiness = sheduleBusiness;
@@ -50,6 +50,8 @@ namespace Business_Back.Services.Citation
 
                 // Paso 6: Filtrar/etiquetar los bloques según el parámetro
                 var resultado = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados, incluirOcupados);
+
+                resultado = FiltrarBloquesPorFechaActual(resultado, fecha);
 
                 return resultado;
             }
@@ -103,7 +105,7 @@ namespace Business_Back.Services.Citation
             return bloques;
         }
 
-        public List<TimeBlockEstado> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques,List<TimeSpan> bloquesOcupados, bool incluirOcupados = false)
+        public List<TimeBlockEstado> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques, List<TimeSpan> bloquesOcupados, bool incluirOcupados = false)
         {
 
             if (!incluirOcupados)
@@ -123,6 +125,38 @@ namespace Business_Back.Services.Citation
                     EstaDisponible = !bloquesOcupados.Contains(b)
                 }).ToList();
         }
+
+        /// <summary>
+        /// Filtra los bloques horarios tomando en cuenta la hora actual
+        /// solo si la fecha consultada es hoy.
+        /// </summary>
+        /// <param name="bloques">Lista de bloques ya filtrados/preparados.</param>
+        /// <param name="fecha">Fecha de la cita solicitada.</param>
+        /// <returns>Bloques filtrados según si la fecha es hoy.</returns>
+        public List<TimeBlockEstado> FiltrarBloquesPorFechaActual(
+            List<TimeBlockEstado> bloques,
+            DateTime fecha)
+        {
+            try
+            {
+                // Si NO es hoy, retorna todos los bloques
+                if (fecha.Date != DateTime.Now.Date)
+                    return bloques;
+
+                // Hora actual (solo hora-minutos)
+                var horaActual = DateTime.Now.TimeOfDay;
+
+                // Filtrar solo bloques >= hora actual
+                return bloques
+                    .Where(b => b.Hora >= horaActual)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al filtrar bloques por fecha actual: {ex.Message}", ex);
+            }
+        }
+
 
     }
 }

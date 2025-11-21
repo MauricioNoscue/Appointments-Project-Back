@@ -51,5 +51,10 @@ namespace Business_Back.Interface.IBusinessModel
             List<TimeSpan> bloquesOcupados,
             bool incluirOcupados = false
         );
+
+
+        List<TimeBlockEstado> FiltrarBloquesPorFechaActual(
+   List<TimeBlockEstado> bloques,
+   DateTime fecha);
     }
 }
