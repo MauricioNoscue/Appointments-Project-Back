@@ -52,6 +52,14 @@ using Business_Back.Interface.IBusinessModel.Notification;
 using Business_Back.Interface.IBusinessModel;
 using Business_Back.Interface.Socket;
 using Web_back.Services;
+using Business_Back.Interface.IBusinessModel.Request;
+using Data_Back.Interface.IDataModels.Request;
+using Data_Back.Implements.ModelDataImplement.Request;
+using Business_Back.Implements.ModelBusinessImplements.Request;
+using Business_Back.Interface.IBusinessModel.Status;
+using Business_Back.Implements.ModelBusinessImplements.Status;
+using Data_Back.Interface.IDataModels.Status;
+using Data_Back.Implements.ModelDataImplement.Status;
 
 namespace Web_back.Extension
 {
@@ -220,6 +228,13 @@ namespace Web_back.Extension
 
 
             services.AddScoped<INotificationSender, SignalRNotificationSender>();
+
+
+            services.AddScoped<IModificationRequestBusiness, ModificationRequestBusiness>();
+            services.AddScoped<IModificationRequestData, ModificationRequestData>();
+
+            services.AddScoped<IStatusTypeBusiness, StatusBusiness>();
+            services.AddScoped<IStatusTypesData, StatusTypesData>();
 
 
             return services;

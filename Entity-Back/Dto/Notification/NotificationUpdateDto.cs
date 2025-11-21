@@ -19,10 +19,11 @@ namespace Entity_Back.Dto.Notification
         [Required, StringLength(2000)]
         public string Message { get; set; }
         [Required]
-        public StatusNotification StateNotification { get; set; }
-        [Required]
+        public int StatustypesId { get; set; }
 
+        [Required]
         public TypeNotification TypeNotification { get; set; }
+
         public string? RedirectUrl { get; set; }
     }
 }

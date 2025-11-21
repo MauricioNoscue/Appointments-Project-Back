@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251119183918_aws-inital")]
-    partial class awsinital
+    [Migration("20251121021002_add-entity-rquest-status-entity")]
+    partial class addentityrqueststatusentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,9 +52,8 @@ namespace Entity_Back.Migrations
                     b.Property<int>("ScheduleHourId")
                         .HasColumnType("int");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatustypesId")
+                        .HasColumnType("int");
 
                     b.Property<TimeSpan?>("TimeBlock")
                         .HasColumnType("time");
@@ -65,6 +64,8 @@ namespace Entity_Back.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ScheduleHourId");
+
+                    b.HasIndex("StatustypesId");
 
                     b.HasIndex("UserId");
 
@@ -79,7 +80,7 @@ namespace Entity_Back.Migrations
                             Note = "string",
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ScheduleHourId = 1,
-                            State = "Agendada",
+                            StatustypesId = 1,
                             TimeBlock = new TimeSpan(0, 8, 45, 0, 0),
                             UserId = 1
                         });
@@ -1249,7 +1250,7 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StateNotification")
+                    b.Property<int>("StatustypesId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -1266,6 +1267,8 @@ namespace Entity_Back.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatustypesId");
 
                     b.HasIndex("UserId");
 
@@ -1312,6 +1315,52 @@ namespace Entity_Back.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshToken");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.Request.ModificationRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StatustypesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeRequest")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatustypesId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ModificationRequest");
                 });
 
             modelBuilder.Entity("Entity_Back.Models.Security.Rol", b =>
@@ -2932,6 +2981,9 @@ namespace Entity_Back.Migrations
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Rescheduling")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("RestrictionPoint")
                         .HasColumnType("int");
 
@@ -2954,6 +3006,7 @@ namespace Entity_Back.Migrations
                             Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 1,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rescheduling = false,
                             RestrictionPoint = 3
                         },
                         new
@@ -2966,6 +3019,7 @@ namespace Entity_Back.Migrations
                             Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 2,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rescheduling = false,
                             RestrictionPoint = 3
                         },
                         new
@@ -2978,6 +3032,7 @@ namespace Entity_Back.Migrations
                             Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 3,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rescheduling = false,
                             RestrictionPoint = 3
                         },
                         new
@@ -2990,7 +3045,120 @@ namespace Entity_Back.Migrations
                             Password = "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG",
                             PersonId = 4,
                             RegistrationDate = new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rescheduling = false,
                             RestrictionPoint = 3
+                        });
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.Status.StatusTypes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatusTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryStatus = 2,
+                            Description = "Scheduled citation",
+                            IsDeleted = false,
+                            Name = "Programada",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryStatus = 2,
+                            Description = "Canceled citation",
+                            IsDeleted = false,
+                            Name = "Cancelada",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryStatus = 2,
+                            Description = "Missed citation",
+                            IsDeleted = false,
+                            Name = "No Asistida",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryStatus = 2,
+                            Description = "completed citation",
+                            IsDeleted = false,
+                            Name = "Atendida",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryStatus = 0,
+                            Description = "Notification sent",
+                            IsDeleted = false,
+                            Name = "Enviada",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryStatus = 0,
+                            Description = "Notification read",
+                            IsDeleted = false,
+                            Name = "Leída",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryStatus = 1,
+                            Description = "Request pending",
+                            IsDeleted = false,
+                            Name = "Pendiente",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryStatus = 1,
+                            Description = "Request approved",
+                            IsDeleted = false,
+                            Name = "Aprobada",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryStatus = 1,
+                            Description = "Request canceled",
+                            IsDeleted = false,
+                            Name = "Cancelada",
+                            RegistrationDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -3176,6 +3344,12 @@ namespace Entity_Back.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entity_Back.Models.Status.StatusTypes", "Statustypes")
+                        .WithMany("Citation")
+                        .HasForeignKey("StatustypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entity_Back.Models.SecurityModels.User", "User")
                         .WithMany("Citation")
                         .HasForeignKey("UserId")
@@ -3183,6 +3357,8 @@ namespace Entity_Back.Migrations
                         .IsRequired();
 
                     b.Navigation("ScheduleHour");
+
+                    b.Navigation("Statustypes");
 
                     b.Navigation("User");
                 });
@@ -3271,6 +3447,12 @@ namespace Entity_Back.Migrations
 
             modelBuilder.Entity("Entity_Back.Models.Notification.Notifications", b =>
                 {
+                    b.HasOne("Entity_Back.Models.Status.StatusTypes", "Statustypes")
+                        .WithMany("Notifications")
+                        .HasForeignKey("StatustypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entity_Back.Models.SecurityModels.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
@@ -3280,6 +3462,8 @@ namespace Entity_Back.Migrations
                     b.HasOne("Entity_Back.Citation", "citation")
                         .WithMany()
                         .HasForeignKey("citationId");
+
+                    b.Navigation("Statustypes");
 
                     b.Navigation("User");
 
@@ -3293,6 +3477,25 @@ namespace Entity_Back.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.Request.ModificationRequest", b =>
+                {
+                    b.HasOne("Entity_Back.Models.Status.StatusTypes", "Statustypes")
+                        .WithMany("ModificationRequests")
+                        .HasForeignKey("StatustypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity_Back.Models.SecurityModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Statustypes");
 
                     b.Navigation("User");
                 });
@@ -3500,6 +3703,15 @@ namespace Entity_Back.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("RolUser");
+                });
+
+            modelBuilder.Entity("Entity_Back.Models.Status.StatusTypes", b =>
+                {
+                    b.Navigation("Citation");
+
+                    b.Navigation("ModificationRequests");
+
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("Entity_Back.ScheduleHour", b =>

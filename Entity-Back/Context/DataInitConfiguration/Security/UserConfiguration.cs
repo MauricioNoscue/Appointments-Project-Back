@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Entity_Back.Context.DataInitConfiguration.Security
 {
     // rama mauro
-    internal class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         // rama mauro 
         public void Configure(EntityTypeBuilder<User> builder)

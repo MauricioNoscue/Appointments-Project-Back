@@ -25,9 +25,7 @@ namespace Entity_Back
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un horario v�lido")]
         public int ScheduleHourId { get; set; }
 
-        [Required(ErrorMessage = "El estado es obligatorio")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "El estado debe tener entre 3 y 20 caracteres")]
-        public string State { get; set; }
+        public int StatustypesId { get; set; }
 
         public int? ReltedPersonId { get; set; }
 

@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Entity_Back.Enum
 {
-    public enum StatusNotification
+    public enum TypeRequest
     {
-        Pending = 1,
-        Sent = 2,  
-        Failed = 3, 
-        Read = 4 
+        // Desbloqueo de cuenta
+        AccountUnlock,
 
+        // Falta (ausencia)
+        Absence,
+
+        // Otro
+        Other
     }
 }

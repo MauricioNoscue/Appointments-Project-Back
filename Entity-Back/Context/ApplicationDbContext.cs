@@ -9,8 +9,10 @@ using Entity_Back.Models;
 using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
+using Entity_Back.Models.Request;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
+using Entity_Back.Models.Status;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Module = Entity_Back.Models.SecurityModels.Module;
@@ -139,7 +141,7 @@ namespace Entity_Back.Context
 
 
 
-
-
+        public DbSet<StatusTypes> StatusTypes { get; set; }
+        public DbSet<ModificationRequest> ModificationRequest{ get; set;}
     }
 }

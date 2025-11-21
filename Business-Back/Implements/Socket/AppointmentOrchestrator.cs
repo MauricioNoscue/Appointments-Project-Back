@@ -116,7 +116,7 @@ namespace Business_Back.Implements.Socket
                         UserId = userId,
                         AppointmentDate = slot.Date,
                         TimeBlock = slot.TimeBlock,
-                        State = "Programada",
+                        StatustypesId = 1,
                         Note = string.Empty,
                         ScheduleHourId = slot.ScheduleHourId,
                         IsDeleted = false,
@@ -148,7 +148,6 @@ namespace Business_Back.Implements.Socket
                         Title= "Tienes una cita agendada",
                         UserId = userId,
                         Message = "Tienes una cita agendada",
-                        StateNotification = StatusNotification.Sent,
                         TypeNotification = TypeNotification.Info
                     };
 
