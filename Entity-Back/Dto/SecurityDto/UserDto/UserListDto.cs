@@ -18,6 +18,8 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
         public bool? Active { get; set; } = false;
         public string? CodePassword { get; set; }
         public int? RestrictionPoint { get; set; }
+        public bool Rescheduling { get; set; } = false;
+
 
     }
 }

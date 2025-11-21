@@ -26,6 +26,8 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
         [Required(ErrorMessage = "La persona asociada es obligatoria")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una persona válida")]
         public int PersonId { get; set; }
+        public bool Rescheduling { get; set; } = false;
+
     }
 
 }

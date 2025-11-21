@@ -12,6 +12,7 @@ using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
 using Entity_Back.Dto.Notification;
 using Entity_Back.Dto.RequestDto;
+using Entity_Back.Dto.ReviewDto.DoctorReviewDto;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
@@ -26,6 +27,7 @@ using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
 using Entity_Back.Models.Request;
+using Entity_Back.Models.Review;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Entity_Back.Models.Status;
@@ -296,11 +298,27 @@ namespace Utilities_Back.Mapster
 
 
             TypeAdapterConfig<ModificationRequest, ModificationRequestListDto>.NewConfig()
-    .Map(dest => dest.StatusTypeName, src => src.Statustypes.Name);
+            .Map(dest => dest.StatusTypeName, src => src.Statustypes.Name);
 
             TypeAdapterConfig<ModificationRequestCreateDto, ModificationRequest>.NewConfig();
 
             TypeAdapterConfig<ModificationRequestEditDto, ModificationRequest>.NewConfig();
+
+
+
+
+            // Entity → ListDto
+            TypeAdapterConfig<DoctorReview, DoctorReviewListDto>
+                .NewConfig()
+                .Map(dest => dest.DoctorName, src => src.Doctor.Person.FullName)
+                .Map(dest => dest.UserName, src => src.User.Person.FullName);
+
+            // CreateDto → Entity
+            TypeAdapterConfig<DoctorReviewCreateDto, DoctorReview>.NewConfig();
+
+            // EditDto → Entity
+            TypeAdapterConfig<DoctorReviewEditDto, DoctorReview>.NewConfig();
+
 
 
         }
