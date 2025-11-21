@@ -19,6 +19,7 @@ namespace Entity_Back.Models.SecurityModels
         public string? CodePassword { get; set; }
         public int? RestrictionPoint { get; set; }
         public string? PasswordResetToken { get; set; }
+        public bool Rescheduling { get; set; } = false;
 
         public DateTime? PasswordResetTokenExpiration { get; set; }
         public Person Person { get; set; }

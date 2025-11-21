@@ -5,7 +5,8 @@ namespace Entity_Back
     public class CitationListDto : BaseModel
     {
         public int UserId { get; set; }
-        public string State { get; set; } = string.Empty;
+        public int StatustypesId { get; set; }
+        public string StatustypesName { get; set; }
         public string Note { get; set; } = string.Empty;
         public DateTime AppointmentDate { get; set; }
         public TimeSpan? TimeBlock { get; set; }

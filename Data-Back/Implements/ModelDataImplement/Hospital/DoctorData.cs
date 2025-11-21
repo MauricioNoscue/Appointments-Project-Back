@@ -104,7 +104,7 @@ namespace Data_Back.Implements
                     .Select(c => new CitationListDto
                     {
                         Id = c.Id,
-                        State = c.State,
+                        StatustypesId = c.StatustypesId,
                         Note = c.Note,
                         AppointmentDate = c.AppointmentDate,
                         TimeBlock = c.TimeBlock,

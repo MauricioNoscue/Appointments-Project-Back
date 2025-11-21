@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class innitDada : Migration
+    public partial class addentityrqueststatusentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -141,6 +141,23 @@ namespace Entity_Back.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Specialty", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StatusTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryStatus = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatusTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -364,6 +381,7 @@ namespace Entity_Back.Migrations
                     CodePassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RestrictionPoint = table.Column<int>(type: "int", nullable: true),
                     PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rescheduling = table.Column<bool>(type: "bit", nullable: false),
                     PasswordResetTokenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -441,6 +459,40 @@ namespace Entity_Back.Migrations
                         column: x => x.InstitutionId,
                         principalSchema: "ModelInfrastructure",
                         principalTable: "Institution",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ModificationRequest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeRequest = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StatustypesId = table.Column<int>(type: "int", nullable: false),
+                    Observation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModificationRequest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModificationRequest_StatusTypes_StatustypesId",
+                        column: x => x.StatustypesId,
+                        principalTable: "StatusTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ModificationRequest_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -610,10 +662,10 @@ namespace Entity_Back.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TimeBlock = table.Column<TimeSpan>(type: "time", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScheduleHourId = table.Column<int>(type: "int", nullable: false),
                     ReltedPersonId = table.Column<int>(type: "int", nullable: true),
+                    StatustypesId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -625,6 +677,12 @@ namespace Entity_Back.Migrations
                         column: x => x.ScheduleHourId,
                         principalSchema: "Medical",
                         principalTable: "ScheduleHour",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Citation_StatusTypes_StatustypesId",
+                        column: x => x.StatustypesId,
+                        principalTable: "StatusTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -645,7 +703,7 @@ namespace Entity_Back.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StateNotification = table.Column<int>(type: "int", nullable: false),
+                    StatustypesId = table.Column<int>(type: "int", nullable: false),
                     TypeNotification = table.Column<int>(type: "int", nullable: false),
                     citationId = table.Column<int>(type: "int", nullable: true),
                     RedirectUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -661,6 +719,12 @@ namespace Entity_Back.Migrations
                         principalSchema: "Medical",
                         principalTable: "Citation",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Notification_StatusTypes_StatustypesId",
+                        column: x => x.StatustypesId,
+                        principalTable: "StatusTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Notification_User_UserId",
                         column: x => x.UserId,
@@ -746,7 +810,7 @@ namespace Entity_Back.Migrations
                 columns: new[] { "Id", "Description", "IsDeleted", "Name", "RegistrationDate" },
                 values: new object[,]
                 {
-                    { 1, "Permite ver un registro", false, "View", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 1, "Permite ver un registro normal", false, "View", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 2, "Permite ver todos los registros (solo Admin)", false, "ViewAll", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 3, "Permite crear registros", false, "Create", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 4, "Permite editar registros", false, "Edit", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
@@ -791,6 +855,22 @@ namespace Entity_Back.Migrations
                     { 18, "Especialidad en imágenes médicas", false, "Radiología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 19, "Especialidad en anestesia", false, "Anestesiología", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 20, "Atención médica familiar integral", false, "Medicina Familiar", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StatusTypes",
+                columns: new[] { "Id", "CategoryStatus", "Description", "IsDeleted", "Name", "RegistrationDate" },
+                values: new object[,]
+                {
+                    { 1, 2, "Scheduled citation", false, "Programada", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 2, "Canceled citation", false, "Cancelada", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 2, "Missed citation", false, "No Asistida", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 2, "completed citation", false, "Atendida", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, 0, "Notification sent", false, "Enviada", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, 0, "Notification read", false, "Leída", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, 1, "Request pending", false, "Pendiente", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 8, 1, "Request approved", false, "Aprobada", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 9, 1, "Request canceled", false, "Cancelada", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -1020,13 +1100,13 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "User",
-                columns: new[] { "Id", "Active", "CodePassword", "Email", "IsDeleted", "Password", "PasswordResetToken", "PasswordResetTokenExpiration", "PersonId", "RegistrationDate", "RestrictionPoint" },
+                columns: new[] { "Id", "Active", "CodePassword", "Email", "IsDeleted", "Password", "PasswordResetToken", "PasswordResetTokenExpiration", "PersonId", "RegistrationDate", "Rescheduling", "RestrictionPoint" },
                 values: new object[,]
                 {
-                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 2, false, "no hay", "andresmauricionoscue@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 3, false, "no hay", "doctor@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { 4, false, "no hay", "User@gmail.com", false, "$2a$12$E2fN/upRzKvtoyhzn66Ro.LqzQWIUNNXI1EDrjaMC0O.9XpJFp756", null, null, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 }
+                    { 1, false, "no hay", "mauronoscue@gmail.com", false, "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG", null, null, 1, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 3 },
+                    { 2, false, "no hay", "andresmauricionoscue@gmail.com", false, "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG", null, null, 2, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 3 },
+                    { 3, false, "no hay", "doctor@gmail.com", false, "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG", null, null, 3, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 3 },
+                    { 4, false, "no hay", "User@gmail.com", false, "$2a$12$W.YmEOuHGqnmvgh3OsrDveXloBt4awWOGca7sK76gM0H2BuDeyRGG", null, null, 4, new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -1077,8 +1157,8 @@ namespace Entity_Back.Migrations
             migrationBuilder.InsertData(
                 schema: "Medical",
                 table: "Citation",
-                columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ReltedPersonId", "ScheduleHourId", "State", "TimeBlock", "UserId" },
-                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Agendada", new TimeSpan(0, 8, 45, 0, 0), 1 });
+                columns: new[] { "Id", "AppointmentDate", "IsDeleted", "Note", "RegistrationDate", "ReltedPersonId", "ScheduleHourId", "StatustypesId", "TimeBlock", "UserId" },
+                values: new object[] { 2, new DateTime(2025, 8, 23, 17, 34, 12, 220, DateTimeKind.Unspecified), false, "string", new DateTime(2024, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, 1, new TimeSpan(0, 8, 45, 0, 0), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Branch_InstitutionId",
@@ -1098,6 +1178,12 @@ namespace Entity_Back.Migrations
                 schema: "Medical",
                 table: "Citation",
                 column: "ScheduleHourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Citation_StatustypesId",
+                schema: "Medical",
+                table: "Citation",
+                column: "StatustypesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Citation_UserId",
@@ -1170,6 +1256,16 @@ namespace Entity_Back.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ModificationRequest_StatustypesId",
+                table: "ModificationRequest",
+                column: "StatustypesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ModificationRequest_UserId",
+                table: "ModificationRequest",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Module_Name",
                 schema: "ModelSecurity",
                 table: "Module",
@@ -1180,6 +1276,11 @@ namespace Entity_Back.Migrations
                 name: "IX_Notification_citationId",
                 table: "Notification",
                 column: "citationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_StatustypesId",
+                table: "Notification",
+                column: "StatustypesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notification_UserId",
@@ -1291,6 +1392,9 @@ namespace Entity_Back.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ModificationRequest");
+
+            migrationBuilder.DropTable(
                 name: "Notification");
 
             migrationBuilder.DropTable(
@@ -1325,6 +1429,9 @@ namespace Entity_Back.Migrations
             migrationBuilder.DropTable(
                 name: "ScheduleHour",
                 schema: "Medical");
+
+            migrationBuilder.DropTable(
+                name: "StatusTypes");
 
             migrationBuilder.DropTable(
                 name: "User",

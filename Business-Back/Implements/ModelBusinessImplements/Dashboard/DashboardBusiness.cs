@@ -31,6 +31,8 @@ namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
                 var citasQuery = _context.Citation
                     .Include(c => c.ScheduleHour).ThenInclude(sh => sh.Shedule).ThenInclude(s => s.Doctor).ThenInclude(d => d.Specialty)
                     .AsQueryable();
+               
+           
 
                 var totalCitasDia = await citasQuery.Where(c => c.AppointmentDate.Date == today).CountAsync();
                 var totalCitasSemana = await citasQuery.Where(c => c.AppointmentDate >= weekAgo).CountAsync();
@@ -43,8 +45,10 @@ namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
 
                 var estadosCitas = await citasQuery
                     .Where(c => c.AppointmentDate >= monthAgo)
-                    .GroupBy(c => c.State)
+                    .GroupBy(c => c.StatustypesId)
                     .ToDictionaryAsync(g => g.Key, g => g.Count());
+
+               
 
                 var citasDto = new CitasDto
                 {
@@ -75,7 +79,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
 
                 // Doctores
                 var topDoctores = await citasQuery
-                    .Where(c => c.State == "Atendida")
+                    .Where(c => c.StatustypesId == 4)
                     .GroupBy(c => c.ScheduleHour.Shedule.Doctor.Person.FullName)
                     .Select(g => new TopDoctoresDto { NombreDoctor = g.Key, CitasAtendidas = g.Count() })
                     .OrderByDescending(t => t.CitasAtendidas)
@@ -103,11 +107,11 @@ namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
 
                 // KPIs
                 var totalCitasProgramadas = await citasQuery.Where(c => c.AppointmentDate >= monthAgo).CountAsync();
-                var citasAtendidas = await citasQuery.Where(c => c.State == "Atendida" && c.AppointmentDate >= monthAgo).CountAsync();
+                var citasAtendidas = await citasQuery.Where(c => c.StatustypesId == 4 && c.AppointmentDate >= monthAgo).CountAsync();
                 var tasaAsistencia = totalCitasProgramadas > 0 ? (double)citasAtendidas / totalCitasProgramadas * 100 : 0;
 
                 var tiemposEspera = await citasQuery
-                    .Where(c => c.State == "Atendida" && c.RegistrationDate.HasValue)
+                    .Where(c => c.StatustypesId == 4 && c.RegistrationDate.HasValue)
                     .Select(c => (c.AppointmentDate - c.RegistrationDate.Value).TotalHours)
                     .ToListAsync();
                 var tiempoPromedioEspera = tiemposEspera.Any() ? tiemposEspera.Average() : 0;

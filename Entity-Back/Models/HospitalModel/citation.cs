@@ -1,6 +1,7 @@
 using Entity_Back.Models;
 using Entity_Back.Models.Notification;
 using Entity_Back.Models.SecurityModels;
+using Entity_Back.Models.Status;
 
 namespace Entity_Back
 {
@@ -9,13 +10,15 @@ namespace Entity_Back
         public int UserId { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan? TimeBlock { get; set; }
-        public string State { get; set; }
         public string Note { get; set; }
         public int ScheduleHourId { get; set; }
         public int? ReltedPersonId { get; set; }
 
         public  User User { get; set; }
-       
+        public int StatustypesId { get; set; }
+
+        public StatusTypes Statustypes { get; set; }
+
         public  ScheduleHour ScheduleHour { get; set; }
     }
 

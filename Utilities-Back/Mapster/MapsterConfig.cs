@@ -11,6 +11,7 @@ using Entity_Back.Dto.InfrastructureDto.Departament;
 using Entity_Back.Dto.InfrastructureDto.DepartamentDto;
 using Entity_Back.Dto.InfrastructureDto.InstitutionDto;
 using Entity_Back.Dto.Notification;
+using Entity_Back.Dto.RequestDto;
 using Entity_Back.Dto.SecurityDto.FormDto;
 using Entity_Back.Dto.SecurityDto.ModuleDto;
 using Entity_Back.Dto.SecurityDto.PermissionDto;
@@ -19,13 +20,15 @@ using Entity_Back.Dto.SecurityDto.RolDto;
 using Entity_Back.Dto.SecurityDto.RolFormPermissionDto;
 using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
+using Entity_Back.Dto.Status.StatusTypesDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
-
+using Entity_Back.Models.Request;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
+using Entity_Back.Models.Status;
 using Mapster;
 
 namespace Utilities_Back.Mapster
@@ -113,11 +116,9 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<CitationEditDto, Citation>
                 .NewConfig()
                 .IgnoreNullValues(true)
-                .Map(d => d.State, s => s.State)
                 .Map(d => d.Note, s => s.Note);
 
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
-                .Map(dest => dest.State, src => src.State)
                 .Map(dest => dest.Note, src => src.Note)
                 .Map(dest => dest.AppointmentDate, src => src.AppointmentDate)
 
@@ -285,6 +286,21 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<NotificationEditDto, Notifications>
                 .NewConfig()
                 .IgnoreNullValues(true); // solo ignora null; false SÍ se aplica
+
+
+            TypeAdapterConfig<StatusTypes, StatusTypeListDto>.NewConfig();
+
+            TypeAdapterConfig<StatusTypeCreateDto, StatusTypes>.NewConfig();
+
+            TypeAdapterConfig<StatusTypeEditDto, StatusTypes>.NewConfig();
+
+
+            TypeAdapterConfig<ModificationRequest, ModificationRequestListDto>.NewConfig()
+    .Map(dest => dest.StatusTypeName, src => src.Statustypes.Name);
+
+            TypeAdapterConfig<ModificationRequestCreateDto, ModificationRequest>.NewConfig();
+
+            TypeAdapterConfig<ModificationRequestEditDto, ModificationRequest>.NewConfig();
 
 
         }

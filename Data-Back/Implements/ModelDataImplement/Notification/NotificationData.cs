@@ -51,7 +51,7 @@ namespace Data_Back.Implements.ModelDataImplement.Notification1
                     return false;
                 }
 
-                existingEntity.StateNotification = StatusNotification.Read;
+                existingEntity.StatustypesId = 6;
 
                 _context.Entry(existingEntity).CurrentValues.SetValues(existingEntity);
                 await _context.SaveChangesAsync();

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
+using Entity_Back.Models.Status;
 
 namespace Entity_Back.Models.Notification
 { 
@@ -15,7 +16,8 @@ namespace Entity_Back.Models.Notification
         public string Title { get; set; }
         public int UserId { get; set; }
         public string Message { get; set; }
-        public StatusNotification StateNotification { get; set; }
+        public int StatustypesId { get; set; }
+        public StatusTypes Statustypes { get; set; }
         public TypeNotification TypeNotification { get; set; }
         public Citation? citation { get; set; }
         public User User { get; set; } 
