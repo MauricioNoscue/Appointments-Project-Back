@@ -18,5 +18,8 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
         public string Gender { get; set; }
         public string HealthRegime { get; set; }
         public List<string> Roles { get; set; }
+
+        public bool Rescheduling { get; set; } = false;
+
     }
 }

@@ -1360,6 +1360,46 @@ namespace Entity_Back.Migrations
                     b.ToTable("ModificationRequest");
                 });
 
+            modelBuilder.Entity("Entity_Back.Models.Review.DoctorReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CitationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CitationId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DoctorReview");
+                });
+
             modelBuilder.Entity("Entity_Back.Models.Security.Rol", b =>
                 {
                     b.Property<int>("Id")
@@ -3497,6 +3537,32 @@ namespace Entity_Back.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entity_Back.Models.Review.DoctorReview", b =>
+                {
+                    b.HasOne("Entity_Back.Citation", "Citation")
+                        .WithMany()
+                        .HasForeignKey("CitationId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Entity_Back.Doctor", "Doctor")
+                        .WithMany("Reviews")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity_Back.Models.SecurityModels.User", "User")
+                        .WithMany("DoctorReviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Citation");
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.Form", b =>
                 {
                     b.HasOne("Entity_Back.Models.SecurityModels.Module", "Module")
@@ -3628,6 +3694,8 @@ namespace Entity_Back.Migrations
 
             modelBuilder.Entity("Entity_Back.Doctor", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("Shedules");
                 });
 
@@ -3696,6 +3764,8 @@ namespace Entity_Back.Migrations
             modelBuilder.Entity("Entity_Back.Models.SecurityModels.User", b =>
                 {
                     b.Navigation("Citation");
+
+                    b.Navigation("DoctorReviews");
 
                     b.Navigation("Notifications");
 

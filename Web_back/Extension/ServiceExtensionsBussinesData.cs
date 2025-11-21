@@ -60,6 +60,10 @@ using Business_Back.Interface.IBusinessModel.Status;
 using Business_Back.Implements.ModelBusinessImplements.Status;
 using Data_Back.Interface.IDataModels.Status;
 using Data_Back.Implements.ModelDataImplement.Status;
+using Business_Back.Implements.ModelBusinessImplements.Review;
+using Business_Back.Interface.IBusinessModel.Review;
+using Data_Back.Implements.ModelDataImplement.Review;
+using Data_Back.Interface.IDataModels.Review;
 
 namespace Web_back.Extension
 {
@@ -235,6 +239,10 @@ namespace Web_back.Extension
 
             services.AddScoped<IStatusTypeBusiness, StatusBusiness>();
             services.AddScoped<IStatusTypesData, StatusTypesData>();
+
+            services.AddScoped<IDoctorReviewBusiness, DoctorReviewBusiness>();
+            services.AddScoped<IDoctorReviewData, DoctorReviewData>();
+
 
 
             return services;

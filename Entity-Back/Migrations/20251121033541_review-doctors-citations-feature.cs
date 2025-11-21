@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity_Back.Migrations
 {
     /// <inheritdoc />
-    public partial class addentityrqueststatusentity : Migration
+    public partial class reviewdoctorscitationsfeature : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -695,6 +695,45 @@ namespace Entity_Back.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DoctorReview",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CitationId = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorReview", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoctorReview_Citation_CitationId",
+                        column: x => x.CitationId,
+                        principalSchema: "Medical",
+                        principalTable: "Citation",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DoctorReview_Doctor_DoctorId",
+                        column: x => x.DoctorId,
+                        principalSchema: "Hospital",
+                        principalTable: "Doctor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DoctorReview_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "ModelSecurity",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Notification",
                 columns: table => new
                 {
@@ -1230,6 +1269,21 @@ namespace Entity_Back.Migrations
                 column: "SpecialtyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DoctorReview_CitationId",
+                table: "DoctorReview",
+                column: "CitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorReview_DoctorId",
+                table: "DoctorReview",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorReview_UserId",
+                table: "DoctorReview",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Form_ModuleId",
                 schema: "ModelSecurity",
                 table: "Form",
@@ -1391,6 +1445,9 @@ namespace Entity_Back.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DoctorReview");
+
             migrationBuilder.DropTable(
                 name: "ModificationRequest");
 

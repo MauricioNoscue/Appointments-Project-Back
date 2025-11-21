@@ -10,6 +10,7 @@ using Entity_Back.Models.HospitalModel;
 using Entity_Back.Models.Infrastructure;
 using Entity_Back.Models.Notification;
 using Entity_Back.Models.Request;
+using Entity_Back.Models.Review;
 using Entity_Back.Models.Security;
 using Entity_Back.Models.SecurityModels;
 using Entity_Back.Models.Status;
@@ -64,6 +65,30 @@ namespace Entity_Back.Context
          .WithMany(s => s.Doctors)
          .HasForeignKey(d => d.SpecialtyId)
          .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DoctorReview>()
+    .HasKey(dr => dr.Id);
+
+
+            // DoctorReview: evitar cascadas múltiples
+            modelBuilder.Entity<DoctorReview>()
+                .HasOne(dr => dr.User)
+                .WithMany(u => u.DoctorReviews)
+                .HasForeignKey(dr => dr.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DoctorReview>()
+                .HasOne(dr => dr.Doctor)
+                .WithMany(d => d.Reviews)
+                .HasForeignKey(dr => dr.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DoctorReview>()
+                .HasOne(dr => dr.Citation)
+                .WithMany()
+                .HasForeignKey(dr => dr.CitationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
 
@@ -142,6 +167,10 @@ namespace Entity_Back.Context
 
 
         public DbSet<StatusTypes> StatusTypes { get; set; }
-        public DbSet<ModificationRequest> ModificationRequest{ get; set;}
+        public DbSet<ModificationRequest> ModificationRequest { get; set; }
+        public DbSet<DoctorReview> DoctorReview
+        {
+            get; set;
+        }
     }
 }

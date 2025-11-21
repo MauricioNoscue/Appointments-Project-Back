@@ -1,10 +1,12 @@
 using Entity_Back.Models;
 using Entity_Back.Models.SecurityModels;
 using Entity_Back.Models.HospitalModel;
+using Entity_Back.Models.Review;
 
 namespace Entity_Back
 {
-    public class Doctor : BaseModel
+    public class 
+        Doctor : BaseModel
     {
         public int SpecialtyId { get; set; }
         public Specialty Specialty { get; set; }
@@ -14,6 +16,8 @@ namespace Entity_Back
         public int PersonId { get; set; }
         public Person Person { get; set; }
         public  List<Shedule> Shedules { get; set; }
+        public List<DoctorReview> Reviews { get; set; } = new();
+
     }
 }
 

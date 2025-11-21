@@ -1,5 +1,6 @@
 using Entity_Back.Models;
 using Entity_Back.Models.Notification;
+using Entity_Back.Models.Review;
 using Entity_Back.Models.SecurityModels;
 using Entity_Back.Models.Status;
 
@@ -20,6 +21,7 @@ namespace Entity_Back
         public StatusTypes Statustypes { get; set; }
 
         public  ScheduleHour ScheduleHour { get; set; }
+
     }
 
 }
