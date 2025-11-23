@@ -91,5 +91,20 @@ namespace Data_Back
         }
 
 
+        public async Task<List<Citation>> GetCitationsByDoctorAndDate(int doctorId, DateTime date)
+        {
+            return await _context.Set<Citation>()
+                .AsNoTracking()
+                .Where(c => !c.IsDeleted &&
+                            c.AppointmentDate.Date == date.Date &&
+                            c.ScheduleHour.Shedule.DoctorId == doctorId &&
+                            c.StatustypesId == 1) // solo programadas
+                .Include(c => c.ScheduleHour)
+                    .ThenInclude(sh => sh.Shedule)
+                .ToListAsync();
+        }
+
+
+
     }
 }

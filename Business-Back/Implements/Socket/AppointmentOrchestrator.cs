@@ -24,6 +24,7 @@ using Entity_Back.Dto.Notification;
 using Utilities_Back.Helper;
 using Entity_Back.Dto.Notification.SendEmail;
 using Entity_Back.Enum;
+using Business_Back.Interface.IBusinessModel.Services;
 
 namespace Business_Back.Implements.Socket
 {
@@ -37,6 +38,7 @@ namespace Business_Back.Implements.Socket
         private readonly IUserData _userData;
         private readonly INotificationBusiness _notificationBusiness;
         private readonly INotificationSender _notificationSender;
+        private readonly ICitationNotificationService _citationNotification;
 
 
         private static readonly TimeSpan HoldTtl = TimeSpan.FromSeconds(120); 
@@ -46,7 +48,10 @@ namespace Business_Back.Implements.Socket
             ApplicationDbContext db,
             IAppointmentNotifier notifier,
             IConfiguration configuration  ,
-            IUserData userData, INotificationBusiness notificationBusiness, INotificationSender notificationSender
+            IUserData userData,
+            INotificationBusiness notificationBusiness,
+            INotificationSender notificationSender,
+            ICitationNotificationService citationNotification
 
             )
         {
@@ -58,6 +63,7 @@ namespace Business_Back.Implements.Socket
             _userData = userData;
             _notificationBusiness = notificationBusiness;
             _notificationSender = notificationSender;
+            _citationNotification = citationNotification;
 
         }
             
@@ -126,34 +132,11 @@ namespace Business_Back.Implements.Socket
 
                     var user = await _userData.GetById(userId);
 
-                    var asunto = "Confirmación de tu cita médica";
-
-                    var cuerpo = SendCitation.SendCitaionTemaplate(dto: new SendCitationDto
-                    {
-                       Email = user.Email,
-                        Date = slot.Date,
-                        TimeBlock = slot.TimeBlock,
-                        UrlRedirect= "localhost:4200"
-                    });
-
 
                     _db.Set<Citation>().Add(entity);
-
-                
-                    await CorreoMensaje.EnviarAsync(_configuration, user.Email, asunto, cuerpo);
                     await _db.SaveChangesAsync(ct);
 
-                    NotificationCreateDto noti = new NotificationCreateDto
-                    {
-                        Title= "Tienes una cita agendada",
-                        UserId = userId,
-                        Message = "Tienes una cita agendada",
-                        TypeNotification = TypeNotification.Info
-                    };
-
-
-                    var savedNotif = await _notificationBusiness.Save(noti);
-                    await _notificationSender.SendToUser(userId, savedNotif);
+                    await _citationNotification.SendCitationConfirmationAsync(entity,  ct);
 
 
                     // (ES): Opcional: liberar hold (ya está BOOKED)

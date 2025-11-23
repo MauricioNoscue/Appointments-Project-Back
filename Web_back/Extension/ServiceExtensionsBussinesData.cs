@@ -64,6 +64,8 @@ using Business_Back.Implements.ModelBusinessImplements.Review;
 using Business_Back.Interface.IBusinessModel.Review;
 using Data_Back.Implements.ModelDataImplement.Review;
 using Data_Back.Interface.IDataModels.Review;
+using Business_Back.Interface.IBusinessModel.Services;
+using Business_Back.Services.Notification;
 
 namespace Web_back.Extension
 {
@@ -242,6 +244,18 @@ namespace Web_back.Extension
 
             services.AddScoped<IDoctorReviewBusiness, DoctorReviewBusiness>();
             services.AddScoped<IDoctorReviewData, DoctorReviewData>();
+
+            // Handler para faltas del doctor
+            services.AddScoped<IModificationRequestHandler,DoctorAbsenceRequestHandler>();
+
+            // Servicio que reprograma citas
+            services.AddScoped<ICitationReschedulerService, CitationReschedulerService>();
+
+
+            services.AddScoped<ICitationNotificationService, CitationNotificationService>();
+           services.AddScoped<IMessageSenderService, MessageSenderService>();
+
+
 
 
 

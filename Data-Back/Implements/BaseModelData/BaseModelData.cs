@@ -244,5 +244,34 @@ namespace Data_Back.Implements.BaseModelData
 
 
 
+        public override async Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId)
+        {
+            try
+            {
+                // 1. Buscar el registro por ID (sin asumir que tiene StatustypesId)
+                var entity = await _context.Set<T>()
+                    .FirstOrDefaultAsync(e => !e.IsDeleted && e.Id == id);
+
+                if (entity == null)
+                    return false;
+
+                // 2. Aplicar actualización SOLO si la entidad tiene la propiedad
+                _context.Entry(entity).Property("StatustypesId").CurrentValue = statusTypeId;
+
+                // 3. Guardar
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al actualizar campo StatustypesId en {typeof(T).Name} con ID: {id}");
+                throw;
+            }
+        }
+
+
+
+
+
     }
 }

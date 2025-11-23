@@ -112,7 +112,18 @@ namespace Entity_Back.Context.DataInitConfiguration.StatusType
                     CategoryStatus = CategoryStatus.Request,
                     IsDeleted = false,
                     RegistrationDate = new DateTime(2025, 1, 1)
-                }
+                },
+
+
+                  new StatusTypes
+                  {
+                      Id = 10,
+                      Name = "Reprogamada",
+                      Description = "Reprogramada citation",
+                      CategoryStatus = CategoryStatus.Citation,
+                      IsDeleted = false,
+                      RegistrationDate = new DateTime(2025, 1, 1)
+                  }
             );
         }
     }

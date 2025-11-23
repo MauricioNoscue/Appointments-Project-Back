@@ -58,5 +58,18 @@ namespace Data_Back.Implements
             }
         }
 
+
+        public async Task<Shedule?> GetByDoctorAndDateAsync(int doctorId, DateTime date)
+        {
+            return await _context.Set<Shedule>()
+                .AsNoTracking()
+                .Where(s => !s.IsDeleted &&
+                            s.DoctorId == doctorId)
+                .Include(s => s.ScheduleHours)
+                .FirstOrDefaultAsync();
+        }
+
+
+
     }
 }

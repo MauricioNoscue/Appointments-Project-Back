@@ -36,5 +36,11 @@ namespace Business_Back
 
             }
         }
+
+        public async Task<Shedule?> GetByDoctorAndDateAsync(int doctorId, DateTime date)
+        {
+            return await _data.GetByDoctorAndDateAsync(doctorId, date);
+        }
+
     }
 }

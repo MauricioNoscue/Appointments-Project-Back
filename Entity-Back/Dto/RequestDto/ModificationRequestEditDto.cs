@@ -24,7 +24,7 @@ namespace Entity_Back.Dto.RequestDto
         public DateTime? EndDate { get; set; }
 
         [Required]
-        public int StatusTypesId { get; set; }
+        public int StatustypesId { get; set; }
 
         public string? Observation { get; set; }
     }

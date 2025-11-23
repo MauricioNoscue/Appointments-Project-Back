@@ -7,6 +7,9 @@ namespace Data_Back
     {
         Task<List<Citation>> GetAllForListAsync(int userId);
         Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate);
+
+        Task<List<Citation>> GetCitationsByDoctorAndDate(int doctorId, DateTime date);
+
     }
 }
 
