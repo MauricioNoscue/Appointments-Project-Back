@@ -1,4 +1,5 @@
 ﻿using Business_Back.Interface.BaseModelBusiness;
+using Entity_Back.Dto.Status;
 using Entity_Back.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -226,6 +227,33 @@ namespace Web_back.Controllers.ControllerModel
                 return StatusCode(500, new { message = "Internal server error." });
             }
         }
+
+
+        [Authorize]
+        [HttpPatch("update-status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusDto dto)
+        {
+            try
+            {
+                var status =await  _service.UpdateStatusTypesAsync(dto.Id, dto.Value);
+
+                return Ok(new { message = "Status updated successfully." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Internal error in update status .");
+                return StatusCode(500, new { message = "Internal server error." });
+            }
+        }
+
 
 
 

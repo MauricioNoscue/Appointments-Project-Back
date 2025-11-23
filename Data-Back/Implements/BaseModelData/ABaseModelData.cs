@@ -71,5 +71,7 @@ namespace Data_Back.Implements.BaseModelData
 
         public abstract Task<IEnumerable<T>> GetAllUser(int userId);
 
+        public abstract Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId);
+
     }
 }

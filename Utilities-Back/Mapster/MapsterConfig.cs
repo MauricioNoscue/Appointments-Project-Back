@@ -297,8 +297,13 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<StatusTypeEditDto, StatusTypes>.NewConfig();
 
 
-            TypeAdapterConfig<ModificationRequest, ModificationRequestListDto>.NewConfig()
-            .Map(dest => dest.StatusTypeName, src => src.Statustypes.Name);
+            TypeAdapterConfig<ModificationRequest, ModificationRequestListDto>
+              .NewConfig()
+              .Map(dest => dest.StatusTypeName, src => src.Statustypes.Name)
+              .Map(dest => dest.Document, src => src.User.Person.Document)
+              .Map(dest => dest.UserName, src => src.User.Person.FullName);
+
+
 
             TypeAdapterConfig<ModificationRequestCreateDto, ModificationRequest>.NewConfig();
 

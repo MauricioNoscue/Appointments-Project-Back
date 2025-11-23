@@ -15,10 +15,12 @@ namespace Entity_Back.Dto.RequestDto
         public TypeRequest TypeRequest { get; set; }
 
         public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string Document { get; set; }
 
         public string StatusTypeName { get; set; }
 
-        public int StatusTypesId { get; set; }
+        public int StatustypesId { get; set; }
 
         public DateTime? StartDate { get; set; }
 
