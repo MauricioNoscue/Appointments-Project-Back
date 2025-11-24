@@ -22,6 +22,6 @@ namespace Business_Back.Implements.BaseModelBusiness
 
         public  abstract Task ValidateAsync(T entity);
 
-        public abstract Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId);
+        public abstract Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId , bool? restore = false);
     }
 }

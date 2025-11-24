@@ -22,13 +22,24 @@ using Utilities_Back.Message.Email;
 
 namespace Business_Back.Implements.ModelBusinessImplements.Security
 {
+    /// <summary>
+    /// Clase de negocio para la gestión de usuarios.
+    /// Proporciona métodos para crear, validar, obtener detalles, restablecer contraseñas y actualizar puntos de restricción de usuarios.
+    /// </summary>
     public class UserBusiness : BaseModelBusinessIm<User, UserCreatedDto, UserEditDto, UserListDto>, IUserBusiness
     {
         private readonly IUserData _data;
         private readonly IPersonBusiness _dataPerson;
         private readonly IRolUserBusiness _dataRolUser;
-        
 
+        /// <summary>
+        /// Constructor de la clase UserBusiness.
+        /// </summary>
+        /// <param name="configuration">Configuración de la aplicación.</param>
+        /// <param name="data">Interfaz de acceso a datos de usuario.</param>
+        /// <param name="logger">Logger para registrar eventos y errores.</param>
+        /// <param name="dataPerson">Interfaz de negocio para personas.</param>
+        /// <param name="dataRolUser">Interfaz de negocio para roles de usuario.</param>
         public UserBusiness(IConfiguration configuration, IUserData data, ILogger<UserBusiness> logger, IPersonBusiness dataPerson, IRolUserBusiness dataRolUser)
             : base(configuration, data, logger)
         {
@@ -37,31 +48,46 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             _dataRolUser = dataRolUser;
         }
 
+        /// <summary>
+        /// Obtiene el detalle de un usuario por su identificador.
+        /// </summary>
+        /// <param name="id">Identificador del usuario.</param>
+        /// <returns>Detalle del usuario.</returns>
         public async Task<UserDetailDto> GetUserDetailAsync(int id)
         {
-            var user = await _data.GetUserDetailAsync(id);
-            if (user == null) return null;
-
-            return new UserDetailDto
+            try
             {
-                FullName = user.Person.FullName,
-                FullLastName = user.Person.FullLastName,
-                Document = $"{user.Person.DocumentType.Name} {user.Person.Document}",
-                PhoneNumber = user.Person.PhoneNumber,
-                Email = user.Email,
-                DateBorn = user.Person.DateBorn,
-                RegisterDate = (DateTime)user.RegistrationDate,
-                Gender = user.Person.Gender.ToString(),
-                HealthRegime = user.Person.HealthRegime.ToString(),
-                Roles = user.RolUser.Select(r => r.Rol.Name).ToList()
-            };
+                var user = await _data.GetUserDetailAsync(id);
+                if (user == null) return null;
 
+                return new UserDetailDto
+                {
+                    FullName = user.Person.FullName,
+                    FullLastName = user.Person.FullLastName,
+                    Document = $"{user.Person.DocumentType.Name} {user.Person.Document}",
+                    PhoneNumber = user.Person.PhoneNumber,
+                    Email = user.Email,
+                    DateBorn = user.Person.DateBorn,
+                    RegisterDate = (DateTime)user.RegistrationDate,
+                    Gender = user.Person.Gender.ToString(),
+                    HealthRegime = user.Person.HealthRegime.ToString(),
+                    Roles = user.RolUser.Select(r => r.Rol.Name).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener el detalle del usuario con Id {Id}", id);
+                throw new BusinessException("Ocurrió un error al obtener el detalle del usuario.", ex);
+            }
         }
 
-
+        /// <summary>
+        /// Guarda un nuevo usuario en el sistema.
+        /// </summary>
+        /// <param name="Dto">DTO con los datos del usuario a crear.</param>
+        /// <returns>DTO con los datos del usuario creado.</returns>
         public override async Task<UserListDto> Save(UserCreatedDto Dto)
         {
-
             if (Dto == null)
                 throw new ValidationException(nameof(Dto), "Los datos enviados son nulos o inválidos.");
 
@@ -70,15 +96,12 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 throw new ValidationException(nameof(Dto.Password), "La contraseña es obligatoria.");
             try
             {
-
                 var entidad = Dto.Adapt<User>();
 
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
 
-
                 entidad.Password = passwordHash;
                 await ValidateAsync(entidad);
-
 
                 var entiry = await _data.Save(entidad);
 
@@ -94,149 +117,70 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
 
                 var asunto = "¡Bienvenido a nuestro sistema!";
                 var cuerpo = $@"
-                                   <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-                                        <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
-                                            <h2 style=""color: #4CAF50;"">¡Bienvenido, {person?.FullName}!</h2>
-                                          <p style=""font-size: 16px; color: #333;"">
-                                              Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
-                                         </p>
-                                          <p style=""font-size: 14px; color: #666;"">
-                                               Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
-                                          </p>
-                                          <div style=""margin-top: 30px; text-align: center;"">
-                                              <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
-                                          </div>
-                                           <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
-                                        <p style=""font-size: 12px; color: #aaa; text-align: center;"">
-                                               Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
-                                           </p>
+                                       <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+                                            <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+                                                <h2 style=""color: #4CAF50;"">¡Bienvenido, {person?.FullName}!</h2>
+                                              <p style=""font-size: 16px; color: #333;"">
+                                                  Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
+                                             </p>
+                                              <p style=""font-size: 14px; color: #666;"">
+                                                   Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
+                                              </p>
+                                              <div style=""margin-top: 30px; text-align: center;"">
+                                                  <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
+                                              </div>
+                                               <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+                                            <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                                                   Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
+                                               </p>
+                                         </div>
                                      </div>
-                                 </div>
-                   ";
-
+                       ";
 
                 await CorreoMensaje.EnviarAsync(_configuration, entiry.Email, asunto, cuerpo);
 
-
                 return entiry.Adapt<UserListDto>();
-
             }
             catch (ValidationException vex)
             {
                 _logger.LogWarning(vex, "Validación fallida en {Entity}", typeof(User).Name);
                 throw;
             }
-
             catch (BusinessException ex)
             {
                 _logger.LogError(ex, "Error al crear entidad {Entity}", typeof(User).Name);
                 throw new BusinessException("Error al intentar crear el registro.", ex);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error inesperado al crear usuario.");
+                throw new BusinessException("Ocurrió un error inesperado al crear el usuario.", ex);
+            }
         }
 
-
+        /// <summary>
+        /// Valida si un usuario cumple con las reglas de negocio antes de ser guardado.
+        /// </summary>
+        /// <param name="entity">Entidad usuario a validar.</param>
         public override async Task ValidateAsync(User entity)
         {
-
-            if (await _data.ExistsByAsync(x => x.Email, entity.Email))
-                throw new ValidationException(nameof(User.Email), "El email ya está registrado.");
+            try
+            {
+                if (await _data.ExistsByAsync(x => x.Email, entity.Email))
+                    throw new ValidationException(nameof(User.Email), "El email ya está registrado.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al validar el usuario.");
+                throw new BusinessException("Ocurrió un error al validar el usuario.", ex);
+            }
         }
 
-
-
-        //public override async Task<UserListDto> Save(UserCreatedDto dto)
-        //{
-        //    if (dto == null)
-        //        throw new ValidationException(nameof(dto), "Los datos enviados son nulos o inválidos.");
-
-        //    try
-        //    {
-        //        // Mapea manualmente person desde dto
-        //        var person = dto.Person.Adapt<Person>();
-
-        //        // Inserta primero la persona
-        //        var personaCreada = await _data.SavePerson(person); // necesitas agregar esto en IUserData
-
-        //        // Mapea user
-        //        var user = dto.Adapt<User>();
-        //        user.PersonId = personaCreada.Id;
-
-        //        var userCreado = await _data.Save(user);
-
-        //        // Cargar persona (por si no la trae el user directamente)
-        //        userCreado.Person = personaCreada;
-
-
-        //        var asunto = "¡Bienvenido a nuestro sistema!";
-        //        var cuerpo = $@"
-        //                    <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-        //                        <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
-        //                            <h2 style=""color: #4CAF50;"">¡Bienvenido, {userCreado.Email}!</h2>
-        //                            <p style=""font-size: 16px; color: #333;"">
-        //                                Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
-        //                            </p>
-        //                            <p style=""font-size: 14px; color: #666;"">
-        //                                Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
-        //                            </p>
-        //                            <div style=""margin-top: 30px; text-align: center;"">
-        //                                <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
-        //                            </div>
-        //                            <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
-        //                            <p style=""font-size: 12px; color: #aaa; text-align: center;"">
-        //                                Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
-        //                            </p>
-        //                        </div>
-        //                    </div>
-        //    ";
-
-
-        //        await CorreoMensaje.EnviarAsync(_configuration, userCreado.Email, asunto, cuerpo);
-
-        //        return userCreado.Adapt<UserListDto>();
-        //    }
-        //    catch (DbUpdateException dbEx)
-        //    {
-        //        // Capturamos errores de la base de datos y tratamos errores de restricción única
-        //        var mensaje = ParseUniqueConstraintError(dbEx);
-        //        throw new ValidationException(mensaje);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error al crear usuario con persona.");
-        //        throw new BusinessException("Error al intentar crear el usuario.", ex);
-        //    }
-        //}
-
-
-        //public override async Task<bool> Update(UserEditDto dto)
-        //{
-        //    if (dto == null)
-        //        throw new ValidationException(nameof(dto), "Los datos enviados para actualización son inválidos.");
-
-        //    try
-        //    {
-        //        var user = await _data.GetById(dto.Id);
-        //        if (user == null) throw new BusinessException("Usuario no encontrado.");
-
-        //        // Mapeamos datos del usuario
-        //        dto.Adapt(user);
-
-        //        // Mapeamos datos de la persona asociada
-        //        dto.Person.Adapt(user.Person);
-
-        //        await _data.Update(user); // solo necesitas uno si el contexto está trackeando
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error al actualizar usuario con persona.");
-        //        throw new BusinessException("Error al intentar actualizar el registro.", ex);
-        //    }
-        //}
-
-
+        /// <summary>
+        /// Solicita el restablecimiento de contraseña para un usuario.
+        /// </summary>
+        /// <param name="email">Correo electrónico del usuario.</param>
+        /// <returns>Token de restablecimiento de contraseña.</returns>
         public async Task<string?> RequestPasswordResetAsync(string email)
         {
             try
@@ -252,44 +196,42 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 var subject = "🔒 Recuperación de contraseña";
 
                 var body = $@"
-                <div style=""font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;"">
-                  <div style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 20px;"">
-    
-                    <h2 style=""color: #2c3e50; text-align: center;"">Recuperación de contraseña</h2>
-    
-                    <p style=""font-size: 15px; color: #333;"">
-                      Hola <b>{email}</b>,
-                    </p>
-    
-                    <p style=""font-size: 15px; color: #333;"">
-                      Hemos recibido una solicitud para restablecer tu contraseña.  
-                      Para continuar, haz clic en el siguiente botón:
-                    </p>
+                    <div style=""font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;"">
+                      <div style=""max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 20px;"">
+        
+                        <h2 style=""color: #2c3e50; text-align: center;"">Recuperación de contraseña</h2>
+        
+                        <p style=""font-size: 15px; color: #333;"">
+                          Hola <b>{email}</b>,
+                        </p>
+        
+                        <p style=""font-size: 15px; color: #333;"">
+                          Hemos recibido una solicitud para restablecer tu contraseña.  
+                          Para continuar, haz clic en el siguiente botón:
+                        </p>
 
-                    <div style=""text-align: center; margin: 30px 0;"">
-                      <a href='{resetLink}' style=""background-color: #007bff; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-size: 16px;"">
-                        🔑 Restablecer Contraseña
-                      </a>
-                    </div>
+                        <div style=""text-align: center; margin: 30px 0;"">
+                          <a href='{resetLink}' style=""background-color: #007bff; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-size: 16px;"">
+                            🔑 Restablecer Contraseña
+                          </a>
+                        </div>
 
-                    <p style=""font-size: 14px; color: #555;"">
-                      ⚠️ Este enlace será válido solo por <b>1 hora</b>.  
-                      Si no solicitaste este cambio, puedes ignorar este mensaje y tu cuenta seguirá segura.
-                    </p>
+                        <p style=""font-size: 14px; color: #555;"">
+                          ⚠️ Este enlace será válido solo por <b>1 hora</b>.  
+                          Si no solicitaste este cambio, puedes ignorar este mensaje y tu cuenta seguirá segura.
+                        </p>
 
-                    <hr style=""margin: 25px 0; border: none; border-top: 1px solid #eee;"">
+                        <hr style=""margin: 25px 0; border: none; border-top: 1px solid #eee;"">
 
-                    <p style=""font-size: 13px; color: #999; text-align: center;"">
-                      © {DateTime.UtcNow.Year} Tu Sistema de Carnetización Digital.  
-                      Este correo fue enviado automáticamente, por favor no respondas.
-                    </p>
+                        <p style=""font-size: 13px; color: #999; text-align: center;"">
+                          © {DateTime.UtcNow.Year} Tu Sistema de Carnetización Digital.  
+                          Este correo fue enviado automáticamente, por favor no respondas.
+                        </p>
 
-                  </div>
-                </div>";
-
+                      </div>
+                    </div>";
 
                 await CorreoMensaje.EnviarAsync(_configuration, email, subject, body);
-
 
                 if (token == null)
                 {
@@ -306,6 +248,13 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             }
         }
 
+        /// <summary>
+        /// Restablece la contraseña de un usuario usando un token.
+        /// </summary>
+        /// <param name="email">Correo electrónico del usuario.</param>
+        /// <param name="token">Token de restablecimiento.</param>
+        /// <param name="newPassword">Nueva contraseña.</param>
+        /// <returns>True si el restablecimiento fue exitoso, false en caso contrario.</returns>
         public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
         {
             try
@@ -327,5 +276,26 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             }
         }
 
+        /// <summary>
+        /// Actualiza los puntos de restricción de un usuario.
+        /// </summary>
+        /// <param name="userId">Identificador del usuario.</param>
+        /// <param name="restore">Indica si se deben restaurar los puntos.</param>
+        /// <returns>True si la operación fue exitosa, false en caso contrario.</returns>
+        public async Task<bool> UpdateRestrictionPointsAsync(int userId, bool restore = false)
+        {
+            try
+            {
+                if (restore)
+                    return await _data.RestoreRestrictionPointAsync(userId);
+
+                return await _data.DecreaseRestrictionPointAsync(userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar los puntos de restricción para el usuario {UserId}", userId);
+                throw new BusinessException("Ocurrió un error al actualizar los puntos de restricción.", ex);
+            }
+        }
     }
 }

@@ -64,39 +64,46 @@ namespace Business_Back.Services.Citation
         /// <returns>Una tarea que representa la operación asincrónica.</returns>
         public async Task HandleAsync(ModificationRequest request)
         {
-            if (request.StartDate == null)
-                throw new BusinessException("StartDate is required for doctor absence.");
-
-            DateTime fecha = request.StartDate.Value.Date;
-
-
-            // 🔥 NUEVO: detectar si el usuario realmente es doctor
-            int doctorId = request.UserId;
-
-            var doctorReal = await GetDoctorIdFromUserAsync(request.UserId);
-            if (doctorReal != null)
-                doctorId = doctorReal.Value; // usar el doctor asociado a la persona
-
-            // 1. Obtener citas del doctor en esa fecha (con doctorId REAL)
-            var citas = await _citationsData
-                .GetCitationsByDoctorAndDate(doctorId, fecha);
-
-            if (!citas.Any())
-                return;
-
-            foreach (var cita in citas)
+            try
             {
-                var user = await _userData.GetById(cita.UserId);
-                bool autoReprog = user?.Rescheduling ?? false;
+                if (request.StartDate == null)
+                    throw new BusinessException("StartDate is required for doctor absence.");
 
-                if (autoReprog)
+                DateTime fecha = request.StartDate.Value.Date;
+
+                // 🔥 NUEVO: detectar si el usuario realmente es doctor
+                int doctorId = request.UserId;
+
+                var doctorReal = await GetDoctorIdFromUserAsync(request.UserId);
+                if (doctorReal != null)
+                    doctorId = doctorReal.Value; // usar el doctor asociado a la persona
+
+                // 1. Obtener citas del doctor en esa fecha (con doctorId REAL)
+                var citas = await _citationsData
+                    .GetCitationsByDoctorAndDate(doctorId, fecha);
+
+                if (!citas.Any())
+                    return;
+
+                foreach (var cita in citas)
                 {
-                    await ReprogramAsync(cita);
+                    var user = await _userData.GetById(cita.UserId);
+                    bool autoReprog = user?.Rescheduling ?? false;
+
+                    if (autoReprog)
+                    {
+                        await ReprogramAsync(cita);
+                    }
+                    else
+                    {
+                        await CancelAsync(cita);
+                    }
                 }
-                else
-                {
-                    await CancelAsync(cita);
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al procesar la solicitud de ausencia del doctor.");
+                throw;
             }
         }
 
@@ -108,28 +115,36 @@ namespace Business_Back.Services.Citation
         /// <returns>Una tarea que representa la operación asincrónica.</returns>
         public async Task ReprogramAsync(Entity_Back.Citation cita)
         {
-            using var tx = await _db.Database.BeginTransactionAsync();
-
             try
             {
-                var newCitation = await _rescheduler.TryRescheduleAsync(cita, CancellationToken.None);
+                using var tx = await _db.Database.BeginTransactionAsync();
 
-                if (newCitation == null)
+                try
                 {
-                    cita.StatustypesId = 2; // Cancelada
-                    _db.Entry(cita).State = EntityState.Modified;
-                    await _db.SaveChangesAsync();
+                    var newCitation = await _rescheduler.TryRescheduleAsync(cita, CancellationToken.None);
+
+                    if (newCitation == null)
+                    {
+                        cita.StatustypesId = 2; // Cancelada
+                        _db.Entry(cita).State = EntityState.Modified;
+                        await _db.SaveChangesAsync();
+                    }
+
+                    await tx.CommitAsync();
+
+                    // HOOK PARA WEBSOCKET
+                    // await _events.CitationReprogrammed(cita.Id);
                 }
-
-                await tx.CommitAsync();
-
-                // HOOK PARA WEBSOCKET
-                // await _events.CitationReprogrammed(cita.Id);
+                catch (Exception ex)
+                {
+                    await tx.RollbackAsync();
+                    _logger.LogError(ex, "Error reprogramming citation.");
+                    throw;
+                }
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync();
-                _logger.LogError(ex, "Error reprogramming citation.");
+                _logger.LogError(ex, "Error general al reprogramar la cita.");
                 throw;
             }
         }
@@ -141,41 +156,56 @@ namespace Business_Back.Services.Citation
         /// <returns>Una tarea que representa la operación asincrónica.</returns>
         public async Task CancelAsync(Entity_Back.Citation cita)
         {
+            try
+            {
+                cita.StatustypesId = 2;
+                _db.Entry(cita).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
 
-            cita.StatustypesId = 2;
-            _db.Entry(cita).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
+                CancellationToken ct = CancellationToken.None;
 
-            CancellationToken ct = CancellationToken.None;
+                await _citationNotification.SendCitationConfirmationAsync(cita, ct);
 
-            await _citationNotification.SendCitationConfirmationAsync(cita, ct);
-
-
-
-            // HOOK WEBSOCKET
-            // await _events.CitationCancelled(cita.Id);
+                // HOOK WEBSOCKET
+                // await _events.CitationCancelled(cita.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al cancelar la cita.");
+                throw;
+            }
         }
 
         /// <summary>
         /// Obtiene el DoctorId real asociado al UserId.
         /// Si el usuario no es doctor, retorna null.
         /// </summary>
+        /// <param name="userId">Identificador del usuario.</param>
+        /// <returns>El identificador del doctor si existe, de lo contrario null.</returns>
         private async Task<int?> GetDoctorIdFromUserAsync(int userId)
         {
-            // Obtener el usuario
-            var user = await _userData.GetById(userId);
-            if (user == null) return null;
+            try
+            {
+                // Obtener el usuario
+                var user = await _userData.GetById(userId);
+                if (user == null) return null;
 
-            // Obtener la persona del usuario
-            int personId = (int)user.PersonId;
+                // Obtener la persona del usuario
+                int personId = (int)user.PersonId;
 
-            // Buscar el doctor asociado a esa persona
-            var doctor = await _db.Doctors
-                .Where(d => d.PersonId == personId && !d.IsDeleted)
-                .Select(d => d.Id)
-                .FirstOrDefaultAsync();
+                // Buscar el doctor asociado a esa persona
+                var doctor = await _db.Doctors
+                    .Where(d => d.PersonId == personId && !d.IsDeleted)
+                    .Select(d => d.Id)
+                    .FirstOrDefaultAsync();
 
-            return doctor == 0 ? null : doctor;
+                return doctor == 0 ? null : doctor;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener el DoctorId real desde el UserId.");
+                throw;
+            }
         }
 
     }

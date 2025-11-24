@@ -29,7 +29,7 @@ namespace Data_Back.Interface.IBaseModelData
 
         Task<IEnumerable<T>> GetAllUser(int userId);
 
-        Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId);
+        Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId,bool? restore =false);
 
     }
 }

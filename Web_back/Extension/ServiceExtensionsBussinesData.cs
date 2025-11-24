@@ -253,7 +253,10 @@ namespace Web_back.Extension
 
 
             services.AddScoped<ICitationNotificationService, CitationNotificationService>();
-           services.AddScoped<IMessageSenderService, MessageSenderService>();
+             services.AddScoped<IMessageSenderService, MessageSenderService>();
+
+            services.AddScoped<INotificationOrchestrator, NotificationOrchestrator>();
+
 
 
 

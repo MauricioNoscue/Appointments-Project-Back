@@ -206,7 +206,7 @@ namespace Business_Back.Implements.BaseModelBusiness
             }
         }
 
-        public override Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId)
+        public override Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId, bool? restore = false)
         {
             try
             {

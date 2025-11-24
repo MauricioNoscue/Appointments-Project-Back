@@ -3,6 +3,7 @@ using Data_Back.Implements.BaseModelData;
 using Data_Back.Interface;
 using Entity_Back;
 using Entity_Back.Context;
+using Entity_Back.Dto.HospitalDto.DoctorDto;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -139,6 +140,36 @@ namespace Data_Back.Implements
                 throw;
             }
         }
+
+
+        public async Task<DoctorReviewAll?> GetDoctorWithReviewsAsync(int doctorId)
+        {
+            try
+            {
+                var doctor = await _context.Doctors
+                    .AsNoTracking()
+                    .Include(d => d.Person)          // Persona asociada
+                    .Include(d => d.Specialty)       // Especialidad
+                    .Include(d => d.Reviews)         // Lista de reseñas
+                    .Where(d => d.Id == doctorId && !d.IsDeleted)
+                    .FirstOrDefaultAsync();
+
+                if (doctor == null)
+                    return null;
+
+                // Adaptación al DTO final
+                return doctor.Adapt<DoctorReviewAll>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener Doctor con Reviews. DoctorId: {doctorId}");
+                throw;
+            }
+        }
+
+
+
+
 
     }
 }

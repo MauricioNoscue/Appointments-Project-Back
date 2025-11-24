@@ -81,5 +81,26 @@ namespace Web_back.Controllers.Implements.Hospital
                 return StatusCode(500, "Error interno del servidor.");
             }
         }
+
+
+        [HttpGet("{id}/doctorReview")]
+        public async Task<IActionResult> GetDoctorReview(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("El id del doctor debe ser mayor que cero.");
+                }
+
+                var reviews = await _business.GetDoctorWithReviewsAsync(id);
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener lasreview del doctor {DoctorId}", id);
+                return StatusCode(500, "Error interno del servidor.");
+            }
+        }
     }
 }

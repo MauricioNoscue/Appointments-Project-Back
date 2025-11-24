@@ -15,6 +15,14 @@ namespace Business_Back.Services.Citation
         private readonly IScheduleHourBusiness _scheduleHourBusiness;
         private readonly ISheduleBusiness _sheduleBusiness;
         private readonly ICitationsBusiness _citationBusiness;
+
+        /// <summary>
+        /// Constructor de la clase CitationCoreService.
+        /// Inicializa las dependencias necesarias para la gestión de citas.
+        /// </summary>
+        /// <param name="scheduleHourBusiness">Servicio de gestión de horas de horario.</param>
+        /// <param name="sheduleBusiness">Servicio de gestión de horarios.</param>
+        /// <param name="citationBusiness">Servicio de gestión de citas.</param>
         public CitationCoreService(IScheduleHourBusiness scheduleHourBusiness, ISheduleBusiness sheduleBusiness, ICitationsBusiness citationBusiness)
         {
             _scheduleHourBusiness = scheduleHourBusiness;
@@ -22,7 +30,16 @@ namespace Business_Back.Services.Citation
             _citationBusiness = citationBusiness;
         }
 
-
+        /// <summary>
+        /// Obtiene los bloques horarios disponibles para un tipo de cita específico,
+        /// según su configuración de horario (Shedule) y fecha indicada.
+        /// </summary>
+        /// <param name="typeCitationId">Identificador del tipo de cita.</param>
+        /// <param name="fecha">Fecha en la que se consultarán los bloques.</param>
+        /// <param name="incluirOcupados">
+        /// Indica si se deben incluir también los bloques ocupados (true) o solo los disponibles (false).
+        /// </param>
+        /// <returns>Lista de bloques de tiempo con su estado de disponibilidad.</returns>
         public async Task<List<TimeBlockEstado>> GetAvailableTimeBlocksByTypeCitationIdAsync(int typeCitationId, DateTime fecha, bool incluirOcupados = false)
         {
             try
@@ -61,69 +78,95 @@ namespace Business_Back.Services.Citation
             }
         }
 
-
+        /// <summary>
+        /// Calcula los bloques horarios posibles según la configuración de un horario (ScheduleHour).
+        /// </summary>
+        /// <param name="scheduleHour">Entidad con los datos de horario y su configuración asociada.</param>
+        /// <returns>Lista de horas (TimeSpan) que representan los posibles bloques de atención.</returns>
         public List<TimeSpan> CalcularBloquesHorarios(ScheduleHour scheduleHour)
         {
-            var bloques = new List<TimeSpan>();
-
-            if (scheduleHour == null || scheduleHour.Shedule == null || scheduleHour.Shedule.NumberCitation <= 0)
-                return bloques;
-
-            int cantidadCitas = scheduleHour.Shedule.NumberCitation;
-            TimeSpan horaInicio = scheduleHour.StartTime;
-            TimeSpan horaFin = scheduleHour.EndTime;
-
-            TimeSpan? pausaInicio = scheduleHour.BreakStartTime;
-            TimeSpan? pausaFin = scheduleHour.BreakEndTime;
-
-            TimeSpan duracionDisponible = pausaInicio.HasValue && pausaFin.HasValue
-                ? (pausaInicio.Value - horaInicio) + (horaFin - pausaFin.Value)
-                : horaFin - horaInicio;
-
-            TimeSpan duracionCita = TimeSpan.FromMinutes(duracionDisponible.TotalMinutes / cantidadCitas);
-            TimeSpan actual = horaInicio;
-
-            for (int i = 0; i < cantidadCitas; i++)
+            try
             {
-                if (pausaInicio.HasValue && pausaFin.HasValue &&
-                    actual >= pausaInicio.Value && actual < pausaFin.Value)
+                var bloques = new List<TimeSpan>();
+
+                if (scheduleHour == null || scheduleHour.Shedule == null || scheduleHour.Shedule.NumberCitation <= 0)
+                    return bloques;
+
+                int cantidadCitas = scheduleHour.Shedule.NumberCitation;
+                TimeSpan horaInicio = scheduleHour.StartTime;
+                TimeSpan horaFin = scheduleHour.EndTime;
+
+                TimeSpan? pausaInicio = scheduleHour.BreakStartTime;
+                TimeSpan? pausaFin = scheduleHour.BreakEndTime;
+
+                TimeSpan duracionDisponible = pausaInicio.HasValue && pausaFin.HasValue
+                    ? (pausaInicio.Value - horaInicio) + (horaFin - pausaFin.Value)
+                    : horaFin - horaInicio;
+
+                TimeSpan duracionCita = TimeSpan.FromMinutes(duracionDisponible.TotalMinutes / cantidadCitas);
+                TimeSpan actual = horaInicio;
+
+                for (int i = 0; i < cantidadCitas; i++)
                 {
-                    actual = pausaFin.Value;
+                    if (pausaInicio.HasValue && pausaFin.HasValue &&
+                        actual >= pausaInicio.Value && actual < pausaFin.Value)
+                    {
+                        actual = pausaFin.Value;
+                    }
+
+                    if (actual + duracionCita <= horaFin)
+                    {
+                        bloques.Add(actual);
+                        actual = actual.Add(duracionCita);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
-                if (actual + duracionCita <= horaFin)
-                {
-                    bloques.Add(actual);
-                    actual = actual.Add(duracionCita);
-                }
-                else
-                {
-                    break;
-                }
+                return bloques;
             }
-
-            return bloques;
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al calcular los bloques horarios: {ex.Message}", ex);
+            }
         }
 
+        /// <summary>
+        /// Filtra los bloques horarios para identificar cuáles están disponibles y cuáles no.
+        /// </summary>
+        /// <param name="todosLosBloques">Lista de todos los bloques generados.</param>
+        /// <param name="bloquesOcupados">Lista de bloques actualmente ocupados.</param>
+        /// <param name="incluirOcupados">
+        /// Indica si se deben incluir los ocupados o solo los disponibles.
+        /// </param>
+        /// <returns>Lista de bloques con su estado de disponibilidad.</returns>
         public List<TimeBlockEstado> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques, List<TimeSpan> bloquesOcupados, bool incluirOcupados = false)
         {
-
-            if (!incluirOcupados)
+            try
             {
-                // Solo disponibles
-                return todosLosBloques
-                    .Where(b => !bloquesOcupados.Contains(b))
-                    .Select(b => new TimeBlockEstado { Hora = b, EstaDisponible = true })
-                    .ToList();
-            }
-
-            // Todos, pero con flag
-            return todosLosBloques
-                .Select(b => new TimeBlockEstado
+                if (!incluirOcupados)
                 {
-                    Hora = b,
-                    EstaDisponible = !bloquesOcupados.Contains(b)
-                }).ToList();
+                    // Solo disponibles
+                    return todosLosBloques
+                        .Where(b => !bloquesOcupados.Contains(b))
+                        .Select(b => new TimeBlockEstado { Hora = b, EstaDisponible = true })
+                        .ToList();
+                }
+
+                // Todos, pero con flag
+                return todosLosBloques
+                    .Select(b => new TimeBlockEstado
+                    {
+                        Hora = b,
+                        EstaDisponible = !bloquesOcupados.Contains(b)
+                    }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al filtrar bloques disponibles: {ex.Message}", ex);
+            }
         }
 
         /// <summary>
@@ -156,7 +199,5 @@ namespace Business_Back.Services.Citation
                 throw new Exception($"Error al filtrar bloques por fecha actual: {ex.Message}", ex);
             }
         }
-
-
     }
 }

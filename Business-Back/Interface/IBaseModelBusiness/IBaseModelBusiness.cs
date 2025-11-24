@@ -15,7 +15,7 @@ namespace Business_Back.Interface.BaseModelBusiness
         Task<bool> Delete(int id);
         Task<bool> DeleteLogical(int id);
         Task<IEnumerable<Dl>> GetAllUser(int userId);
-        Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId);
+        Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId, bool? restore = false);
 
 
 
