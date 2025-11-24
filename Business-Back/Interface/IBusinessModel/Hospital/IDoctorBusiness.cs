@@ -1,5 +1,6 @@
 using Business_Back.Interface.BaseModelBusiness;
 using Entity_Back;
+using Entity_Back.Dto.HospitalDto.DoctorDto;
 
 namespace Business_Back
 {
@@ -9,5 +10,7 @@ namespace Business_Back
         Task<DoctorListDto?> GetDoctorWithPersonById(int id);
         // Método para obtener citas asignadas a un doctor
         Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId);
+
+        Task<DoctorReviewAll?> GetDoctorWithReviewsAsync(int doctorId);
     }
 }

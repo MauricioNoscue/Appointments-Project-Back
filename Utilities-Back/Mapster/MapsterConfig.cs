@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entity_Back;
+using Entity_Back.Dto.HospitalDto.DoctorDto;
 using Entity_Back.Dto.HospitalDto.RelatedPerson;
 using Entity_Back.Dto.InfrastructureDto.BranchDto;
 using Entity_Back.Dto.InfrastructureDto.CityDto;
@@ -323,6 +324,22 @@ namespace Utilities_Back.Mapster
 
             // EditDto → Entity
             TypeAdapterConfig<DoctorReviewEditDto, DoctorReview>.NewConfig();
+
+
+            TypeAdapterConfig<Doctor, DoctorReviewAll>
+            .NewConfig()
+            .Map(dest => dest.SpecialtyName, src => src.Specialty.Name)
+            .Map(dest => dest.SpecialtyDescription, src => src.Specialty.Description)
+            .Map(dest => dest.FullName, src => src.Person.FullName)
+            .Map(dest => dest.FullLastName, src => src.Person.FullLastName)
+            .Map(dest => dest.Document, src => src.Person.Document)
+            .Map(dest => dest.PhoneNumber, src => src.Person.PhoneNumber)
+            .Map(dest => dest.DateBorn, src => src.Person.DateBorn)
+            .Map(dest => dest.Address, src => src.Person.Address)
+            .Map(dest => dest.Reviews, src => src.Reviews);
+
+            TypeAdapterConfig<DoctorReview, DoctorReviewListDto>.NewConfig();
+
 
 
 

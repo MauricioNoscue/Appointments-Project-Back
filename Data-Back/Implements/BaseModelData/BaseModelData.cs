@@ -244,7 +244,7 @@ namespace Data_Back.Implements.BaseModelData
 
 
 
-        public override async Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId)
+        public override async Task<bool> UpdateStatusTypesAsync(int id, int statusTypeId, bool? restore = false)
         {
             try
             {

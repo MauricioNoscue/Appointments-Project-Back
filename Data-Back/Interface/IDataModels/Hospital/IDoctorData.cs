@@ -1,5 +1,6 @@
 using Data_Back.Interface.IBaseModelData;
 using Entity_Back;
+using Entity_Back.Dto.HospitalDto.DoctorDto;
 
 namespace Data_Back.Interface
 {
@@ -11,5 +12,7 @@ namespace Data_Back.Interface
         Task<IEnumerable<CitationListDto>> GetCitationsByDoctorId(int doctorId);
 
         Task<Doctor?> GetDoctorByUserIdAsync(int userId);
+
+        Task<DoctorReviewAll?> GetDoctorWithReviewsAsync(int doctorId);
     }
 }

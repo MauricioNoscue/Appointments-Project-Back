@@ -15,5 +15,7 @@ namespace Business_Back.Interface.IBusinessModel.Security
         Task<string?> RequestPasswordResetAsync(string email);
 
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
+
+        Task<bool> UpdateRestrictionPointsAsync(int userId, bool restore = false);
     }
 }
