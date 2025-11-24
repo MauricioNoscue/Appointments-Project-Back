@@ -264,6 +264,25 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         }
 
 
+        public async Task SaveTwoFactorCodeAsync(int userId, string code, TimeSpan ttl)
+        {
+            var user = await _context.User.FirstAsync(u => u.Id == userId);
+
+            user.TwoFactorCode = code;
+            user.TwoFactorExpiresAt = DateTime.UtcNow.Add(ttl);
+
+            await _context.SaveChangesAsync();
+        }
+        public async Task ClearTwoFactorCodeAsync(User user)
+        {
+            user.TwoFactorCode = null;
+            user.TwoFactorExpiresAt = null;
+
+            await _context.SaveChangesAsync();
+        }
+
+
+
 
     }
 }

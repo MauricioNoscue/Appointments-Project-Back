@@ -22,6 +22,10 @@ namespace Entity_Back.Models.SecurityModels
         public string? PasswordResetToken { get; set; }
         public bool Rescheduling { get; set; } = false;
 
+        public string? TwoFactorCode { get; set; }   // Código temporal
+        public DateTime? TwoFactorExpiresAt { get; set; } // Expira en pocos minutos
+
+
         public DateTime? PasswordResetTokenExpiration { get; set; }
         public Person Person { get; set; }
         public List<Notifications> Notifications { get; set; } = new List<Notifications>();
