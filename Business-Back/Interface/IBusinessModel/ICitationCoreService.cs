@@ -47,10 +47,11 @@ namespace Business_Back.Interface.IBusinessModel
         /// </param>
         /// <returns>Lista de bloques con su estado de disponibilidad.</returns>
         List<TimeBlockEstado> FiltrarBloquesDisponibles(
-            List<TimeSpan> todosLosBloques,
-            List<TimeSpan> bloquesOcupados,
-            bool incluirOcupados = false
-        );
+     List<TimeSpan> todosLosBloques,
+     List<TimeSpan> bloquesOcupados,
+     bool incluirOcupados = false,
+     int scheduleHourId = 0);
+
 
 
         List<TimeBlockEstado> FiltrarBloquesPorFechaActual(

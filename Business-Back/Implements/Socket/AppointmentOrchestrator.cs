@@ -122,7 +122,7 @@ namespace Business_Back.Implements.Socket
                         UserId = userId,
                         AppointmentDate = slot.Date,
                         TimeBlock = slot.TimeBlock,
-                        StatustypesId = 1,
+                        StatustypesId = slot.ScheduleHourId,
                         Note = string.Empty,
                         ScheduleHourId = slot.ScheduleHourId,
                         IsDeleted = false,

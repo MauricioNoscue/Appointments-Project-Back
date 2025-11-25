@@ -66,9 +66,17 @@ namespace Business_Back.Services.Citation
                     .GetUsedTimeBlocksByScheduleHourIdAndDateAsync(scheduleHourEntity.Id, fecha.Date);
 
                 // Paso 6: Filtrar/etiquetar los bloques según el parámetro
-                var resultado = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados, incluirOcupados);
+                // var resultado = FiltrarBloquesDisponibles(todosLosBloques, bloquesOcupados, incluirOcupados);
+
+                var resultado = FiltrarBloquesDisponibles(
+      todosLosBloques,
+      bloquesOcupados,
+      incluirOcupados,
+      scheduleHourEntity.Id
+  );
 
                 resultado = FiltrarBloquesPorFechaActual(resultado, fecha);
+
 
                 return resultado;
             }
@@ -142,32 +150,44 @@ namespace Business_Back.Services.Citation
         /// Indica si se deben incluir los ocupados o solo los disponibles.
         /// </param>
         /// <returns>Lista de bloques con su estado de disponibilidad.</returns>
-        public List<TimeBlockEstado> FiltrarBloquesDisponibles(List<TimeSpan> todosLosBloques, List<TimeSpan> bloquesOcupados, bool incluirOcupados = false)
+        public List<TimeBlockEstado> FiltrarBloquesDisponibles(
+         List<TimeSpan> todosLosBloques,
+         List<TimeSpan> bloquesOcupados,
+         bool incluirOcupados = false,
+         int scheduleHourId = 0)
         {
             try
             {
                 if (!incluirOcupados)
                 {
-                    // Solo disponibles
+                    // Solo bloques disponibles
                     return todosLosBloques
                         .Where(b => !bloquesOcupados.Contains(b))
-                        .Select(b => new TimeBlockEstado { Hora = b, EstaDisponible = true })
+                        .Select(b => new TimeBlockEstado
+                        {
+                            Hora = b,
+                            EstaDisponible = true,
+                            ScheduleHourId = scheduleHourId
+                        })
                         .ToList();
                 }
 
-                // Todos, pero con flag
+                // Incluir ocupados también
                 return todosLosBloques
                     .Select(b => new TimeBlockEstado
                     {
                         Hora = b,
-                        EstaDisponible = !bloquesOcupados.Contains(b)
-                    }).ToList();
+                        EstaDisponible = !bloquesOcupados.Contains(b),
+                        ScheduleHourId = scheduleHourId
+                    })
+                    .ToList();
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error al filtrar bloques disponibles: {ex.Message}", ex);
             }
         }
+
 
         /// <summary>
         /// Filtra los bloques horarios tomando en cuenta la hora actual
