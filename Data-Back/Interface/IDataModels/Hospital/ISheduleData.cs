@@ -8,5 +8,7 @@ namespace Data_Back.Interface
         Task<Shedule?> GetByIdTypeCitation(int id);
         Task<Shedule?> GetByDoctorAndDateAsync(int doctorId, DateTime date);
 
+        Task<IEnumerable<Shedule>> GetSheduleByDoctor(int doctorId);
+
     }
 }

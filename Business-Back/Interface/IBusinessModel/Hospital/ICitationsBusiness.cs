@@ -7,6 +7,8 @@ namespace Business_Back
     {
         Task<List<TimeSpan>> GetUsedTimeBlocksByScheduleHourIdAndDateAsync(int scheduleHourId, DateTime appointmentDate);
         Task<List<CitationListDto>> GetAllForListAsync(int UserId);
+
+        Task<IEnumerable<CitationListDto>> GetCitationsByDoctor(int doctorId, DateTime date);
     }
 }
 

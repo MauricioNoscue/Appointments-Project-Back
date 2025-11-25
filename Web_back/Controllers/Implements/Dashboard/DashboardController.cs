@@ -31,5 +31,14 @@ namespace Web_back.Controllers.Implements.Dashboard
                 return StatusCode(500, "Error interno del servidor.");
             }
         }
+
+
+        [HttpGet("doctor/{doctorId}")]
+        public async Task<IActionResult> GetDoctorDashboard(int doctorId)
+        {
+            var result = await _dashboardBusiness.GetDashboardAsync(doctorId);
+            return Ok(result);
+        }
+
     }
 }

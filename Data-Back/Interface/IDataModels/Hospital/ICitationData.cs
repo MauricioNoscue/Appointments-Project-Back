@@ -10,6 +10,10 @@ namespace Data_Back
 
         Task<List<Citation>> GetCitationsByDoctorAndDate(int doctorId, DateTime date);
 
+        Task<IEnumerable<Citation>> GetCitationsByDoctor(int doctorId, DateTime date);
+
+        Task<List<Citation>> GetCitationsForDashboardAsync(int doctorId);
+
     }
 }
 

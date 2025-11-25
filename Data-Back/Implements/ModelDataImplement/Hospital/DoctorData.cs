@@ -27,7 +27,7 @@ namespace Data_Back.Implements
                 var doctor = await _context.Doctors
                     .Include(d => d.Person)
                     .Include(d => d.Specialty)
-                    .Where(d => d.PersonId == id && !d.IsDeleted)
+                    .Where(d => d.Id == id && !d.IsDeleted)
                     .FirstOrDefaultAsync();
 
                 if (doctor == null) return null;
@@ -47,7 +47,7 @@ namespace Data_Back.Implements
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al obtener el doctor por PersonId {id}: {ex.Message}", ex);
+                throw new Exception($"Error al obtener el doctor por Id {id}: {ex.Message}", ex);
             }
         }
 
