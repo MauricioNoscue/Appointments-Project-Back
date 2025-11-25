@@ -124,6 +124,11 @@ namespace Utilities_Back.Mapster
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.Note, src => src.Note)
                 .Map(dest => dest.AppointmentDate, src => src.AppointmentDate)
+                .Map(dest => dest.StatustypesName, src => src.Statustypes.Name)
+                .Map(dest => dest.DoctorId, src => src.ScheduleHour.Shedule.Doctor.Id)
+
+
+
 
                 .Map(dest => dest.NameDoctor, src => src.ScheduleHour.Shedule.Doctor.Person.FullName)  // ajusta si tu Doctor no tiene Person
                 .Map(dest => dest.ConsultingRoomName, src => src.ScheduleHour.Shedule.ConsultingRoom.Name)
@@ -282,8 +287,24 @@ namespace Utilities_Back.Mapster
                 .NewConfig();
 
             // Notification (Entity -> List, ya lo tienes)
-            TypeAdapterConfig<Notifications, NotificationListDto>.NewConfig();
-                //.Map(d => d.TypeCitationName, s => s.citation.ScheduleHour.Shedule.TypeCitation.Name);
+            TypeAdapterConfig<Notifications, NotificationListDto>
+                .NewConfig()
+                // Campos directos
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Title, src => src.Title)
+                .Map(dest => dest.Message, src => src.Message)
+                .Map(dest => dest.TypeNotification, src => src.TypeNotification)
+                .Map(dest => dest.RedirectUrl, src => src.RedirectUrl)
+                .Map(dest => dest.StatustypesId, src => src.StatustypesId)
+                .Map(dest => dest.StatustypesName, src => src.Statustypes.Name)
+                .Map(dest => dest.UserId, src => src.UserId)
+
+                // Datos desde la cita (null-safe)
+                .Map(dest => dest.CitationId, src => src.citation != null ? src.citation.Id : (int?)null)
+                .Map(dest => dest.TimeBlock, src => src.citation != null ? src.citation.TimeBlock : null)
+                .Map(dest => dest.AppointmentDate, src => src.citation != null ? src.citation.AppointmentDate : default)
+                .Map(dest => dest.ReltedPersonId, src => src.citation != null ? src.citation.ReltedPersonId : null);
+
 
             // ⬇️  DESCOMENTAR / AÑADIR  ⬇️
             TypeAdapterConfig<NotificationEditDto, Notifications>

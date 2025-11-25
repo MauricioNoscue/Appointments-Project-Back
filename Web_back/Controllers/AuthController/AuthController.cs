@@ -28,20 +28,36 @@ namespace Web_back.Controllers.AuthController
         {
             try
             {
-                // 1️⃣ Primero intentamos 2FA
-                var twoFactorResult = await _authService.LoginWithTwoFactorAsync(
+                // 1️⃣ Intentar login con validación de restricciones y 2FA
+                var result = await _authService.LoginWithTwoFactorAsync(
                     request.Email,
                     request.Password
                 );
 
-                if (twoFactorResult == null)
+                if (result == null)
                     return Unauthorized("Credenciales inválidas.");
 
-                // Si requiere 2FA → enviar respuesta al front
-                if (twoFactorResult.RequiresTwoFactor)
-                    return Ok(twoFactorResult);
+                // 2️⃣ Si la cuenta está BLOQUEADA
+                if (result.IsBlocked)
+                {
+                    return Ok(new
+                    {
+                        isBlocked = true,
+                        userId = result.UserId
+                    });
+                }
 
-                // 2️⃣ Si no requiere 2FA → login normal con tokens
+                // 3️⃣ Si requiere 2FA → enviar al front
+                if (result.RequiresTwoFactor)
+                {
+                    return Ok(new
+                    {
+                        requiresTwoFactor = true,
+                        userId = result.UserId
+                    });
+                }
+
+                // 4️⃣ Si no requiere 2FA → login normal con tokens
                 var tokens = await _authService.LoginWithTokensAsync(
                     request.Email,
                     request.Password,
@@ -58,6 +74,7 @@ namespace Web_back.Controllers.AuthController
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
 
 
         [HttpPost("refresh")]

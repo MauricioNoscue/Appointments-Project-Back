@@ -105,7 +105,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<AppointmentHub>("/hubs/appointments");
-app.MapHub<NotificationHub>("/hubs/notifications");
+app.MapHub<NotificationHub>("/hubs/noti");
 
 
 //using (var scope = app.Services.CreateScope())

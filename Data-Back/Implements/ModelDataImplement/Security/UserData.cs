@@ -282,6 +282,46 @@ namespace Data_Back.Implements.ModelDataImplement.Security
         }
 
 
+        public async Task<User?> GetByUserc(int userId)
+        {
+            try
+            {
+                return await _context.Set<User>()
+               .Include(p => p.Person)
+               .FirstOrDefaultAsync(p => p.Id == userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener el registro {typeof(User).Name} con ID: {userId}");
+                throw;
+            }
+        }
+
+
+
+        public async Task<bool> ToggleReschedulingAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.User
+                    .FirstOrDefaultAsync(u => !u.IsDeleted && u.Id == userId);
+
+                if (user == null)
+                    return false;
+
+                // Invertir el valor
+                user.Rescheduling = !user.Rescheduling;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al invertir Rescheduling para User ID: {userId}", userId);
+                throw;
+            }
+        }
+
 
 
     }

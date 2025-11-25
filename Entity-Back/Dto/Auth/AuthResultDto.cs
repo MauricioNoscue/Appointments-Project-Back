@@ -16,5 +16,6 @@ namespace Entity_Back.Dto.Auth
 
         // 👇 ÚNICO dato que necesitas devolver al front
         public int? UserId { get; set; }
+        public bool IsBlocked { get; set; }
     }
 }

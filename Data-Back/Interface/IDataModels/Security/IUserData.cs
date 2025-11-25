@@ -71,5 +71,9 @@ namespace Data_Back.Interface.IDataModels.Security
         Task SaveTwoFactorCodeAsync(int userId, string code, TimeSpan ttl);
 
         Task ClearTwoFactorCodeAsync(User user);
+
+        Task<User?> GetByUserc(int userId);
+
+        Task<bool> ToggleReschedulingAsync(int userId);
     }
 }

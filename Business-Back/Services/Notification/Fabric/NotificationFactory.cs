@@ -96,6 +96,20 @@ namespace Business_Back.Services.Notification.Fabric
                 throw;
             }
         }
+
+
+        public static (string title, string message, TypeNotification type, int statusId)
+            BuildTwoFactorCode()
+                {
+                    return (
+                        "Código de verificación",
+                        "Se envió tu código 2FA.",
+                        TypeNotification.Info,
+                        5 // o el StatusTypesId correcto
+                    );
+                }
+
+
     }
 
 }

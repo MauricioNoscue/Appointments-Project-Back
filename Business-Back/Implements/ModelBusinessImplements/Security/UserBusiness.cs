@@ -297,5 +297,35 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 throw new BusinessException("Ocurrió un error al actualizar los puntos de restricción.", ex);
             }
         }
+
+        public async  Task<int?> GetByUserc(int userId)
+        {   
+            try
+            {
+                var user = await _data.GetByUserc(userId);
+                return user.Person.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener el usuario por Userc {UserId}", userId);
+                throw new BusinessException("Ocurrió un error al obtener el usuario por Userc.", ex);
+            }
+        }
+
+
+
+        public async Task<bool> ToggleReschedulingAsync(int userId)
+        {
+            try
+            {
+                // Llamar a Data donde realmente se invierte la propiedad
+                return await _data.ToggleReschedulingAsync(userId);
+            }
+            catch (BusinessException)
+            {
+                throw;
+            }
+        }
+
     }
 }

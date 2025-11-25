@@ -129,6 +129,13 @@ namespace Business_Back
 
                 switch (citation.StatustypesId)
                 {
+
+
+                    case 2: // Atendida
+                        email = EmailTemplateFactory.BuildCitationCanceled(user, citation);
+                        notification = NotificationFactory.BuildCitationCanceled();
+                        break;
+
                     case 3: // No asistida
                         email = EmailTemplateFactory.BuildCitationMissed(user, citation);
                         notification = NotificationFactory.BuildCitationMissed();

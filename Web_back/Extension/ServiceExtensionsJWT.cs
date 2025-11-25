@@ -47,7 +47,8 @@ namespace Web_back.Extension
                         var path = context.HttpContext.Request.Path;
 
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            path.StartsWithSegments("/hubs/appointments"))
+                             (path.StartsWithSegments("/hubs/appointments") ||
+                         path.StartsWithSegments("/hubs/noti"))) // ❗ AGREGAR ESTO ❗
                         {
                             context.Token = accessToken;
                         }

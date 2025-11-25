@@ -36,6 +36,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Request
         private readonly IModificationRequestHandler _doctorAbsenceHandler;
         private readonly IUserData _userBusiness;
         private readonly INotificationOrchestrator _orchestrator;
+        private readonly IUserBusiness _userService;
 
         /// <summary>
         /// Constructor de la clase <see cref="ModificationRequestBusiness"/>.
@@ -48,13 +49,14 @@ namespace Business_Back.Implements.ModelBusinessImplements.Request
         /// <param name="orchestrator">Orquestador de notificaciones.</param>
         public ModificationRequestBusiness(IConfiguration configuration, IModificationRequestData data,
             ILogger<ModificationRequestBusiness> logger,
-            IModificationRequestHandler doctorAbsenceHandler, IUserData userBusiness, INotificationOrchestrator orchestrator)
+            IModificationRequestHandler doctorAbsenceHandler, IUserData userBusiness, INotificationOrchestrator orchestrator, IUserBusiness userService)
             : base(configuration, data, logger)
         {
             _data = data;
             _doctorAbsenceHandler = doctorAbsenceHandler;
             _userBusiness = userBusiness;
             _orchestrator = orchestrator;
+            _userService = userService;
         }
 
         /// <summary>
@@ -107,8 +109,12 @@ namespace Business_Back.Implements.ModelBusinessImplements.Request
             {
                 switch (request.TypeRequest)
                 {
-                    case TypeRequest.Absence: // Falta del doctor
+                    case TypeRequest.Absence: 
                         await _doctorAbsenceHandler.HandleAsync(request);
+                        break;
+
+                    case TypeRequest.AccountUnlock:
+                        await _userService.UpdateRestrictionPointsAsync(request.UserId, true);
                         break;
 
                     default:
