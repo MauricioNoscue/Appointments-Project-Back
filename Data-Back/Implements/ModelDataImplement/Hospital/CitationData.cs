@@ -56,6 +56,7 @@ namespace Data_Back
             {
                 var lts = await _context.Set<Citation>()
                     .AsNoTracking()
+                    .Include(c => c.Statustypes)
                     .Include(c => c.ScheduleHour)
                         .ThenInclude(sh => sh.Shedule)
                             .ThenInclude(s => s.Doctor)
@@ -91,6 +92,8 @@ namespace Data_Back
             {
                 var citations = await _context.Citation
                     .AsNoTracking()
+                    .Include(c => c.Statustypes)
+
                     .Include(c => c.ScheduleHour)
                         .ThenInclude(sh => sh.Shedule)
                             .ThenInclude(s => s.Doctor)
@@ -126,6 +129,8 @@ namespace Data_Back
         {
             var lts = await _context.Set<Citation>()
                 .AsNoTracking()
+                    .Include(c => c.Statustypes)
+
                 .Include(c => c.ScheduleHour)
                     .ThenInclude(sh => sh.Shedule)
                         .ThenInclude(s => s.Doctor)

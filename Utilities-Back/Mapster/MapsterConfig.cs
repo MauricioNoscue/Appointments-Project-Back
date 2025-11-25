@@ -123,6 +123,7 @@ namespace Utilities_Back.Mapster
 
             TypeAdapterConfig<Citation, CitationListDto>.NewConfig()
                 .Map(dest => dest.Note, src => src.Note)
+                .Map(dest => dest.StatustypesName, src => src.Statustypes.Name)
                 .Map(dest => dest.AppointmentDate, src => src.AppointmentDate)
                 .Map(dest => dest.StatustypesName, src => src.Statustypes.Name)
                 .Map(dest => dest.DoctorId, src => src.ScheduleHour.Shedule.Doctor.Id)
