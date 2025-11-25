@@ -1,4 +1,5 @@
 using Business_Back.Interface.IBusinessModel.Dashboard;
+using Data_Back;
 using Entity_Back;
 using Entity_Back.Context;
 using Entity_Back.Dto.DashboardDto;
@@ -8,14 +9,18 @@ using Microsoft.Extensions.Logging;
 namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
 {
     public class DashboardBusiness : IDashboardBusiness
+        
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<DashboardBusiness> _logger;
+        private readonly ICitationsData _repo;
 
-        public DashboardBusiness(ApplicationDbContext context, ILogger<DashboardBusiness> logger)
+        public DashboardBusiness(ApplicationDbContext context, ILogger<DashboardBusiness> logger, ICitationsData repo)
         {
             _context = context;
             _logger = logger;
+            _repo = repo;
+
         }
 
         public async Task<DashboardDto> GetDashboardDataAsync()
@@ -136,5 +141,88 @@ namespace Business_Back.Implements.ModelBusinessImplements.Dashboard
                 throw;
             }
         }
+
+
+        public async Task<DoctorDashboardVmDto> GetDashboardAsync(int doctorId)
+        {
+            var citas = await _repo.GetCitationsForDashboardAsync(doctorId);
+
+            var today = DateTime.Today;
+            var now = DateTime.Now;
+
+            // Estados
+            const int PROGRAMADA = 1;
+            const int CANCELADA = 2;
+            const int NO_ASISTIDA = 3;
+            const int ATENDIDA = 4;
+            const int REPROGRAMADA = 10;
+
+            // KPIs del día
+            var hoy = citas.Where(c => c.AppointmentDate.Date == today);
+
+            var kpis = new KpiDto
+            {
+                AttendedToday = hoy.Count(c => c.StatustypesId == ATENDIDA),
+                PresentToday = hoy.Count(c => c.StatustypesId == PROGRAMADA), // si tienes estado "presente" me dices
+                AbsentToday = hoy.Count(c => c.StatustypesId == NO_ASISTIDA),
+            };
+
+            // Semana
+            var start = today.AddDays(-(int)today.DayOfWeek + 1); // lunes
+            var end = start.AddDays(5);
+
+            var week = citas
+                .Where(c => c.AppointmentDate.Date >= start &&
+                            c.AppointmentDate.Date <= end);
+
+            var weekly = week
+                .GroupBy(c => ((int)c.AppointmentDate.DayOfWeek + 6) % 7)
+                .OrderBy(g => g.Key)
+                .Select(g => g.Count())
+                .ToList();
+
+            // Asegurar 6 días (L?S)
+            while (weekly.Count < 6)
+                weekly.Add(0);
+
+            var weeklyBars = new WeeklyBarsDto
+            {
+                Labels = new() { "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb" },
+                Values = weekly
+            };
+
+            // Donut
+            var donut = new DonutDto
+            {
+                Attended = citas.Count(c => c.StatustypesId == ATENDIDA),
+                NotAttended = citas.Count(c => c.StatustypesId == NO_ASISTIDA),
+            };
+
+            // Próxima cita
+            var next = citas
+                .Where(c => c.AppointmentDate > now)
+                .OrderBy(c => c.AppointmentDate)
+                .Select(c => new NextCitationDto
+                {
+                    Date = c.AppointmentDate,
+                    TimeLabel = c.AppointmentDate.ToString("HH:mm"),
+                    Note = c.Note
+                })
+                .FirstOrDefault();
+
+            // Pendientes
+            var pendingCount = citas.Count(c => c.StatustypesId == PROGRAMADA);
+
+            return new DoctorDashboardVmDto
+            {
+                Kpis = kpis,
+                WeeklyBars = weeklyBars,
+                Donut = donut,
+                Next = next,
+                PendingCount = pendingCount
+            };
+        }
+
+
     }
 }

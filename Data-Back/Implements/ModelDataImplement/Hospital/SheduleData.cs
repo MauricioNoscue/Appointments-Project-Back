@@ -41,6 +41,27 @@ namespace Data_Back.Implements
         }
 
 
+        public  async Task<IEnumerable<Shedule>> GetSheduleByDoctor(int doctorId)
+        {
+            try
+            {
+                var ltsModel = await _context.Set<Shedule>()
+                    .Include(e => e.Doctor)
+                    .Include(t => t.TypeCitation)
+                    .Include(c => c.ConsultingRoom)
+                .Where(e => !e.IsDeleted && e.DoctorId == doctorId )
+                .ToListAsync();
+
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(Shedule).Name}");
+                throw;
+            }
+        }
+
+
 
         public async Task<Shedule?>  GetByIdTypeCitation(int id)
         {

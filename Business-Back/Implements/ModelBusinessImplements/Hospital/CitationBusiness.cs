@@ -131,7 +131,7 @@ namespace Business_Back
                 {
 
 
-                    case 2: // Atendida
+                    case 2: // cancelada
                         email = EmailTemplateFactory.BuildCitationCanceled(user, citation);
                         notification = NotificationFactory.BuildCitationCanceled();
                         break;
@@ -168,6 +168,24 @@ namespace Business_Back
             {
                 _logger.LogError(ex, "Error en SendCitationStatusNotificationAsync para la cita {CitationId}", citation?.Id);
                 throw;
+            }
+        }
+
+
+       
+     
+        public  async Task<IEnumerable<CitationListDto>> GetCitationsByDoctor(int doctorId, DateTime date)
+        {
+            try
+            {
+                var allEntities = await _data.GetCitationsByDoctor(doctorId,date);
+                return allEntities.Adapt<IEnumerable<CitationListDto>>();
+
+            }
+            catch (BusinessException ex)
+            {
+                _logger.LogError(ex, $"Error al obtener los reguistros registros  ");
+                throw new BusinessException("Ocurrió un error inesperado al consultar los datos.", ex);
             }
         }
     }

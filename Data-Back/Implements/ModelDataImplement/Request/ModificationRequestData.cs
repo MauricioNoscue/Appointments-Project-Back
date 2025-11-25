@@ -48,6 +48,28 @@ namespace Data_Back.Implements.ModelDataImplement.Request
             }
         }
 
+        public override async Task<IEnumerable<ModificationRequest>> GetAllUser(int userId)
+        {
+            try
+            {
+                var ltsModel = await _context.Set<ModificationRequest>()
+                          .AsNoTracking()
+                    .Where(e => !e.IsDeleted)
+                    .Include(e => e.Statustypes)
+                    .Include(e => e.User)                               // ✔ necesario
+                        .ThenInclude(u => u.Person)                     // ✔ necesario
+                            .ThenInclude(p => p.DocumentType)           // ✔ necesario
+                .Where(e => !e.IsDeleted && EF.Property<int>(e, "UserId") == userId)
+                .ToListAsync();
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(ModificationRequest).Name} para el usuario con ID: {userId}");
+                throw;
+            }
+        }
+
 
         public override async Task<ModificationRequest?> GetById(int id)
         {

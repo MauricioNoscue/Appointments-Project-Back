@@ -7,6 +7,7 @@ namespace Business_Back
     {
         Task<SheduleListDto?> GetByIdTypeCitation(int id);
         Task<Shedule?> GetByDoctorAndDateAsync(int doctorId, DateTime date);
+        Task<IEnumerable<SheduleListDto>> GetSheduleByDoctor(int doctorId);
 
 
     }
