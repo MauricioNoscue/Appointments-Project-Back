@@ -2,8 +2,11 @@
 using Business_Back.Interface.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
 using Entity_Back.Dto.SecurityDto.UserDto;
+using Entity_Back.Dto.Status;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities_Back.Exceptions;
+using Utilities_Back.Helper;
 using Web_back.Controllers.ControllerModel;
 
 namespace Web_back.Controllers.Implements.Security
@@ -76,6 +79,34 @@ namespace Web_back.Controllers.Implements.Security
                 return StatusCode(500, new { mesagge = ex.Message });
             }
         }
+
+
+        [Authorize]
+        [HttpPatch("Rescheduling")]
+        public async Task<IActionResult> ToggleReschedulingAsync()
+        {
+            try
+            {
+                int userId = User.GetUserId();
+                var status = await _service.ToggleReschedulingAsync(userId);
+
+                return Ok(new { message = "Status updated successfully." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Internal error in update status .");
+                return StatusCode(500, new { message = "Internal server error." });
+            }
+        }
+
 
 
     }

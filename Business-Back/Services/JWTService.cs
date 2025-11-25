@@ -36,7 +36,7 @@ namespace Business_Back.Services
         /// 
         //public string GenerateToken(string userId, string username, List<string> roles, List<string> permission)
 
-        public string GenerateToken(string userId, string username, List<RolUser> roles, Doctor doctors)
+        public string GenerateToken(string userId, string username, List<RolUser> roles, Doctor doctors, int? personId)
         {
             // Obtiene la sección JwtSettings del archivo appsettings.json
 
@@ -66,6 +66,12 @@ namespace Business_Back.Services
                 claims.Add(new Claim("DoctorId", doctors.Id.ToString()));
             }
 
+
+            // NUEVO: PersonId
+            if (personId.HasValue)
+            {
+                claims.Add(new Claim("PersonId", personId.Value.ToString()));
+            }
 
 
             // permission.ForEach(permiso => claims.Add(new Claim("permission", permiso)));

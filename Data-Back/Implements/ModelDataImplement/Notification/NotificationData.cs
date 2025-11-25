@@ -26,18 +26,29 @@ namespace Data_Back.Implements.ModelDataImplement.Notification1
         {
             try
             {
-                var ltsModel = await _context.Set<Notifications>()
-                    
+                var list = await _context.Notification
+                    .AsNoTracking()
+                    .Include(n => n.User)                 // Usuario dueño de la notificación
+                    .Include(n => n.Statustypes)          // Estado de la notificación
+                    .Include(n => n.citation)             // Cita relacionada (incluye TimeBlock automáticamente)
+                        .ThenInclude(c => c.Statustypes)  // Estado de la cita
+                    .Include(n => n.citation)
+                        .ThenInclude(c => c.User)         // Usuario dueño de la cita
+                    .Include(n => n.citation)
+                        .ThenInclude(c => c.ScheduleHour) // Bloque horario
+                    .OrderByDescending(n => n.RegistrationDate)
                     .ToListAsync();
 
-                return ltsModel;
+                return list;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(Notifications).Name}");
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {nameof(Notifications)}");
                 throw;
             }
         }
+
+
 
         public async Task<bool> UpdateStatusNotification(int id)
         {

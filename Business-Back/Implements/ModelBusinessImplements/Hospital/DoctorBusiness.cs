@@ -139,18 +139,35 @@ namespace Business_Back
         /// </summary>
         /// <param name="doctorId">Identificador del doctor.</param>
         /// <returns>DTO con la información del doctor y sus reseñas, o null si no existe.</returns>
-        public Task<DoctorReviewAll?> GetDoctorWithReviewsAsync(int doctorId)
+        public async Task<DoctorReviewAll?> GetDoctorWithReviewsAsync(int doctorId)
         {
-            try
+            var data = await _data.GetDoctorWithReviewsAsync(doctorId);
+
+            if (data == null)
+                return null;
+
+            // Calcular promedio
+            if (data.Reviews.Any())
             {
-                var doctorReviews = _data.GetDoctorWithReviewsAsync(doctorId);
-                return doctorReviews;
+                data.AverageRating = Math.Round(data.Reviews.Average(r => r.Rating), 1);
+                data.TotalReviews = data.Reviews.Count;
+
+                data.RatingsDistribution = data.Reviews
+                    .GroupBy(r => r.Rating)
+                    .OrderByDescending(g => g.Key)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Count()
+                    );
             }
-            catch (Exception ex)
+            else
             {
-                // Manejo de errores
-                throw new Exception($"Error al obtener las reseñas del doctor {doctorId}: {ex.Message}", ex);
+                data.AverageRating = 0;
+                data.TotalReviews = 0;
             }
+
+            return data;
         }
+
     }
 }

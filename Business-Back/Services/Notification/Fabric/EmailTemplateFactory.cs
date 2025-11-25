@@ -207,6 +207,23 @@ namespace Business_Back.Services.Notification.Fabric
                 throw;
             }
         }
+
+
+        public static (string subject, string body) BuildTwoFactorCode(User user, string code)
+        {
+            try
+            {
+                string subject = "Código de verificación (2FA)";
+                string body = SendCitation.BuildTwoFactorCodeTemplate(user, code);
+
+                return (subject, body);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 
 

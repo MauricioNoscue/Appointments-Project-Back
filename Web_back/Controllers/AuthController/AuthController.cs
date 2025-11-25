@@ -28,24 +28,54 @@ namespace Web_back.Controllers.AuthController
         {
             try
             {
-                // Comentario: usa tu AuthService para validar credenciales y emitir tokens
-                var result = await _authService.LoginWithTokensAsync(
+                // 1️⃣ Intentar login con validación de restricciones y 2FA
+                var result = await _authService.LoginWithTwoFactorAsync(
                     request.Email,
-                    request.Password,
-                    HttpContext.Connection.RemoteIpAddress?.ToString()
+                    request.Password
                 );
 
                 if (result == null)
                     return Unauthorized("Credenciales inválidas.");
 
-                return Ok(result); // { accessToken, refreshToken, expiresAtUtc }
+                // 2️⃣ Si la cuenta está BLOQUEADA
+                if (result.IsBlocked)
+                {
+                    return Ok(new
+                    {
+                        isBlocked = true,
+                        userId = result.UserId
+                    });
+                }
+
+                // 3️⃣ Si requiere 2FA → enviar al front
+                if (result.RequiresTwoFactor)
+                {
+                    return Ok(new
+                    {
+                        requiresTwoFactor = true,
+                        userId = result.UserId
+                    });
+                }
+
+                // 4️⃣ Si no requiere 2FA → login normal con tokens
+                var tokens = await _authService.LoginWithTokensAsync(
+                    request.Email,
+                    request.Password,
+                    HttpContext.Connection.RemoteIpAddress?.ToString()
+                );
+
+                if (tokens == null)
+                    return Unauthorized("Credenciales inválidas.");
+
+                return Ok(tokens);
             }
             catch (BusinessException ex)
             {
-              
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+
 
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(AuthResultDto), 200)]
@@ -66,6 +96,18 @@ namespace Web_back.Controllers.AuthController
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+        }
+
+
+        [HttpPost("verify-2fa")]
+        public async Task<IActionResult> VerifyTwoFactor([FromBody] VerifyTwoFactorDto dto)
+        {
+            var result = await _authService.VerifyTwoFactorAsync(dto.UserId, dto.Code);
+
+            if (result == null)
+                return Unauthorized("Código inválido o expirado.");
+
+            return Ok(result);  // ahora sí devuelves tokens
         }
 
 

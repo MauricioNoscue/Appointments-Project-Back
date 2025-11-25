@@ -67,5 +67,13 @@ namespace Data_Back.Interface.IDataModels.Security
         /// <param name="userId">Identificador del usuario.</param>
         /// <returns>True si la operación fue exitosa; de lo contrario, false.</returns>
         Task<bool> RestoreRestrictionPointAsync(int userId);
+
+        Task SaveTwoFactorCodeAsync(int userId, string code, TimeSpan ttl);
+
+        Task ClearTwoFactorCodeAsync(User user);
+
+        Task<User?> GetByUserc(int userId);
+
+        Task<bool> ToggleReschedulingAsync(int userId);
     }
 }

@@ -14,7 +14,9 @@ namespace Web_back.Hub
 
             if(!string.IsNullOrEmpty(userId))
             {
+
                 Groups.AddToGroupAsync(Context.ConnectionId, $"user:{userId}");
+                Console.WriteLine($"🔥 SignalR conectado al notifica — userId = {userId}");
             }
 
             return base.OnConnectedAsync();

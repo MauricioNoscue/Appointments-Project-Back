@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Business_Back.Interface.BaseModelBusiness;
 using Entity_Back.Dto.SecurityDto.UserDto;
+using Entity_Back.Models.SecurityModels;
 
 namespace Business_Back.Interface.IBusinessModel.Security
 {
@@ -17,5 +18,9 @@ namespace Business_Back.Interface.IBusinessModel.Security
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
 
         Task<bool> UpdateRestrictionPointsAsync(int userId, bool restore = false);
+
+        Task<int?> GetByUserc(int userId);
+
+        Task<bool> ToggleReschedulingAsync(int userId);
     }
 }

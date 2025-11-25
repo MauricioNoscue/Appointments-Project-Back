@@ -29,6 +29,11 @@ namespace Entity_Back.Dto.HospitalDto.DoctorDto
         public DateTime DateBorn { get; set; }           // Fecha de nacimiento
         public string? Address { get; set; }             // Dirección
 
+        public double AverageRating { get; set; }
+        public int TotalReviews { get; set; }
+        public Dictionary<int, int> RatingsDistribution { get; set; } = new();
+
+
         // Reseñas --------------------------------------
         public List<DoctorReviewListDto> Reviews { get; set; } = new(); // Lista de reseñas
     }

@@ -105,6 +105,33 @@ namespace Data_Back
         }
 
 
+        public override async Task<IEnumerable<Citation>> GetAllUser(int userId)
+        {
+            try
+            {
+                var ltsModel = await _context.Set<Citation>()
+                    .AsNoTracking()
+                         .Include(c => c.Statustypes)
+                        .Include(c => c.ScheduleHour)
+                            .ThenInclude(sh => sh.Shedule)
+                                .ThenInclude(s => s.Doctor)
+                                    .ThenInclude(d => d.Person)
+                        .Include(c => c.ScheduleHour)
+                            .ThenInclude(sh => sh.Shedule)
+                    .ThenInclude(s => s.ConsultingRoom)
+                .Where(e => !e.IsDeleted && EF.Property<int>(e, "UserId") == userId)
+                .ToListAsync();
+                return ltsModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error al obtener todos los registros de la entidad {typeof(Citation).Name} para el usuario con ID: {userId}");
+                throw;
+            }
+        }
+
+
+
 
     }
 }
