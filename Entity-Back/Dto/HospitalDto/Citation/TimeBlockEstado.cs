@@ -10,6 +10,8 @@ namespace Entity_Back.Dto.HospitalDto.Citation
     {
         public TimeSpan Hora { get; set; }
         public bool EstaDisponible { get; set; }
+        public int ScheduleHourId { get; set; }
+
     }
 
 }
