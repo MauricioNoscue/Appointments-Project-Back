@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Business_Back.Implements.BaseModelBusiness;
 using Business_Back.Interface.IBusinessModel.Security;
 using Data_Back.Interface.IDataModels.Security;
+using Entity_Back.Context;
 using Entity_Back.Dto.SecurityDto.PersonDto;
+using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Enum;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
@@ -20,11 +22,15 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
     {
 
         private readonly IpersonData _data;
+        private readonly ApplicationDbContext _db;
+    
 
-        public PersonBusiness(IConfiguration configuration, IpersonData data, ILogger<PersonBusiness> logger) :
+
+        public PersonBusiness(IConfiguration configuration, IpersonData data, ILogger<PersonBusiness> logger, ApplicationDbContext db) :
             base(configuration, data, logger)
         {
             _data = data;
+            _db = db;
         }
 
         public override async Task<IEnumerable<PersonListDto>> GetAll()
@@ -102,6 +108,9 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             }
         }
 
+
+
+       
 
 
     }
