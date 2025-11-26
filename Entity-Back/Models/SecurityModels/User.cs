@@ -18,7 +18,7 @@ namespace Entity_Back.Models.SecurityModels
         public bool? Active { get; set; } = false;
         public int? PersonId { get; set; }
         public string? CodePassword { get; set; }
-        public int? RestrictionPoint { get; set; }
+        public int? RestrictionPoint { get; set; } 
         public string? PasswordResetToken { get; set; }
         public bool Rescheduling { get; set; } = false;
 

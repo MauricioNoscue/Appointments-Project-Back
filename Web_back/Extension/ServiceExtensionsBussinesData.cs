@@ -66,6 +66,7 @@ using Data_Back.Implements.ModelDataImplement.Review;
 using Data_Back.Interface.IDataModels.Review;
 using Business_Back.Interface.IBusinessModel.Services;
 using Business_Back.Services.Notification;
+using Business_Back.Interface;
 
 namespace Web_back.Extension
 {
@@ -258,6 +259,7 @@ namespace Web_back.Extension
             services.AddScoped<INotificationOrchestrator, NotificationOrchestrator>();
 
 
+            services.AddScoped<IPersonUserCoreService, PersonUserCoreService>();
 
 
 
