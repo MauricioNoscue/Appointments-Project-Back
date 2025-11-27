@@ -58,7 +58,10 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                     Password = dto.Password,
                     Active = true,
                     PersonId = newPerson.Id,
-                    Rescheduling = dto.Rescheduling
+                    Rescheduling = dto.Rescheduling,
+                    
+
+
                 };
 
                 var newUser = await _userBusiness.Save(userDto);

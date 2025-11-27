@@ -28,5 +28,8 @@ namespace Entity_Back.Dto.SecurityDto.UserDto
         public int PersonId { get; set; }
         public bool Rescheduling { get; set; } = false;
 
+
+
+
     }
 }
