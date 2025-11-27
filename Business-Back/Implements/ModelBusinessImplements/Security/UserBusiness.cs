@@ -91,17 +91,20 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             if (Dto == null)
                 throw new ValidationException(nameof(Dto), "Los datos enviados son nulos o inválidos.");
 
-            // Validación mínima de contraseña (evitar null/empty)
             if (string.IsNullOrWhiteSpace(Dto.Password))
                 throw new ValidationException(nameof(Dto.Password), "La contraseña es obligatoria.");
+
             try
             {
                 var entidad = Dto.Adapt<User>();
                 entidad.RestrictionPoint = 3;
 
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
+                // 🔹 Guardar la contraseña original antes de hashear
+                string plainPassword = Dto.Password; // ← ESTA SE ENVÍA AL CORREO
 
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
                 entidad.Password = passwordHash;
+
                 await ValidateAsync(entidad);
 
                 var entiry = await _data.Save(entidad);
@@ -117,26 +120,39 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 var userRol = await _dataRolUser.Save(Paciente);
 
                 var asunto = "¡Bienvenido a nuestro sistema!";
+
+                // 🔥 Correo con email + contraseña
                 var cuerpo = $@"
-                                       <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-                                            <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
-                                                <h2 style=""color: #4CAF50;"">¡Bienvenido, {person?.FullName}!</h2>
-                                              <p style=""font-size: 16px; color: #333;"">
-                                                  Tu cuenta ha sido creada exitosamente. Gracias por registrarte en nuestro sistema.
-                                             </p>
-                                              <p style=""font-size: 14px; color: #666;"">
-                                                   Ahora puedes iniciar sesión y comenzar a disfrutar de nuestros servicios. Si tienes alguna pregunta, no dudes en contactarnos.
-                                              </p>
-                                              <div style=""margin-top: 30px; text-align: center;"">
-                                                  <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"">Iniciar sesión</a>
-                                              </div>
-                                               <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
-                                            <p style=""font-size: 12px; color: #aaa; text-align: center;"">
-                                                   Este mensaje fue enviado automáticamente. Por favor, no respondas a este correo.
-                                               </p>
-                                         </div>
-                                     </div>
-                       ";
+        <div style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
+            <div style=""max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"">
+                
+                <h2 style=""color: #4CAF50;"">¡Bienvenido, {person?.FullName}!</h2>
+
+                <p style=""font-size: 16px; color: #333;"">
+                    Tu cuenta ha sido creada exitosamente. Aquí tienes tus credenciales:
+                </p>
+
+                <div style=""background: #eef8ee; padding: 15px; border-radius: 8px; margin: 25px 0;"">
+                    <p><strong>Email:</strong> {entiry.Email}</p>
+                    <p><strong>Contraseña:</strong> {plainPassword}</p>
+                </div>
+
+                <p style=""font-size: 14px; color: #444;"">
+                    Ahora puedes iniciar sesión y comenzar a usar nuestros servicios.
+                </p>
+
+                <div style=""margin-top: 30px; text-align: center;"">
+                    <a href=""http://localhost:4200/"" style=""background-color: #4CAF50; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none;"">
+                        Iniciar sesión
+                    </a>
+                </div>
+
+                <hr style=""margin-top: 40px; border: none; border-top: 1px solid #eee;"" />
+                <p style=""font-size: 12px; color: #aaa; text-align: center;"">
+                    Este mensaje fue enviado automáticamente. No respondas a este correo.
+                </p>
+            </div>
+        </div>";
 
                 await CorreoMensaje.EnviarAsync(_configuration, entiry.Email, asunto, cuerpo);
 
@@ -158,6 +174,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
                 throw new BusinessException("Ocurrió un error inesperado al crear el usuario.", ex);
             }
         }
+
 
         /// <summary>
         /// Valida si un usuario cumple con las reglas de negocio antes de ser guardado.
