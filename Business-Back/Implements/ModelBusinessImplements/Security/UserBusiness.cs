@@ -97,6 +97,7 @@ namespace Business_Back.Implements.ModelBusinessImplements.Security
             try
             {
                 var entidad = Dto.Adapt<User>();
+                entidad.RestrictionPoint = 3;
 
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(Dto.Password, workFactor: 12);
 
