@@ -3,6 +3,7 @@ using Business_Back.Interface.IBusinessModel.Security;
 using Data_Back.Interface;
 using Entity_Back;
 using Entity_Back.Dto.HospitalDto.DoctorDto;
+using Entity_Back.Dto.SecurityDto.RolUserDto;
 using Entity_Back.Dto.SecurityDto.UserDto;
 using Entity_Back.Models.SecurityModels;
 using Mapster;
@@ -22,6 +23,7 @@ namespace Business_Back
         private readonly IDoctorData _data;
         private readonly IPersonBusiness _personBusiness;
         private readonly IUserBusiness _userBusiness;
+        private readonly IRolUserBusiness _rolUserBusiness;
 
         /// <summary>
         /// Constructor de la clase DoctorBusiness.
@@ -29,12 +31,13 @@ namespace Business_Back
         /// <param name="configuration">Configuración de la aplicación.</param>
         /// <param name="data">Interfaz de acceso a datos de Doctor.</param>
         /// <param name="logger">Logger para registrar información y errores.</param>
-        public DoctorBusiness(IConfiguration configuration, IDoctorData data, ILogger<DoctorBusiness> logger, IPersonBusiness personBusiness, IUserBusiness userBusiness)
+        public DoctorBusiness(IConfiguration configuration, IDoctorData data, ILogger<DoctorBusiness> logger, IPersonBusiness personBusiness, IUserBusiness userBusiness, IRolUserBusiness rolUserBusiness)
             : base(configuration, data, logger)
         {
             _data = data;
             _personBusiness = personBusiness;
             _userBusiness = userBusiness;
+            _rolUserBusiness = rolUserBusiness;
         }
 
 
@@ -65,9 +68,15 @@ namespace Business_Back
                     
                 };
 
-                await _userBusiness.Save(usernew);
+                var userDcotro =  await _userBusiness.Save(usernew);
 
+                RolUserCreatedDto roluser = new RolUserCreatedDto
+                {
+                    UserId = userDcotro.Id,
+                    RolId = 3, 
+                };
 
+                await  _rolUserBusiness.Save(roluser);
 
                 return entiry.Adapt<DoctorListDto>();
 
